@@ -1,0 +1,10 @@
+node_modules/
+__pycache__/
+work/__pycache__/
+work/*.npy
+work/*.pkl
+work/overview.png
+work/rec.png
+work/rec_full.png
+work/glyphs.png
+web/original.jpg

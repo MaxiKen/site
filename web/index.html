@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NGSA Geological Map of Nigeria — raster vs. digitised shapefile</title>
+<link rel="stylesheet" href="leaflet.css">
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a;
+    --fg:#e7eaf0; --dim:#9aa3b2; --accent:#4ea3ff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);
+    font:13px/1.45 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
+  header{display:flex;align-items:center;gap:14px;padding:8px 14px;background:var(--panel);
+    border-bottom:1px solid var(--line);flex-wrap:wrap}
+  header h1{font-size:14px;margin:0;font-weight:600;letter-spacing:.2px}
+  header .sub{color:var(--dim);font-size:12px}
+  .ctl{display:flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);
+    border-radius:7px;padding:3px 8px}
+  .ctl label{color:var(--dim);font-size:11.5px;white-space:nowrap}
+  button{background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:6px;
+    padding:5px 10px;cursor:pointer;font-size:12px}
+  button:hover{border-color:#465061;background:#242a34}
+  button.on{background:var(--accent);border-color:var(--accent);color:#04101d;font-weight:600}
+  input[type=range]{width:110px;accent-color:var(--accent)}
+  #wrap{display:flex;height:calc(100% - 45px)}
+  #maps{flex:1;display:flex;min-width:0;position:relative}
+  .pane{flex:1;position:relative;min-width:0}
+  .pane + .pane{border-left:1px solid var(--line)}
+  .map{position:absolute;inset:0;background:#0b0d11}
+  .tag{position:absolute;top:8px;left:8px;z-index:500;background:rgba(15,17,21,.85);
+    border:1px solid var(--line);border-radius:6px;padding:4px 9px;font-size:11.5px;letter-spacing:.3px}
+  .tag b{color:var(--accent)}
+  aside{width:308px;background:var(--panel);border-left:1px solid var(--line);overflow:auto}
+  aside h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.9px;color:var(--dim);
+    margin:12px 12px 6px;font-weight:600}
+  #q{width:calc(100% - 24px);margin:10px 12px 0;background:var(--panel2);border:1px solid var(--line);
+    border-radius:6px;color:var(--fg);padding:6px 8px;font-size:12px}
+  #list{max-height:calc(100% - 150px);overflow:auto;padding:0 8px 20px}
+  .row{display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:5px;cursor:pointer}
+  .row:hover{background:var(--panel2)}
+  .row.off{opacity:.34}
+  .sw{width:16px;height:16px;border-radius:3px;border:1px solid #0006;flex:none}
+  .row .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .row .ar{color:var(--dim);font-size:11px;font-variant-numeric:tabular-nums}
+  .row .cd{color:var(--dim);font-size:11px;min-width:34px;text-align:right}
+  .leaflet-popup-content-wrapper{background:#1b1f27;color:var(--fg);border:1px solid var(--line)}
+  .leaflet-popup-tip{background:#1b1f27}
+  .leaflet-popup-content{margin:10px 12px;font-size:12px;line-height:1.5}
+  .leaflet-popup-content b{color:var(--accent)}
+  .leaflet-popup-content .k{color:var(--dim)}
+  .leaflet-container{background:#0b0d11}
+  .leaflet-bar a{background:#1b1f27;color:var(--fg);border-color:var(--line)}
+  .leaflet-bar a:hover{background:#242a34}
+  #hint{position:absolute;bottom:8px;left:8px;z-index:500;background:rgba(15,17,21,.85);
+    border:1px solid var(--line);border-radius:6px;padding:4px 9px;font-size:11px;color:var(--dim)}
+  #ovl .leaflet-overlay-pane{opacity:.85}
+  .swipe{position:absolute;inset:0;pointer-events:none;z-index:600}
+</style>
+</head>
+<body>
+<header>
+  <h1>NGSA Geological Map of Nigeria</h1>
+  <span class="sub">original scan ⟷ digitised polygons (EPSG:4326)</span>
+  <div class="ctl"><label>view</label>
+    <button id="bSide" class="on">side&nbsp;by&nbsp;side</button>
+    <button id="bOvl">overlay</button>
+  </div>
+  <div class="ctl"><label>polygon opacity</label>
+    <input id="op" type="range" min="0" max="100" value="80">
+    <span id="opv" style="color:var(--dim);width:30px">80%</span>
+  </div>
+  <div class="ctl"><label>scan under polygons</label><input id="under" type="checkbox"></div>
+  <div class="ctl"><label>hydro layer</label><input id="hyd" type="checkbox" checked></div>
+  <button id="bReset">reset view</button>
+</header>
+<div id="wrap">
+  <div id="maps">
+    <div class="pane" id="pA"><div class="map" id="mA"></div><div class="tag">ORIGINAL SCAN</div></div>
+    <div class="pane" id="pB"><div class="map" id="mB"></div>
+      <div class="tag">DIGITISED <b>SHAPEFILE</b></div>
+      <div id="hint">click any polygon for its attributes</div></div>
+  </div>
+  <aside>
+    <h2>Map units</h2>
+    <input id="q" placeholder="filter code / name / lithology …">
+    <div id="list"></div>
+  </aside>
+</div>
+<script src="leaflet.js"></script>
+<script>
+const CRS = L.CRS.EPSG3857;
+let META, GEO, HYD, mA, mB, vecLayer, hydLayer, underImg, ovlImg;
+const state = {hidden:new Set(), mode:'side'};
+
+const HOME = {c:[8.7,8.4], z:6};
+
+fetch('meta.json').then(r=>r.json()).then(async m=>{
+  META = m.bounds;
+  GEO  = await (await fetch('nigeria_geology.geojson')).json();
+  HYD  = await (await fetch('nigeria_hydro.geojson')).json();
+  build();
+});
+
+const imgOpts = () => ({
+  opacity:1, interactive:false, className:'scanimg',
+  bounds:[[META.south, META.west],[META.north, META.east]]
+});
+
+function build(){
+  mA = L.map('mA',{crs:CRS, zoomControl:true, attributionControl:false, preferCanvas:false})
+        .setView(HOME.c, HOME.z);
+  mB = L.map('mB',{crs:CRS, zoomControl:true, attributionControl:false, preferCanvas:false})
+        .setView(HOME.c, HOME.z);
+  L.imageOverlay('original.jpg', [[META.south,META.west],[META.north,META.east]], imgOpts()).addTo(mA);
+  underImg = L.imageOverlay('original.jpg', [[META.south,META.west],[META.north,META.east]],
+                            {opacity:0, interactive:false}).addTo(mB);
+  ovlImg   = L.imageOverlay('original.jpg', [[META.south,META.west],[META.north,META.east]],
+                            {opacity:0, interactive:false}).addTo(mB);
+
+  vecLayer = L.geoJSON(GEO, {
+    style: f => ({color:'#00000000', weight:0, fillColor:f.properties.HEX, fillOpacity:0.80}),
+    onEachFeature:(f,l)=>{
+      const p=f.properties;
+      l.bindPopup(`<b>${p.CODE}</b> — ${p.NAME||''}<br>
+        <span class="k">lithology</span> ${p.LITH||'—'}<br>
+        <span class="k">age</span> ${p.AGE||'—'}<br>
+        <span class="k">area</span> ${p.AREA_KM2.toLocaleString()} km² · ${p.NPART} polygon(s)<br>
+        <span class="k">map colour</span> rgb(${p.RGB})${p.NOTE?'<br><span class="k">note</span> '+p.NOTE:''}`);
+      l.on({mouseover:e=>e.target.setStyle({color:'#fff',weight:1.2}),
+            mouseout:e=>vecLayer.resetStyle(e.target)});
+    }
+  }).addTo(mB);
+
+  hydLayer = L.geoJSON(HYD, {
+    style:{color:'#00000000', weight:0, fillColor:'#96d8f0', fillOpacity:0.95},
+    onEachFeature:(f,l)=>l.bindPopup('<b>WATER</b><br>ocean, lakes and rivers as mapped')
+  }).addTo(mB);
+
+  // synchronise pan/zoom
+  let a=false,b=false;
+  mA.on('movestart',()=>{a=true});  mA.on('moveend',()=>{a=false});
+  mB.on('movestart',()=>{b=true});  mB.on('moveend',()=>{b=false});
+  const sync=(from,to)=>()=>{ if(state.mode!=='side') return;
+    if((from===mA&&b)||(from===mB&&a)) return;
+    to.setView(from.getCenter(), from.getZoom(), {animate:false}); };
+  mA.on('move',sync(mA,mB)); mB.on('move',sync(mB,mA));
+
+  buildList();
+  wire();
+  setTimeout(()=>{mA.invalidateSize();mB.invalidateSize();},60);
+}
+
+function buildList(){
+  const feats = GEO.features.slice().sort((x,y)=>y.properties.AREA_KM2-x.properties.AREA_KM2);
+  const el = document.getElementById('list'); el.innerHTML='';
+  feats.forEach(f=>{
+    const p=f.properties, id=p.CLASS_ID;
+    const d=document.createElement('div');
+    d.className='row'; d.dataset.id=id;
+    d.innerHTML=`<span class="sw" style="background:${p.HEX}"></span>
+      <span class="nm" title="${(p.LITH||'').replace(/"/g,'')}">${p.CODE} · ${p.NAME||p.LITH||''}</span>
+      <span class="ar">${Math.round(p.AREA_KM2).toLocaleString()} km²</span>`;
+    d.onclick=()=>{
+      if(state.hidden.has(id)){state.hidden.delete(id);d.classList.remove('off');}
+      else {state.hidden.add(id);d.classList.add('off');}
+      applyFilter();
+    };
+    d.onmouseenter=()=>{
+      vecLayer.eachLayer(l=>{ if(l.feature.properties.CLASS_ID===id)
+        l.setStyle({color:'#fff',weight:1.6,dashArray:'4 3'}); });
+    };
+    d.onmouseleave=()=>vecLayer.eachLayer(l=>{ if(l.feature.properties.CLASS_ID===id) vecLayer.resetStyle(l); });
+    el.appendChild(d);
+  });
+}
+
+function applyFilter(){
+  vecLayer.eachLayer(l=>{
+    const id=l.feature.properties.CLASS_ID;
+    l.setStyle({fillOpacity: state.hidden.has(id)?0:document.getElementById('op').value/100});
+  });
+}
+
+function wire(){
+  const op=document.getElementById('op'), opv=document.getElementById('opv');
+  op.oninput=()=>{opv.textContent=op.value+'%';applyFilter();};
+  document.getElementById('under').onchange=e=>{ underImg.setOpacity(e.target.checked?0.55:0); };
+  document.getElementById('hyd').onchange=e=>{
+    if(e.target.checked) hydLayer.addTo(mB); else mB.removeLayer(hydLayer);
+  };
+  document.getElementById('q').oninput=e=>{
+    const s=e.target.value.toLowerCase();
+    document.querySelectorAll('.row').forEach(r=>{
+      r.style.display = r.textContent.toLowerCase().includes(s)?'':'none';
+    });
+  };
+  document.getElementById('bReset').onclick=()=>{mA.setView(HOME.c,HOME.z);mB.setView(HOME.c,HOME.z);};
+  const side=document.getElementById('bSide'), ovl=document.getElementById('bOvl');
+  const setMode=m=>{
+    state.mode=m; side.classList.toggle('on',m==='side'); ovl.classList.toggle('on',m==='ovl');
+    const wrap=document.getElementById('maps');
+    if(m==='side'){ document.getElementById('pA').style.display=''; ovlImg.setOpacity(0); }
+    else { document.getElementById('pA').style.display='none'; ovlImg.setOpacity(1);
+           underImg.setOpacity(document.getElementById('under').checked?0.55:0); }
+    setTimeout(()=>{mA.invalidateSize();mB.invalidateSize();},60);
+  };
+  side.onclick=()=>setMode('side'); ovl.onclick=()=>setMode('ovl');
+  window.addEventListener('resize',()=>{mA.invalidateSize();mB.invalidateSize();});
+}
+</script>
+</body>
+</html>

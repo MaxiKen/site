@@ -1,0 +1,1290 @@
+[
+ {
+  "y0": 198,
+  "y1": 228,
+  "rgb": [
+   236,
+   255,
+   101
+  ],
+  "kept": "1326/1380",
+  "code": "AI",
+  "lith": "Alluvi / Alluvium",
+  "name": "Sediments",
+  "age": "Recent"
+ },
+ {
+  "y0": 234,
+  "y1": 263,
+  "rgb": [
+   228,
+   229,
+   127
+  ],
+  "kept": "1203/1334",
+  "code": "MWSSands",
+  "lith": "MWSSands / MWS Sands,Gravels and Clay",
+  "name": "Meaderbelt, back swamps, fresh water swamps",
+  "age": ""
+ },
+ {
+  "y0": 270,
+  "y1": 300,
+  "rgb": [
+   240,
+   255,
+   131
+  ],
+  "kept": "1307/1380",
+  "code": "AB",
+  "lith": "Sands / ABSandsandPebbles",
+  "name": "",
+  "age": "NEOGENE / Holocene"
+ },
+ {
+  "y0": 307,
+  "y1": 336,
+  "rgb": [
+   150,
+   170,
+   254
+  ],
+  "kept": "1264/1334",
+  "code": "MS",
+  "lith": "Sand, / Sand, Clay and Mangrove Swamps",
+  "name": "Abandoned Beach Ridges / -- / Mangroves swamps",
+  "age": ""
+ },
+ {
+  "y0": 343,
+  "y1": 372,
+  "rgb": [
+   255,
+   255,
+   83
+  ],
+  "kept": "1216/1334",
+  "code": "SDsm / SDsmS",
+  "lith": "Sand, / Sand,Clay and Swamp",
+  "name": "Sombreiro Deltaic Fomation",
+  "age": ""
+ },
+ {
+  "y0": 379,
+  "y1": 408,
+  "rgb": [
+   240,
+   255,
+   92
+  ],
+  "kept": "1275/1334",
+  "code": "Cst",
+  "lith": "Sands / Sands,Clays,siltstones and limestones",
+  "name": "Chad Fomation",
+  "age": "Pleistocene/Pliocene"
+ },
+ {
+  "y0": 416,
+  "y1": 444,
+  "rgb": [
+   254,
+   254,
+   190
+  ],
+  "kept": "1197/1288",
+  "code": "Bnst",
+  "lith": "Sand / Sand and Clay",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 452,
+  "y1": 479,
+  "rgb": [
+   216,
+   216,
+   252
+  ],
+  "kept": "1215/1242",
+  "code": "b",
+  "lith": "Young / Younger Basalt",
+  "name": "",
+  "age": "TERTIARY TO"
+ },
+ {
+  "y0": 488,
+  "y1": 516,
+  "rgb": [
+   132,
+   126,
+   252
+  ],
+  "kept": "1243/1288",
+  "code": "bb",
+  "lith": "Basal / Basalt",
+  "name": "Newer Basalt",
+  "age": "RECENTVOLCANICS"
+ },
+ {
+  "y0": 523,
+  "y1": 552,
+  "rgb": [
+   235,
+   255,
+   108
+  ],
+  "kept": "1210/1334",
+  "code": "OAlgs",
+  "lith": "Lignite / Lignite,Claystone and shale",
+  "name": "Older Basalt / Ogwashi - Asaba Formation",
+  "age": "Oligocene/Miocene"
+ },
+ {
+  "y0": 560,
+  "y1": 587,
+  "rgb": [
+   255,
+   201,
+   224
+  ],
+  "kept": "1170/1242",
+  "code": "Issh",
+  "lith": "Clay / Issh Clay clayey sands and shale",
+  "name": "lIlaro Formation",
+  "age": "Upper Eocene"
+ },
+ {
+  "y0": 595,
+  "y1": 625,
+  "rgb": [
+   255,
+   254,
+   102
+  ],
+  "kept": "1288/1380",
+  "code": "Gwss",
+  "lith": "Sands / Sandstone and Clay",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 631,
+  "y1": 660,
+  "rgb": [
+   220,
+   216,
+   109
+  ],
+  "kept": "1255/1334",
+  "code": "Glcl / GlclS",
+  "lith": "Sands / Sandstonesand Clays",
+  "name": "Gwandu Formation",
+  "age": "MddleEocene"
+ },
+ {
+  "y0": 667,
+  "y1": 696,
+  "rgb": [
+   116,
+   214,
+   54
+  ],
+  "kept": "1241/1334",
+  "code": "Wss",
+  "lith": "Sands / Sandstone and Clay",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 703,
+  "y1": 732,
+  "rgb": [
+   156,
+   227,
+   91
+  ],
+  "kept": "1253/1334",
+  "code": "Esh",
+  "lith": "Shale / Shaleandlimestone",
+  "name": "",
+  "age": "PALAEOGENE"
+ },
+ {
+  "y0": 739,
+  "y1": 769,
+  "rgb": [
+   204,
+   223,
+   110
+  ],
+  "kept": "1273/1380",
+  "code": "Imsh",
+  "lith": "Clay / ImshClayandShalewithLimestoneIntercalations",
+  "name": "Imogroup",
+  "age": "Lover Eocene"
+ },
+ {
+  "y0": 776,
+  "y1": 805,
+  "rgb": [
+   236,
+   255,
+   78
+  ],
+  "kept": "1264/1334",
+  "code": "Kss",
+  "lith": "Sands / Sandstone,shaleandClay",
+  "name": "Keri-Kerri Fomation",
+  "age": ""
+ },
+ {
+  "y0": 813,
+  "y1": 840,
+  "rgb": [
+   219,
+   222,
+   177
+  ],
+  "kept": "1155/1242",
+  "code": "Dsh",
+  "lith": "Shale",
+  "name": "Dange Formation / SokotoGroup",
+  "age": "Palaeocene"
+ },
+ {
+  "y0": 848,
+  "y1": 877,
+  "rgb": [
+   100,
+   242,
+   135
+  ],
+  "kept": "1271/1334",
+  "code": "Kls / KIs",
+  "lith": "Limes / Limestone",
+  "name": "Kalambaina Formation",
+  "age": ""
+ },
+ {
+  "y0": 884,
+  "y1": 912,
+  "rgb": [
+   229,
+   254,
+   170
+  ],
+  "kept": "1216/1288",
+  "code": "GsS",
+  "lith": "Sands / Gss Sandstone,Siltstone,Shale and ironstone",
+  "name": "Gombe Formation",
+  "age": ""
+ },
+ {
+  "y0": 920,
+  "y1": 948,
+  "rgb": [
+   206,
+   254,
+   167
+  ],
+  "kept": "1209/1288",
+  "code": "Ajst",
+  "lith": "False / False-bedded sandstone",
+  "name": "Ajali Fomation",
+  "age": ""
+ },
+ {
+  "y0": 957,
+  "y1": 984,
+  "rgb": [
+   179,
+   254,
+   183
+  ],
+  "kept": "1157/1242",
+  "code": "Ncsh",
+  "lith": "Coal,shaleand sandstone",
+  "name": "Nsukka Fomation",
+  "age": ""
+ },
+ {
+  "y0": 993,
+  "y1": 1020,
+  "rgb": [
+   182,
+   228,
+   153
+  ],
+  "kept": "1140/1242",
+  "code": "Ncsh",
+  "lith": "Sands / Sandstone,limestone,Coal",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 1029,
+  "y1": 1056,
+  "rgb": [
+   197,
+   244,
+   176
+  ],
+  "kept": "1179/1242",
+  "code": "Asl",
+  "lith": "Sands / SandstoneandLimestone",
+  "name": "Abeokuta Formation",
+  "age": "Coniancian/Maestrichtian"
+ },
+ {
+  "y0": 1065,
+  "y1": 1092,
+  "rgb": [
+   166,
+   243,
+   191
+  ],
+  "kept": "1149/1242",
+  "code": "Mcst",
+  "lith": "Coal, / Mcst Coal,Sandstone and Shale",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 1100,
+  "y1": 1129,
+  "rgb": [
+   214,
+   255,
+   135
+  ],
+  "kept": "1244/1334",
+  "code": "Bssf",
+  "lith": "Sands / Bssf Sandstone and Ironstone",
+  "name": "Bassange Formation",
+  "age": ""
+ },
+ {
+  "y0": 1136,
+  "y1": 1165,
+  "rgb": [
+   210,
+   243,
+   92
+  ],
+  "kept": "1258/1334",
+  "code": "Nsh",
+  "lith": "Shale / Shaleandmudstone",
+  "name": "Nkporo Fomation",
+  "age": ""
+ },
+ {
+  "y0": 1172,
+  "y1": 1202,
+  "rgb": [
+   204,
+   215,
+   110
+  ],
+  "kept": "1248/1380",
+  "code": "ANsh",
+  "lith": "Shale / ANsh Shale and Limestone",
+  "name": "Awgu - Formation",
+  "age": "Coniancian"
+ },
+ {
+  "y0": 1209,
+  "y1": 1237,
+  "rgb": [
+   156,
+   214,
+   189
+  ],
+  "kept": "1230/1288",
+  "code": "Tst",
+  "lith": "Sands / Sandstone,siltstone and shale",
+  "name": "Taloka Formation",
+  "age": ""
+ },
+ {
+  "y0": 1245,
+  "y1": 1274,
+  "rgb": [
+   100,
+   242,
+   135
+  ],
+  "kept": "1258/1334",
+  "code": "Glls",
+  "lith": "Limes / Limestone",
+  "name": "Dukamaje Formation",
+  "age": ""
+ },
+ {
+  "y0": 1281,
+  "y1": 1309,
+  "rgb": [
+   189,
+   236,
+   155
+  ],
+  "kept": "1201/1288",
+  "code": "Wss",
+  "lith": "Sands / Sandstone,clays and shale",
+  "name": "",
+  "age": "Senonian"
+ },
+ {
+  "y0": 1317,
+  "y1": 1345,
+  "rgb": [
+   163,
+   252,
+   194
+  ],
+  "kept": "1209/1288",
+  "code": "Wcs",
+  "lith": "Clays / Clays and loose sandstone",
+  "name": "Dukamaje and Wurno Formation",
+  "age": ""
+ },
+ {
+  "y0": 1353,
+  "y1": 1382,
+  "rgb": [
+   185,
+   224,
+   110
+  ],
+  "kept": "1240/1334",
+  "code": "Wsh",
+  "lith": "Shale / Shale (Phosphate nodules)",
+  "name": "Rima Group",
+  "age": "CRETACEOUS"
+ },
+ {
+  "y0": 1389,
+  "y1": 1417,
+  "rgb": [
+   219,
+   222,
+   177
+  ],
+  "kept": "1248/1288",
+  "code": "Ts",
+  "lith": "Siltsto / Siltstone and Sandstone",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 1425,
+  "y1": 1453,
+  "rgb": [
+   121,
+   223,
+   176
+  ],
+  "kept": "1208/1288",
+  "code": "Psh",
+  "lith": "Shale / Shale,limestoneandsandstone",
+  "name": "Pindiga Formation",
+  "age": ""
+ },
+ {
+  "y0": 1461,
+  "y1": 1489,
+  "rgb": [
+   188,
+   201,
+   184
+  ],
+  "kept": "1187/1288",
+  "code": "Lass",
+  "lith": "Sands / Sandstone,shale and sandyshale",
+  "name": "Lafia - Wukari Formation",
+  "age": ""
+ },
+ {
+  "y0": 1497,
+  "y1": 1525,
+  "rgb": [
+   123,
+   223,
+   176
+  ],
+  "kept": "1168/1288",
+  "code": "NPss / NPsS",
+  "lith": "Felds / Feldspathicsandstoneandsiltstone",
+  "name": "Nupe Formation",
+  "age": ""
+ },
+ {
+  "y0": 1533,
+  "y1": 1562,
+  "rgb": [
+   149,
+   206,
+   104
+  ],
+  "kept": "1210/1334",
+  "code": "Glpg / GlpgF / GlpgPebbl",
+  "lith": "Pebbl / Pebbles and grit / GlpgPebbl / Glpg Pebbles and grit",
+  "name": "",
+  "age": "Turonian"
+ },
+ {
+  "y0": 1569,
+  "y1": 1598,
+  "rgb": [
+   165,
+   239,
+   104
+  ],
+  "kept": "1250/1334",
+  "code": "Glss",
+  "lith": "Clay / Glss Clay grit and pebbles",
+  "name": "Gundumi-Illo Fomation",
+  "age": "Pre maastrichtian"
+ },
+ {
+  "y0": 1605,
+  "y1": 1634,
+  "rgb": [
+   178,
+   209,
+   131
+  ],
+  "kept": "1197/1334",
+  "code": "Glgss",
+  "lith": "Grave / Glgss Gravel and sand",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 1642,
+  "y1": 1670,
+  "rgb": [
+   172,
+   247,
+   156
+  ],
+  "kept": "1216/1288",
+  "code": "Fsh",
+  "lith": "Black / Blackshale,siltstone and sandstone",
+  "name": "Fika Fomation",
+  "age": ""
+ },
+ {
+  "y0": 1678,
+  "y1": 1706,
+  "rgb": [
+   178,
+   227,
+   114
+  ],
+  "kept": "1209/1288",
+  "code": "Ess",
+  "lith": "Sands / Sandstone",
+  "name": "Eze - aku Group",
+  "age": ""
+ },
+ {
+  "y0": 1714,
+  "y1": 1742,
+  "rgb": [
+   152,
+   214,
+   81
+  ],
+  "kept": "1206/1288",
+  "code": "Esh",
+  "lith": "Black / Blackshale,siltstone and sandstone",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 1750,
+  "y1": 1778,
+  "rgb": [
+   185,
+   230,
+   163
+  ],
+  "kept": "1199/1288",
+  "code": "Mlst",
+  "lith": "Limes / Limestone and Siltstone",
+  "name": "Awi - Mfamosing Formation",
+  "age": ""
+ },
+ {
+  "y0": 1786,
+  "y1": 1814,
+  "rgb": [
+   185,
+   231,
+   194
+  ],
+  "kept": "1186/1288",
+  "code": "Awst",
+  "lith": "Sands / Sandstone",
+  "name": "",
+  "age": "Albian/ Cenomanian"
+ },
+ {
+  "y0": 1822,
+  "y1": 1850,
+  "rgb": [
+   114,
+   193,
+   52
+  ],
+  "kept": "1224/1288",
+  "code": "YIs",
+  "lith": "Shale / Shale, sandyclay, calcerous sandstones",
+  "name": "--- Yola-Bima-Yolde Formation",
+  "age": ""
+ },
+ {
+  "y0": 1858,
+  "y1": 1886,
+  "rgb": [
+   138,
+   172,
+   96
+  ],
+  "kept": "1182/1288",
+  "code": "Bss",
+  "lith": "Felds",
+  "name": "Feldspathic sandstone calcerous sandstone and shelly limestone--Bima Fomation",
+  "age": ""
+ },
+ {
+  "y0": 1894,
+  "y1": 1922,
+  "rgb": [
+   97,
+   164,
+   59
+  ],
+  "kept": "1170/1288",
+  "code": "Arlsh",
+  "lith": "Shale / Shaleandlimestonewithsandstoneintercalations",
+  "name": "Asu River group",
+  "age": ""
+ },
+ {
+  "y0": 1930,
+  "y1": 1958,
+  "rgb": [
+   255,
+   200,
+   255
+  ],
+  "kept": "1196/1288",
+  "code": "MyP",
+  "lith": "Quart / Quartz porphyry",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 1966,
+  "y1": 1994,
+  "rgb": [
+   217,
+   139,
+   225
+  ],
+  "kept": "1187/1288",
+  "code": "MyG",
+  "lith": "Granit / Granite and graniteporphery",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2002,
+  "y1": 2030,
+  "rgb": [
+   231,
+   187,
+   248
+  ],
+  "kept": "1214/1288",
+  "code": "Myl",
+  "lith": "Igniml / lgnimbrite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2038,
+  "y1": 2066,
+  "rgb": [
+   231,
+   190,
+   198
+  ],
+  "kept": "1202/1288",
+  "code": "Mys",
+  "lith": "Syeni / Syenite,quartz-syenite and gabbro",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2075,
+  "y1": 2103,
+  "rgb": [
+   231,
+   190,
+   255
+  ],
+  "kept": "1185/1288",
+  "code": "MGp",
+  "lith": "Granit / Granites and granite porphyry",
+  "name": "",
+  "age": "Per Alkaline young"
+ },
+ {
+  "y0": 2111,
+  "y1": 2139,
+  "rgb": [
+   213,
+   185,
+   199
+  ],
+  "kept": "1180/1288",
+  "code": "MyP",
+  "lith": "Porph / Porphyry / quartz porphyry",
+  "name": "",
+  "age": "Granite Series"
+ },
+ {
+  "y0": 2147,
+  "y1": 2174,
+  "rgb": [
+   222,
+   204,
+   204
+  ],
+  "kept": "1231/1242",
+  "code": "",
+  "lith": "Rhyol / Rhyolite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2183,
+  "y1": 2211,
+  "rgb": [
+   190,
+   100,
+   200
+  ],
+  "kept": "1237/1288",
+  "code": "Jyr",
+  "lith": "Rhyol / Rhyolite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2219,
+  "y1": 2247,
+  "rgb": [
+   218,
+   138,
+   227
+  ],
+  "kept": "1214/1288",
+  "code": "JyG",
+  "lith": "Biotite / Biotite granite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2255,
+  "y1": 2283,
+  "rgb": [
+   255,
+   115,
+   224
+  ],
+  "kept": "1223/1288",
+  "code": "JyA",
+  "lith": "Trach / Trachy-andesine",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2291,
+  "y1": 2319,
+  "rgb": [
+   193,
+   149,
+   120
+  ],
+  "kept": "1250/1288",
+  "code": "Q / P",
+  "lith": "Pegm / Pegmatite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2327,
+  "y1": 2355,
+  "rgb": [
+   155,
+   155,
+   155
+  ],
+  "kept": "1237/1288",
+  "code": "D",
+  "lith": "Doleri / Dolerite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2363,
+  "y1": 2391,
+  "rgb": [
+   178,
+   178,
+   178
+  ],
+  "kept": "1173/1288",
+  "code": "ODh",
+  "lith": "Bauch /  ODh Bauchite quartz- diorite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2399,
+  "y1": 2427,
+  "rgb": [
+   255,
+   155,
+   171
+  ],
+  "kept": "1199/1288",
+  "code": "OGd",
+  "lith": "Biotite / Biotiteandbiotitehornblendegranodiorite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2435,
+  "y1": 2462,
+  "rgb": [
+   204,
+   204,
+   204
+  ],
+  "kept": "1136/1242",
+  "code": "OGS Syeni",
+  "lith": "OGS Syenite,mainly of pyroxene diorite composition",
+  "name": "",
+  "age": "Pan -African Older / GraniteSeries"
+ },
+ {
+  "y0": 2471,
+  "y1": 2500,
+  "rgb": [
+   255,
+   236,
+   185
+  ],
+  "kept": "1246/1334",
+  "code": "bso",
+  "lith": "Coars /  OSq Coarse biotite and biotite muscovite granite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2507,
+  "y1": 2536,
+  "rgb": [
+   255,
+   116,
+   87
+  ],
+  "kept": "1237/1334",
+  "code": "OGh",
+  "lith": "Coars / Coarse hornblende granite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2544,
+  "y1": 2571,
+  "rgb": [
+   255,
+   199,
+   212
+  ],
+  "kept": "1160/1242",
+  "code": "OGf",
+  "lith": "Fine-g / Fine-grained biotite granite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2580,
+  "y1": 2607,
+  "rgb": [
+   254,
+   142,
+   186
+  ],
+  "kept": "1156/1242",
+  "code": "OGm",
+  "lith": "Mediu /  OGm Medium-to coarse-grained biotite granite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2615,
+  "y1": 2644,
+  "rgb": [
+   255,
+   112,
+   88
+  ],
+  "kept": "1259/1334",
+  "code": "OGu",
+  "lith": "Undiff / Undifferentiatedgranite,migmatiteandgraniteGneiss",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2651,
+  "y1": 2680,
+  "rgb": [
+   177,
+   125,
+   70
+  ],
+  "kept": "1201/1334",
+  "code": "OGCh",
+  "lith": "Charr / OGCh Charnockitic rocks",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2687,
+  "y1": 2716,
+  "rgb": [
+   220,
+   1,
+   253
+  ],
+  "kept": "1299/1334",
+  "code": "OGr",
+  "lith": "Gabbi / Gabbro and quartz gabbro",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2723,
+  "y1": 2752,
+  "rgb": [
+   193,
+   109,
+   39
+  ],
+  "kept": "1253/1334",
+  "code": "MV",
+  "lith": "Meta / MetaVolcanicMetaSedimentaryincludingpebblyschist",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2759,
+  "y1": 2788,
+  "rgb": [
+   114,
+   223,
+   254
+  ],
+  "kept": "1283/1334",
+  "code": "Sa",
+  "lith": "Amph / Amphibole Schist,Amphibolite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2795,
+  "y1": 2824,
+  "rgb": [
+   224,
+   224,
+   150
+  ],
+  "kept": "1228/1334",
+  "code": "BIF",
+  "lith": "Bande / Banded IronFormation / BandedIronFormation",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2832,
+  "y1": 2859,
+  "rgb": [
+   121,
+   185,
+   255
+  ],
+  "kept": "1189/1242",
+  "code": "Sp",
+  "lith": "Slate / Slatephyliteandmetasiltstone,locallyhornfelstic/carbonaceous",
+  "name": "",
+  "age": "PRE - CAMBRIAN"
+ },
+ {
+  "y0": 2867,
+  "y1": 2896,
+  "rgb": [
+   83,
+   206,
+   89
+  ],
+  "kept": "1301/1334",
+  "code": "m",
+  "lith": "Marbl / Marble",
+  "name": "",
+  "age": "TO CAMBRIAN"
+ },
+ {
+  "y0": 2904,
+  "y1": 2932,
+  "rgb": [
+   158,
+   185,
+   230
+  ],
+  "kept": "1238/1288",
+  "code": "Sf",
+  "lith": "Fine-g / Fine-grained flaggy quartzite and Quartz Schist.",
+  "name": "",
+  "age": "Meta - Sedimentary / / Meta-Volcanic Series"
+ },
+ {
+  "y0": 2940,
+  "y1": 2969,
+  "rgb": [
+   223,
+   255,
+   70
+  ],
+  "kept": "1280/1334",
+  "code": "Qs",
+  "lith": "Quart / Quartzite,massive and schistose,alsooccuring asridges",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 2975,
+  "y1": 3005,
+  "rgb": [
+   242,
+   246,
+   6
+  ],
+  "kept": "1308/1380",
+  "code": "MS",
+  "lith": "Pelitic / PeliticSchist/MuscoviteSchist",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 3012,
+  "y1": 3040,
+  "rgb": [
+   122,
+   193,
+   217
+  ],
+  "kept": "1237/1288",
+  "code": "Su",
+  "lith": "Undiff / Undifferentiated schists,including phyllities.",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 3048,
+  "y1": 3077,
+  "rgb": [
+   163,
+   231,
+   114
+  ],
+  "kept": "1271/1334",
+  "code": "Mc",
+  "lith": "Meta- / Meta-conglomerate",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 3084,
+  "y1": 3112,
+  "rgb": [
+   223,
+   186,
+   116
+  ],
+  "kept": "1228/1288",
+  "code": "bS",
+  "lith": "Biotite / BiotiteGarnetGneissSchist",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 3120,
+  "y1": 3149,
+  "rgb": [
+   217,
+   178,
+   93
+  ],
+  "kept": "1244/1334",
+  "code": "bG-h",
+  "lith": "Biotite / Biotitehornblendegneiss",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 3156,
+  "y1": 3185,
+  "rgb": [
+   218,
+   177,
+   53
+  ],
+  "kept": "1237/1334",
+  "code": "OPg",
+  "lith": "Porph / OPgPorphroblastic Gneiss",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 3192,
+  "y1": 3221,
+  "rgb": [
+   255,
+   181,
+   78
+  ],
+  "kept": "1265/1334",
+  "code": "GG",
+  "lith": "Granit / Granite Gneiss",
+  "name": "",
+  "age": "Mgmatite - Gneiss / Complex"
+ },
+ {
+  "y0": 3228,
+  "y1": 3257,
+  "rgb": [
+   236,
+   201,
+   109
+  ],
+  "kept": "1273/1334",
+  "code": "Ge",
+  "lith": "Granu / Granulite and gneiss",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 3263,
+  "y1": 3293,
+  "rgb": [
+   218,
+   160,
+   1
+  ],
+  "kept": "1314/1380",
+  "code": "bG",
+  "lith": "Bande / Bandedgneiss/biotitegneiss",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 3299,
+  "y1": 3329,
+  "rgb": [
+   229,
+   179,
+   7
+  ],
+  "kept": "1277/1380",
+  "code": "MaG",
+  "lith": "Migm / Migmatitic augen gneiss",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 3337,
+  "y1": 3365,
+  "rgb": [
+   223,
+   196,
+   119
+  ],
+  "kept": "1206/1288",
+  "code": "MG",
+  "lith": "Migm / Migmatitic gneiss",
+  "name": "",
+  "age": "PRE - CAMBRIAN TO CAMBRIAN"
+ },
+ {
+  "y0": 3373,
+  "y1": 3401,
+  "rgb": [
+   222,
+   211,
+   119
+  ],
+  "kept": "1242/1288",
+  "code": "M",
+  "lith": "Migm / Migmatite",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 3409,
+  "y1": 3437,
+  "rgb": [
+   240,
+   255,
+   134
+  ],
+  "kept": "1243/1288",
+  "code": "qs / sb",
+  "lith": "Silicifi / Silicified,shearedrocks,large quartzveins",
+  "name": "",
+  "age": "Cataclastic Rocks"
+ },
+ {
+  "y0": 3444,
+  "y1": 3474,
+  "rgb": [
+   255,
+   201,
+   71
+  ],
+  "kept": "1317/1380",
+  "code": "My",
+  "lith": "Mylon / Mylonites",
+  "name": "",
+  "age": ""
+ },
+ {
+  "y0": 3481,
+  "y1": 3509,
+  "rgb": [
+   122,
+   163,
+   253
+  ],
+  "kept": "1207/1288",
+  "code": "aMy",
+  "lith": "Mylon / Mylonitesinterlayeredwithamphibolites",
+  "name": "",
+  "age": ""
+ }
+]
