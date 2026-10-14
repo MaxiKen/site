@@ -1,0 +1,156 @@
+{
+  "bbox_pt": {
+    "x0": 74.23969,
+    "y_top": 1801.27615,
+    "x1": 2051.19136,
+    "y_bottom": 192.29887
+  },
+  "GPTS": [
+    3.83671,
+    2.47619,
+    14.04668,
+    2.47619,
+    14.04668,
+    15.02138,
+    3.83671,
+    15.02138
+  ],
+  "LPTS": [
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    1.0,
+    1.0
+  ],
+  "gcs_wkt": "GEOGCS[\"GCS_Assumed_Geographic_1\",DATUM[\"D_North_American_1927\",SPHEROID[\"Clarke_1866\",6378206.4,294.9786982]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]]",
+  "affine": {
+    "lon = a*x + b": [
+      0.006345724172407311,
+      2.0050854046149746
+    ],
+    "lat = c*y + d": [
+      0.006345627204878867,
+      2.6164530590605355
+    ]
+  },
+  "points_per_degree": {
+    "x": 157.58642714857245,
+    "y": 157.58883522674404
+  },
+  "control_points": [
+    [
+      74.23969,
+      192.29887000000008,
+      2.47619,
+      3.83671
+    ],
+    [
+      74.23969,
+      1801.27615,
+      2.47619,
+      14.04668
+    ],
+    [
+      2051.19136,
+      1801.27615,
+      15.02138,
+      14.04668
+    ],
+    [
+      2051.19136,
+      192.29887000000008,
+      15.02138,
+      3.83671
+    ]
+  ],
+  "graticule_check": [
+    {
+      "axis": "lat",
+      "page_pt": 375.66084,
+      "value_from_VP": 5.000256705172182,
+      "printed_label": 5,
+      "residual_deg": -0.00025670517218223665
+    },
+    {
+      "axis": "lat",
+      "page_pt": 690.86423,
+      "value_from_VP": 7.000419911826226,
+      "printed_label": 7,
+      "residual_deg": -0.0004199118262260271
+    },
+    {
+      "axis": "lat",
+      "page_pt": 1006.06761,
+      "value_from_VP": 9.000583055023997,
+      "printed_label": 9,
+      "residual_deg": -0.0005830550239966925
+    },
+    {
+      "axis": "lat",
+      "page_pt": 1321.27099,
+      "value_from_VP": 11.00074619822177,
+      "printed_label": 11,
+      "residual_deg": -0.0007461982217691343
+    },
+    {
+      "axis": "lat",
+      "page_pt": 1636.47438,
+      "value_from_VP": 13.000909404875813,
+      "printed_label": 13,
+      "residual_deg": -0.0009094048758129247
+    },
+    {
+      "axis": "lon",
+      "page_pt": 341.43856,
+      "value_from_VP": 4.171760328198919,
+      "printed_label": 4,
+      "residual_deg": -0.17176032819891862
+    },
+    {
+      "axis": "lon",
+      "page_pt": 656.63724,
+      "value_from_VP": 6.171924210985796,
+      "printed_label": 6,
+      "residual_deg": -0.1719242109857957
+    },
+    {
+      "axis": "lon",
+      "page_pt": 971.83591,
+      "value_from_VP": 8.17208803031543,
+      "printed_label": 8,
+      "residual_deg": -0.17208803031543063
+    },
+    {
+      "axis": "lon",
+      "page_pt": 1287.03458,
+      "value_from_VP": 10.172251849645065,
+      "printed_label": 10,
+      "residual_deg": -0.17225184964506468
+    },
+    {
+      "axis": "lon",
+      "page_pt": 1602.23325,
+      "value_from_VP": 12.1724156689747,
+      "printed_label": 12,
+      "residual_deg": -0.1724156689747005
+    },
+    {
+      "axis": "lon",
+      "page_pt": 1917.43193,
+      "value_from_VP": 14.17257955176158,
+      "printed_label": 14,
+      "residual_deg": -0.17257955176157935
+    }
+  ],
+  "parallel_max_residual_deg": 0.0009094048758129247,
+  "meridian_label_offset_deg": -0.17216993998024824,
+  "notes": [
+    "Affine read from the GeoPDF /VP /Measure dictionary (4 corner GPTS).  lon/lat are linear in page x/y (Plate Carree data frame, 157.586 pt/deg).",
+    "The PDF declares GCS_Assumed_Geographic_1 (NAD27 / Clarke 1866) - the ArcGIS default for data with an unknown datum; the data are almost certainly Minna/WGS84-era lat/lon.  Outputs are written as EPSG:4326 (the difference is far below the ~1.2 km/pixel resolution of the raster symbols).",
+    "Cross-check 1 (parallels): the 5 long parallels fall on whole degrees of the /VP affine within 0.0009 deg - OK.",
+    "Cross-check 2 (meridians): the 6 long meridians are labelled 4..14 E but sit at 0.172 deg LARGER longitude in the /VP affine (about 19 km).  The printed meridian labels and the embedded georeferencing disagree; the capital-city check in qa_report.json (capital_check_km) shows the /VP affine is the better of the two, so it is used for every layer.  The graticule layer carries both values (printed label and VP value)."
+  ]
+}

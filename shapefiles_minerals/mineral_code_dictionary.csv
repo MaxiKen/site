@@ -1,0 +1,121 @@
+code,meaning,confidence,uses_in_table
+A,unknown code,unknown,1
+Ab,Asbestos / Serpentine,probable,4
+Ag,Silver,legend,5
+Aq,"Beryl, Aquamarine, Emerald",probable,3
+Au,Gold,certain,87
+Ba,Baryte,certain,29
+Bc,Brick Clay,probable,3
+Bcl,Ball Clay,probable,2
+Be,"Beryl, Aquamarine, Emerald",certain,37
+Bi,Bismuth,probable,1
+Bit,Bitumen,certain,2
+Bn,Bentonite,certain,11
+Br,Brine,probable,38
+Bx,Bauxitic Clay,probable,4
+By,unknown code,unknown,1
+C,Coal,certain,25
+Ca,Calcite,probable,6
+Cl,Clay / Pottery Clay,certain,131
+Cm,unknown code,unknown,1
+Cor,"Corundum, Sapphire & Ruby",certain,3
+Cr,Chromite,certain,7
+Cs,unknown code,unknown,1
+Cu,Copper minerals,certain,6
+Cy,unknown code (Clay or Gypsum misprint?),unknown,2
+Cz,unknown code,unknown,1
+Da,unknown code,unknown,1
+Di,Diatomite,uncertain,1
+Dl,Dolomite (not in legend),probable,2
+Ds,Dimension Stone,certain,4
+Dt,Diatomite,certain,5
+E,"Beryl, Aquamarine, Emerald",probable,7
+EmI,"Beryl, Aquamarine, Emerald (emerald; printed ""EmI"")",probable,1
+Ev,Evaporite,certain,0
+F,Flourite,probable,2
+Fc,Fire Clay,probable,3
+Fe,"Iron Ore (Magnetite, Ilmenite)",certain,41
+Fl,Flourite,probable,0
+Fp,Feldspar,certain,24
+Fr,Flourite,probable,5
+G,Gold (typo for Au?),uncertain,2
+Gm,Gemstone (not in legend),uncertain,16
+Gn,Garnet,probable,4
+Gr,Graphite,probable,11
+Grl,River Gravel,probable,1
+Gs,Glass Sand,certain,35
+Gvl,River Gravel,certain,2
+Gy,Gypsum,certain,43
+Gys,Gypsum,probable,0
+Ilm,"Iron Ore (Magnetite, Ilmenite)",certain,2
+In,unknown code,unknown,1
+Ka,Kaolin / kaolinitic clay,certain,76
+Ke,unknown code,unknown,2
+Ks,Kaolinitic sand/clay (not in legend),uncertain,4
+Ky,Kyanite,certain,6
+La,Laterite (not in legend),uncertain,1
+Lg,Lignite,certain,9
+Li,"Lithium (Ambligonite, Kunzite, Moganite, Spodumene, etc)",certain,0
+Lp,Lepidolite,certain,1
+Ls,Limestone,certain,62
+M,Mica,legend,21
+MI,"Marl (printed ""MI"" for the legend code ""mi"")",probable,1
+MS,Mica schist / muscovite (not in legend),uncertain,1
+Ma,unknown code,unknown,1
+Mb,Marble,certain,41
+Mc,Marcasite,legend,2
+Mg,Magnesite,certain,2
+Mi,Marl,legend,1
+Ml,Marl,probable,3
+Mn,Manganese,certain,6
+Mo,Molybdenite,legend,2
+Ms,Mica schist / muscovite (not in legend),uncertain,1
+Mu,Mica (muscovite),probable,4
+Mz,Monazite,certain,3
+Na,Saltlake/ Potash (salt),probable,12
+Nb,Columbite,certain,50
+Ni,Nickel,legend,1
+Ocr,Ochre (not in legend),probable,1
+Oil,Oil and Gas,certain,10
+Os,unknown code,unknown,1
+P,Phosphate,certain,18
+Pb,Lead - Zinc (lead),certain,30
+PbS,Galena (PbS),probable,1
+Pbs,Galena,probable,4
+Pr,Phosphate Rock,probable,0
+Ps,Psammite,probable,0
+Py,Pyrite / Pyroclore,legend,8
+Qa,Quartz (not in legend),uncertain,20
+Qs,Quartz sand (not in legend),uncertain,2
+Qz,Quartz (not in legend),uncertain,11
+R,Rose Quartz,legend,0
+RS,unknown code,unknown,1
+Rb,"Ruby? (Corundum, Sapphire & Ruby)",uncertain,1
+Ru,"Corundum, Sapphire & Ruby (ruby)",certain,3
+S,Sulphur / salt (not in legend),uncertain,3
+Sd,Sand (not in legend),uncertain,7
+Si,unknown code (Silica sand?),unknown,1
+Sl,Sillimanite,legend,1
+Sm,Tin? (probably a misprint of Sn),uncertain,1
+Sn,Tin / cassiterite (no legend symbol),certain,82
+Sp,unknown code,unknown,1
+Sr,unknown code,unknown,1
+Ss,Silica Sand,legend,2
+St,Stone? (not in legend),uncertain,1
+Sul,Sulphur (not in legend),probable,1
+Ta,Tantalite,legend,65
+Tc,Talc,legend,21
+Tm,Tourmaline,legend,16
+Tn,unknown code,unknown,1
+To,Topaz,probable,2
+Tpz,Topaz,legend,2
+Tr,Trona,legend,13
+Ts,Tar Sand,legend,9
+U,Uranium,legend,4
+Us,unknown code,unknown,2
+W,Wolframite,legend,17
+Wa,unknown code,unknown,1
+Zn,Lead - Zinc (zinc),certain,29
+Zr,Zircon,legend,9
+m,Mica,legend,1
+sT,unknown code,unknown,1

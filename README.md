@@ -85,3 +85,67 @@ What the viewer offers (designed for a phone screen, works on desktop too):
 * Layer switches, legend from `legend.csv` with “highlight this unit” and the units missing from
   the printed legend, a “Compare” tab with the GeoPDF verdict and PDF-primitive vs feature counts,
   quick zooms (Jos Plateau, Niger Delta, Lake Chad, Sokoto, the PDF legend panel).
+
+---
+
+# Mineral Resources Map of Nigeria (2023) – GeoPDF → shapefiles
+
+Source file: `Mineral_Resources_Map_of_Nigeria_2023.pdf` (55 × 30 in, single page, **Esri ArcMap 10.2.2**, 2023‑08‑17).
+Script: `extract_mineral_map.py` → outputs in `shapefiles_minerals/` (WGS 84 `.prj`) + `shapefiles_minerals/nigeria_minerals.gpkg`.
+
+## 1. Is it a GeoPDF?
+
+**Yes.** The page carries an ISO‑32000 geospatial viewport (`/VP` → `/Measure` `/GEO`, four corner `/GPTS`, `/GCS` WKT), so GDAL/QGIS/Avenza place it directly. The frame runs 2.47619–15.02138 °E × 3.83671–14.04668 °N, lon/lat are linear in page coordinates (Plate Carrée data frame, 157.586 pt/°); the transform is in `shapefiles_minerals/georeferencing.json`.
+
+Two things to know about that georeference (both recorded in `georeferencing.json`/`qa_report.json`):
+
+* The declared CRS is `GCS_Assumed_Geographic_1` (ArcGIS' placeholder for "lat/lon, datum unknown", nominally NAD27/Clarke 1866). The data are plainly Nigerian lat/lon; outputs are written as EPSG:4326 – the datum difference is far below the ≈1 km symbol resolution.
+* The **printed meridian labels disagree with the embedded georeference by 0.172 ° (≈19 km)**: the lines labelled 4…14 °E sit at 4.17…14.17 °E in the `/VP` affine (parallels agree to < 0.001 °). An independent check against the 33 state‑capital markers shows the `/VP` affine is the better of the two (mean offset −7 km E / −7 km N, rms 11 km; shifting to the meridian labels would make it −26 km E), so `/VP` is used for every layer and the `graticule` layer carries both values (`printed`, `vp_value`).
+
+## 2. What is in the PDF, and what the layers carry
+
+Unlike the geological map, only part of this map is vector. The **background geology, the mineral symbols and the state‑capital squares are a raster** (7 image strips, 2060 × 1677 px ≈ 75 dpi); the vector layers are Roads, Rivers, Railway, International boundary, division lines, Towns (circles), Graticule, and all text (town/capital/state/river names, mineral numbers, the EXPLANATIONS table and legend text). The map locates mineral occurrences by a **number printed on the map** which is resolved through the EXPLANATIONS table (seven numbering zones A–G, each restarting at 1), and by a **coloured legend symbol** next to the number. The extraction therefore joins three sources: the number labels (vector text), the table (vector text) and the symbols (raster blobs).
+
+| Output | Features | What it carries |
+|---|---|---|
+| `mineral_localities.shp` / `.csv` | 998 points | One point per mineral number printed on the map. `zone`, `number`, `zone_num` (e.g. `E109`); from the table join: `locality`, `codes_raw` (as printed), `minerals` (expanded names), `min_conf` (certain / legend / probable / uncertain / unknown per code), `match` (992 `exact`, 6 `number not in table`), `tbl_flags`. Position: `pos_src` = `raster symbol (colour-consistent)` for the 667 numbers whose legend symbol (right colour, size and fill class for the listed mineral) was found within 25 pt – the point is the symbol centre, `snap_pt` the distance – otherwise `label centre` (331; the number itself, ~5–15 pt ≈ 3–10 km from the symbol). `label_lon/lat` always hold the number's own position. |
+| `explanations_table.csv` | 1 171 rows | The complete EXPLANATIONS list (A 103, B 165, C 86, D 157, E 234, F 202, G 224 rows), parsed from the eight text columns: `zone`, `number` (sequential, see caveats), `number_printed`, `locality`, `codes_raw`, `codes`, `minerals`, `code_confidence`, `unknown_codes`, `on_map` (954 rows have their number on the map, 217 do not), `flags`, `table_column`, `raw_text`. |
+| `mineral_symbols_raster.shp` | 1 642 points | Every coloured symbol blob detected in the raster: `colour` class, size, `fill` (solid / round / sparse – distinguishes e.g. the solid gold square from the lettered brine circle), `candidates` (legend minerals consistent with colour+size+fill; 1 377 blobs have a rule), `link` + `near_*` (the number label it serves, if any). 559 blobs have no number within 14 pt – unnumbered symbols, geology‑pattern fragments and water bodies (`blue`). |
+| `mineral_legend.csv`, `legend_symbols/` | 67 rows, 66 PNGs | Legend order, mineral name, the code printed in the legend (only 19 entries have one), the table codes mapped to that mineral, cut‑outs of each legend symbol. |
+| `mineral_code_dictionary.csv` | 120 codes | Every code used in the table → mineral, with confidence (36 certain, 20 from the legend, 30 probable, 15 uncertain, 19 unknown – e.g. `Us`, `Ke`, `Cy`, each used once or twice). |
+| `map_zones.shp`, `division_lines.shp` | 7 / 5 | The A–G numbering zones polygonised from the division lines + frame (`tbl_rows`, `labels` per zone). |
+| `roads.shp` | 115 lines, 18 400 km | Double‑line symbol collapsed to centrelines (`n_frag` fragments merged). |
+| `rivers.shp` | 876 lines, 43 200 km | As drawn (the vector river layer; lakes/large rivers are raster only). |
+| `railway.shp` | 6 lines | The 114 white dash overprints of the symbol dropped. |
+| `international_boundary.shp` | 1 line, 4 090 km | The red band; the black dashes of the symbol dropped. |
+| `graticule.shp`, `map_frame.shp` | 11 / 1 | `axis`, `vp_value`, `printed` (see §1). |
+| `towns.shp` | 483 points | 478 vector circles (`town marker`), 411 named from the label beside them (`name_dist` = marker‑to‑label distance), 67 without a legible name; plus 5 names whose circle is shared with/hidden by a neighbour (`name only (no marker)`, placed at the label). |
+| `state_capitals.shp` | 33 points | Capitals have no vector marker – the grey square is in the raster, centred under the bold label. 14 were located on that square (`src = raster capital square`), the rest sit at the label centre (within ≈1 pt of the square where both exist). |
+| `state_name_labels.shp` | 37 | the 36 states + FCT labels |
+| `river_labels.shp` | 119 | italic water names as placed (curved names come in pieces) |
+| `pegmatite_marks.shp` | 23 | the "P" pegmatite marks of the geology legend |
+| `map_labels.shp` | 683 | every text string on the map face except the mineral numbers, with layer, font, size, angle |
+| `geology_legend.csv` | 9 | the background‑geology legend order – the geology itself is raster only |
+| `map_raster/` | PNG + `.pgw` | the untouched 75 dpi raster strips reassembled and world‑filed (`mineral_map_base_75dpi.png`, the actual symbol source) and a 150 dpi render of the full map face |
+| `qa_report.json` | | all counts above, the unmatched numbers, snap statistics, the capital check |
+
+### How the table/number join was verified
+
+* Every zone's list is contiguous after parsing: the only numbers absent from the printed list are **F 110, G 53, G 86, G 111** (F110, G53 and G86 *are* printed on the map – those three labels are kept with `match = number not in table`), and the map prints three stray numbers (D 256, F 460, F 1150) that exist in no list.
+* 30 rows have a misprinted number that is unambiguous from its neighbours (e.g. `109. Kafin‑chiri` followed by `109 Kofin‑chini`, `53. Basuras` between 82 and 84) – `number` holds the sequential value, `number_printed` the print, `flags` says so. 10 numbers were printed in a broken font (`I`, `SI`, `SE`, `lOB`, `•7` …) and are inferred from the sequence; 2 entries carry a suffix in the source (B 17A, D 67A). All of these were checked against the rendered PDF.
+* Zone B's rows 156–164 are typeset at the foot of the D column; they are assigned to B by position (`TABLE_ZONE_OVERRIDES`). 113 rows had the mineral codes typed into the locality cell; they are split off only when every token is a known code.
+* Symbol detection was calibrated on localities with a single mineral (gold = solid yellow 8 × 8 px square, clay = yellow 14 × 10 rectangle, kaolin = khaki rectangle, limestone = hatched green, tantalite = white bowl, barytes/gypsum = white ring arcs, lead‑zinc = red triangle …) and is applied as colour + size + fill‑class rules; a number is only snapped to a symbol whose rule contains one of its minerals. Tin (`Sn`, 73 rows) and quartz/monazite/ruby codes have no legend symbol by design and stay at the label.
+
+### Caveats
+
+* **Positions**: 1 pt ≈ 0.7 km; a snapped point is the symbol centre (±1–2 px), an unsnapped one is the number's centre, which is typically 3–10 km from the deposit symbol. The `/VP` georeference itself is ≈7 km off true positions in both axes (capital check), consistent with a 1:2 M compilation.
+* **Minerals come from codes typed by the map compiler**, with inconsistent spelling (`CI`/`Cl`, `MI`/`mi`, `PbS`/`Pbs`); confidence is recorded per code and 19 codes could not be resolved at all.
+* Mineral symbols without a number (559 blobs) are delivered as raw raster blobs with candidate minerals only – the map gives no other way to identify them.
+* Background geology, lakes and the large rivers exist only as raster.
+
+## 3. Reproducing
+
+```bash
+pip install pikepdf pymupdf shapely pyshp numpy pillow scipy pyogrio   # pyogrio only for the .gpkg
+python extract_mineral_map.py Mineral_Resources_Map_of_Nigeria_2023.pdf shapefiles_minerals   # ~10 s
+```

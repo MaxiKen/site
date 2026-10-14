@@ -27,7 +27,8 @@ import time
 import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PDF = glob.glob(os.path.join(ROOT, '*.pdf'))[0]
+PDF = (glob.glob(os.path.join(ROOT, 'ilide.info-geological-map-of-nigeria*.pdf'))
+       or [f for f in glob.glob(os.path.join(ROOT, '*.pdf')) if 'Mineral' not in os.path.basename(f)])[0]
 SHP_DIR = os.path.join(ROOT, 'shapefiles')
 BUILD = os.path.join(ROOT, 'viewer', 'build')
 TILE = 256

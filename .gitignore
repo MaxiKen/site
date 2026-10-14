@@ -2,3 +2,6 @@
 __pycache__/
 *.pyc
 viewer/build/
+
+# scratch dump of the mineral-map pipeline (MINERAL_DEBUG=1)
+shapefiles_minerals/_debug.pkl
