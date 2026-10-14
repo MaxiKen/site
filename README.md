@@ -64,27 +64,41 @@ python extract_shapefiles.py ilide.info-geological-map-of-nigeria-pr_a0987e407d1
 
 The script parses the PDF content stream itself (paths, text and Optional‑Content tags), fits the graticule, rebuilds polygons/lines/points and writes the shapefiles; it runs in ~10 s.
 
-## 4. Live comparison viewer (mobile-first)
+## 4. Live comparison viewer (mobile-first) – both maps
 
 ```bash
 python viewer/serve.py          # then open http://localhost:8080  (bind: 0.0.0.0, flags: --port, --rebuild)
 ```
 
-The first start runs `viewer/build_data.py` (~30 s): it renders the original PDF page to Leaflet
-EPSG:4326 tiles (zoom 4–9 ≈ 330 dpi) placed with the graticule georeference, converts the
-shapefiles to GeoJSON and computes PDF-vs-output statistics. Generated data lives in
-`viewer/build/` (git-ignored). Extra dependencies: `pymupdf pillow pyogrio` (plus the extraction
-dependencies above for the statistics).
+The first start runs `viewer/build_data.py` (~1–2 min; `--dataset geology|minerals|all`): it renders
+both PDF pages to Leaflet EPSG:4326 tiles (zoom 4–9 ≈ 330 dpi) – the 2011 map placed with its fitted
+graticule georeference, the 2023 map with its own GeoPDF `/VP` viewport – converts `shapefiles/` and
+`shapefiles_minerals/` to GeoJSON and collects the QA statistics. Generated data lives in
+`viewer/build/` (git-ignored: `tiles/`, `tiles_minerals/`, `data/`, `data/minerals/`). Extra
+dependencies: `pymupdf pillow pyogrio` (plus the extraction dependencies above for the statistics).
+A dataset whose PDF or shapefiles are missing is simply skipped by the viewer.
 
 What the viewer offers (designed for a phone screen, works on desktop too):
 
-* **Swipe** – original PDF on the left of a draggable divider, extracted layers (drawn with a
+* **Swipe** – an original PDF on the left of a draggable divider, extracted layers (drawn with a
   matching symbology) on the right; **Overlay** – extracted layers over the PDF with an opacity
-  slider; **PDF only** / **Extracted** – one at a time.
-* Tap any extracted feature for its attributes (plus the geology unit under the point).
-* Layer switches, legend from `legend.csv` with “highlight this unit” and the units missing from
-  the printed legend, a “Compare” tab with the GeoPDF verdict and PDF-primitive vs feature counts,
-  quick zooms (Jos Plateau, Niger Delta, Lake Chad, Sokoto, the PDF legend panel).
+  slider; **PDF only** / **Extracted** – one at a time. Which PDF is on the "PDF side" (2011
+  geology or 2023 minerals) is chosen with the first chip above the map or under *Layers*.
+* **Layers** – the 17 geological-map layers and the 16 mineral-map layers (plus the printed mineral
+  numbers drawn as text) are listed in two groups, each with its own on/off switch, group-level
+  *All on / All off* and a *Units only* / *Minerals only* shortcut. Both maps share one lon/lat
+  grid, so e.g. mineral localities can be switched on over the 2011 geology units (the two maps'
+  state-capital markers agree to a median 8 km, within the 2011 label-centre tolerance).
+* Tap any extracted feature for its attributes; a mineral locality shows its EXPLANATIONS-table row,
+  how its point was placed (on the matched raster symbol = solid outline, on the printed number =
+  dashed outline) and the 2011 geology unit beneath it.
+* **Legend** – `legend.csv` of the 2011 map with "highlight this unit", the 67 mineral legend symbols
+  cut from the 2023 PDF with locality counts and "highlight localities with this mineral", and a
+  locality finder (number such as `B 12`, name or mineral).
+* **Compare** – the GeoPDF verdict and PDF-primitive vs feature counts for the 2011 map; the
+  georeference check, table/number/symbol matching statistics and the capital-city test for the 2023
+  map. Quick zooms: Jos Plateau, Niger Delta, Lake Chad, Sokoto, the 2011 legend panel, the 2023
+  EXPLANATIONS table.
 
 ---
 

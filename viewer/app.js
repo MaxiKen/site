@@ -1,4 +1,7 @@
-/* Nigeria geological map: original PDF (tiles) vs extracted shapefiles (GeoJSON) – mobile-first viewer */
+/* Nigeria maps viewer: original PDFs (tiles) vs extracted shapefiles (GeoJSON) – mobile-first.
+   Two datasets share one map: the Geological Map (2011, vector PDF, graticule georeference) and the
+   Mineral Resources Map (2023, GeoPDF).  Each layer of either dataset can be toggled; either PDF can
+   be shown on the "PDF" side. */
 (function () {
   'use strict';
 
@@ -8,60 +11,148 @@
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const fmt = n => (n == null ? '–' : Number(n).toLocaleString('en'));
 
+  // ------------------------------------------------------------------ symbology helpers (mineral map)
+  // colour classes of the raster symbol detector -> RGB (see SYMBOL_PALETTE in extract_mineral_map.py)
+  const SYMBOL_RGB = { yellow: '#fff500', khaki: '#97946b', green: '#00923f', red: '#da251d', purple: '#974578',
+    'light green': '#84c225', grey: '#828282', 'dark grey': '#605d5c', 'blue grey': '#667ab3', brown: '#c08040',
+    'bright green': '#00ff00', orange: '#e77817', tan: '#bb825b', 'green 2': '#00a040', 'dark tan': '#957f66',
+    violet: '#8400a8', 'dark blue': '#004da8', 'purple 2': '#a900e6', magenta: '#e02080', outline: '#1f1a17' };
+  // first mineral code of a locality -> colour of its printed symbol (calibrated signatures; others grey)
+  const CODE_COLOUR = { Au: '#fff500', Cl: '#fff500', Br: '#fff500', Gs: '#fff500', Ev: '#fff500', Ka: '#97946b',
+    W: '#84c225', Ls: '#00923f', Mn: '#00923f', Bcl: '#00923f', Bc: '#00923f', Gy: '#ffffff', Ba: '#ffffff', P: '#ffffff',
+    Ta: '#ffffff', Be: '#ffffff', C: '#1f1a17', Lg: '#1f1a17', Fe: '#974578', Tc: '#974578', Mo: '#974578', M: '#667ab3',
+    Mb: '#da251d', Fp: '#da251d', Pb: '#da251d', Zn: '#da251d', Tm: '#da251d', Nb: '#605d5c', Sn: '#828282', Li: '#00ff00',
+    Fr: '#e77817', F: '#e77817', Bt: '#1f1a17', Oil: '#1f1a17', Ts: '#1f1a17' };
+  const codeColour = raw => { const m = /^[A-Za-z]+/.exec(String(raw || '').trim()); return (m && CODE_COLOUR[m[0]]) || '#8a8a8a'; };
+  const textColourFor = p => {
+    const k = (p.kind || '') + ' ' + (p.layer || '');
+    if (/water|Rivers/i.test(k)) return '#1d4ed8';
+    if (/capital/i.test(k)) return '#7f1d1d';
+    if (/State_Boundarys|state name/i.test(k)) return '#374151';
+    if (/mineral number/i.test(k)) return '#000';
+    return '#111';
+  };
+
   // ------------------------------------------------------------------ layer catalogue
-  // Styles mimic the symbology of the PDF so the two sides can be compared visually.
-  const LAYERS = [
-    { id: 'geology_units', title: 'Geology units', kind: 'polygon', on: true,
+  // Styles mimic the symbology of the PDFs so the two sides can be compared visually.
+  const GEOLOGY_LAYERS = [
+    { file: 'geology_units', title: 'Geology units', kind: 'polygon', on: true,
       swatch: 'linear-gradient(90deg,#f08080 0 33%,#f5ff9e 33% 66%,#7adeb0 66%)',
       style: f => unitStyle(f),
       name: p => (p.code ? p.code + ' – ' : '') + (p.unit || '') },
-    { id: 'major_rivers_poly', title: 'Major rivers & Lake Chad (areas)', kind: 'polygon', on: true, swatch: '#a9d2f6',
+    { file: 'major_rivers_poly', title: 'Major rivers & Lake Chad (areas)', kind: 'polygon', on: true, swatch: '#a9d2f6',
       style: () => ({ fillColor: '#a9d2f6', fillOpacity: 1, stroke: false }), name: () => 'Major river / lake' },
-    { id: 'geological_boundaries', title: 'Geological boundaries', kind: 'line', on: true, swatch: '#222',
+    { file: 'geological_boundaries', title: 'Geological boundaries', kind: 'line', on: true, swatch: '#222',
       style: f => {
         const c = f.properties.class;
         return { color: '#222', weight: 0.9, opacity: 1,
           dashArray: c === 'approximate' ? '6 4' : c === 'inferred' ? '2 4' : c === 'transitional' ? '9 3 2 3' : null };
       }, name: p => 'Boundary (' + p.class + ')' },
-    { id: 'younger_granite_outlines', title: 'Younger Granite outlines', kind: 'line', on: true, swatch: '#000',
+    { file: 'younger_granite_outlines', title: 'Younger Granite outlines', kind: 'line', on: true, swatch: '#000',
       style: () => ({ color: '#000', weight: 1.1 }), name: () => 'Younger Granite outline' },
-    { id: 'faults', title: 'Faults / fractures', kind: 'line', on: true, swatch: '#d7191c',
+    { file: 'faults', title: 'Faults / fractures', kind: 'line', on: true, swatch: '#d7191c',
       style: f => ({ color: '#d7191c', weight: 1.3, dashArray: /inferred/.test(f.properties.class) ? '5 4' : null }),
       name: p => p.class },
-    { id: 'fold_axes', title: 'Fold axes', kind: 'line', on: true, swatch: '#7b1fa2',
+    { file: 'fold_axes', title: 'Fold axes', kind: 'line', on: true, swatch: '#7b1fa2',
       style: () => ({ color: '#7b1fa2', weight: 1.5 }), name: p => p.class + ' axis' },
-    { id: 'ridges', title: 'Ridges', kind: 'line', on: true, swatch: '#8d6e63',
+    { file: 'ridges', title: 'Ridges', kind: 'line', on: true, swatch: '#8d6e63',
       style: () => ({ color: '#8d6e63', weight: 1.8 }), name: () => 'Ridge' },
-    { id: 'rivers', title: 'Rivers', kind: 'line', on: true, swatch: '#3b82f6',
+    { file: 'rivers', title: 'Rivers', kind: 'line', on: true, swatch: '#3b82f6',
       style: () => ({ color: '#3b82f6', weight: 0.9 }), name: () => 'River' },
-    { id: 'major_rivers_outline', title: 'Major river outlines', kind: 'line', on: true, swatch: '#3b82f6',
+    { file: 'major_rivers_outline', title: 'Major river outlines', kind: 'line', on: true, swatch: '#3b82f6',
       style: () => ({ color: '#3b82f6', weight: 0.8 }), name: () => 'Major river outline' },
-    { id: 'state_boundaries', title: 'State boundaries', kind: 'line', on: true, swatch: '#8a8a8a',
+    { file: 'state_boundaries', title: 'State boundaries', kind: 'line', on: true, swatch: '#8a8a8a',
       style: () => ({ color: '#8a8a8a', weight: 2.6, opacity: 0.9, dashArray: '10 4 2 4' }), name: () => 'State boundary' },
-    { id: 'roads', title: 'Roads (centrelines)', kind: 'line', on: true, swatch: '#555',
+    { file: 'roads', title: 'Roads (centrelines)', kind: 'line', on: true, swatch: '#555',
       style: () => ({ color: '#555', weight: 1.4 }), name: () => 'Road' },
-    { id: 'railway', title: 'Railway', kind: 'line', on: true, swatch: '#000',
+    { file: 'railway', title: 'Railway', kind: 'line', on: true, swatch: '#000',
       style: () => ({ color: '#000', weight: 1.6, dashArray: '6 3' }), name: () => 'Railway' },
-    { id: 'graticule', title: 'Fitted graticule (QA)', kind: 'line', on: false, swatch: '#999',
+    { file: 'graticule', title: 'Fitted graticule (QA)', kind: 'line', on: false, swatch: '#999',
       style: () => ({ color: '#999', weight: 0.7 }), name: p => p.axis + ' ' + p.value + '°' },
-    { id: 'towns', title: 'Towns', kind: 'point', on: true, swatch: '#000',
+    { file: 'towns', title: 'Towns', kind: 'point', on: true, swatch: '#000',
       point: (f, ll) => L.circleMarker(ll, { radius: 3.5, color: '#000', weight: 1, fillColor: '#000', fillOpacity: 1 }),
       name: p => p.name || '(unnamed town)' },
-    { id: 'volcanic_plugs', title: 'Volcanic plugs & pipes', kind: 'point', on: true, swatch: '#000',
+    { file: 'volcanic_plugs', title: 'Volcanic plugs & pipes', kind: 'point', on: true, swatch: '#000',
       point: (f, ll) => L.circleMarker(ll, { radius: 4, color: '#000', weight: 1.3, fill: false }),
       name: () => 'Volcanic plug / pipe' },
-    { id: 'state_capitals', title: 'State capitals (approx.)', kind: 'point', on: true, swatch: '#e53935',
+    { file: 'state_capitals', title: 'State capitals (approx.)', kind: 'point', on: true, swatch: '#e53935',
       point: (f, ll) => L.circleMarker(ll, { radius: 5.5, color: '#fff', weight: 1.5, fillColor: '#e53935', fillOpacity: 1 }),
       name: p => p.name },
-    { id: 'labels', title: 'Map text (unit codes, names)', kind: 'labels', on: true, swatch: '#fff',
+    { file: 'labels', title: 'Map text (unit codes, names)', kind: 'labels', on: true, swatch: '#fff', anchor: 'origin',
       name: p => p.text },
   ];
+
+  const MINERAL_LAYERS = [
+    { file: 'map_zones', title: 'Numbering zones A–G', kind: 'polygon', on: true, swatch: '#d946ef',
+      style: () => ({ color: '#d946ef', weight: 1.6, dashArray: '8 5', fill: true, fillOpacity: 0.02 }),
+      tooltip: p => p.zone, name: p => 'Zone ' + p.zone + ' (' + p.tbl_rows + ' table rows, ' + p.labels + ' numbers on the map)' },
+    { file: 'division_lines', title: 'Division lines', kind: 'line', on: false, swatch: '#d946ef',
+      style: () => ({ color: '#d946ef', weight: 2 }), name: () => 'Division line' },
+    { file: 'map_frame', title: 'Map frame (GeoPDF viewport)', kind: 'line', on: false, swatch: '#777',
+      style: () => ({ color: '#777', weight: 1.2, fill: false }), name: p => p.name },
+    { file: 'international_boundary', title: 'International boundary', kind: 'line', on: true, swatch: '#16a34a',
+      style: () => ({ color: '#16a34a', weight: 2.4, opacity: 0.9 }), name: () => 'International boundary' },
+    { file: 'rivers', title: 'Rivers (2023 map)', kind: 'line', on: false, swatch: '#60a5fa',
+      style: () => ({ color: '#60a5fa', weight: 0.9 }), name: () => 'River' },
+    { file: 'roads', title: 'Roads (2023 map, centrelines)', kind: 'line', on: false, swatch: '#9a3412',
+      style: () => ({ color: '#9a3412', weight: 1.3 }), name: () => 'Road' },
+    { file: 'railway', title: 'Railway (2023 map)', kind: 'line', on: false, swatch: '#000',
+      style: () => ({ color: '#000', weight: 1.6, dashArray: '6 3' }), name: () => 'Railway' },
+    { file: 'graticule', title: 'Graticule (printed vs /VP)', kind: 'line', on: false, swatch: '#999',
+      style: () => ({ color: '#999', weight: 0.7, dashArray: '3 3' }),
+      name: p => p.axis + ' – printed ' + p.printed + '°, GeoPDF ' + p.vp_value + '°' },
+    { file: 'mineral_symbols_raster', title: 'Raster symbol blobs (all detections)', kind: 'point', on: false, swatch: '#fff500',
+      point: (f, ll) => {
+        const c = SYMBOL_RGB[f.properties.colour] || '#999', hollow = f.properties.fill === 'sparse';
+        return L.circleMarker(ll, { radius: f.properties.fill === 'round' ? 3.5 : 3, color: hollow ? c : '#000', weight: hollow ? 1.6 : 0.6,
+          fillColor: hollow ? '#fff' : c, fillOpacity: hollow ? 0.6 : 0.9 });
+      },
+      name: p => (p.candidates || 'no matching rule') + (p.near_num ? ' · near ' + p.near_num : '') },
+    { file: 'mineral_localities', title: 'Mineral localities (numbered)', kind: 'point', on: true, swatch: '#fff500',
+      point: (f, ll) => localityMarker(f, ll),
+      name: p => p.zone_num + ' ' + (p.locality || '(not in table)') + (p.codes_raw ? ' – ' + p.codes_raw : '') },
+    { virtual: 'mineral_numbers', from: 'mineral_localities', title: 'Printed numbers (as on the map)', kind: 'labels', on: true, swatch: '#fff', anchor: 'centre',
+      derive: fc => fc.features.map(f => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [f.properties.label_lon, f.properties.label_lat] },
+        properties: { text: String(f.properties.number), size_pt: 6.72, font: 'ArialMT', angle: 0, kind: 'mineral number' } })),
+      name: p => p.text },
+    { file: 'towns', title: 'Towns (2023 map)', kind: 'point', on: false, swatch: '#000',
+      point: (f, ll) => L.circleMarker(ll, { radius: 3, color: '#000', weight: 1, fillColor: f.properties.kind === 'town marker' ? '#000' : '#fff', fillOpacity: 1 }),
+      name: p => p.name || '(unnamed town)' },
+    { file: 'state_capitals', title: 'State capitals (2023 map)', kind: 'point', on: true, swatch: '#b91c1c',
+      point: (f, ll) => L.circleMarker(ll, { radius: 5.5, color: '#fff', weight: 1.5, fillColor: '#b91c1c', fillOpacity: 1 }),
+      name: p => p.name },
+    { file: 'map_labels', title: 'Map text (towns, states, rivers)', kind: 'labels', on: true, swatch: '#fff', anchor: 'centre',
+      name: p => p.text },
+    { file: 'river_labels', title: 'River names (points)', kind: 'point', on: false, swatch: '#1d4ed8',
+      point: (f, ll) => L.circleMarker(ll, { radius: 3.5, color: '#1d4ed8', weight: 1.2, fill: false }), name: p => p.name },
+    { file: 'state_name_labels', title: 'State names (points)', kind: 'point', on: false, swatch: '#374151',
+      point: (f, ll) => L.circleMarker(ll, { radius: 3.5, color: '#374151', weight: 1.2, fill: false }), name: p => p.name },
+    { file: 'pegmatite_marks', title: 'Pegmatite marks “P”', kind: 'point', on: false, swatch: '#7c2d12',
+      point: (f, ll) => L.circleMarker(ll, { radius: 4, color: '#7c2d12', weight: 1.4, fill: false }), name: p => p.meaning },
+  ];
+
+  const DATASETS = {
+    geology: { key: 'geology', title: 'Geological Map (2011)', short: 'Geology 2011', metaUrl: 'build/data/meta.json',
+      dataDir: 'build/data/', tilesUrl: 'build/tiles/{z}/{x}/{y}.png', layers: GEOLOGY_LAYERS,
+      attribution: 'NGSA Geological Map of Nigeria 1:2M (PDF) · extract_shapefiles.py' },
+    minerals: { key: 'minerals', title: 'Mineral Resources Map (2023)', short: 'Minerals 2023', metaUrl: 'build/data/minerals/meta.json',
+      dataDir: 'build/data/minerals/', tilesUrl: 'build/tiles_minerals/{z}/{x}/{y}.png', layers: MINERAL_LAYERS,
+      attribution: 'NGSA Mineral Resources Map of Nigeria 2023 (GeoPDF) · extract_mineral_map.py' },
+  };
+  const LAYERS = [];                       // flat list in drawing order, ids prefixed with the dataset key
   const byId = {};
-  LAYERS.forEach(d => { byId[d.id] = d; });
+  for (const ds of Object.values(DATASETS)) {
+    for (const def of ds.layers) {
+      def.ds = ds.key;
+      def.id = ds.key + ':' + (def.file || def.virtual);
+      LAYERS.push(def); byId[def.id] = def;
+    }
+  }
 
   // ------------------------------------------------------------------ state
-  let meta, map, pdfLayer, labelLayer;
-  let mode = 'swipe', swipeFrac = 0.5, highlighted = null, outlineUnits = false;
+  const metas = {};                        // dataset key -> meta.json
+  let map, pdfLayer, pdfSource = 'geology';
+  let mode = 'swipe', swipeFrac = 0.5, highlighted = null, outlineUnits = false, highlightMineral = null;
   const data = {}, groups = {}, visible = {};
   let unitsIndex = [];     // [{bbox:[minx,miny,maxx,maxy], feature}]
 
@@ -71,10 +162,22 @@
     return { fillColor: p.fill || '#cccccc', fillOpacity: dim ? 0.10 : 1,
       stroke: outlineUnits, color: '#333', weight: 0.6, opacity: 1 };
   }
+  function localityColour(p) {
+    // colour of the matched raster symbol when there is one, otherwise the colour the legend gives the first code
+    const sc = p.sym_colour && !/^nearest/.test(p.sym_colour) ? SYMBOL_RGB[p.sym_colour] : null;
+    return sc || codeColour(p.codes_raw);
+  }
+  function localityStyle(p) {
+    const dim = highlightMineral && !(' ' + (p.minerals || '') + ' ').toLowerCase().includes(highlightMineral.toLowerCase());
+    const snapped = /raster symbol/.test(p.pos_src || '');
+    return { radius: dim ? 3 : 4.5, color: dim ? '#999' : '#000', weight: snapped ? 1 : 1.4, dashArray: snapped ? null : '2 2',
+      fillColor: localityColour(p), fillOpacity: dim ? 0.15 : 0.95, opacity: dim ? 0.3 : 1 };
+  }
+  function localityMarker(f, ll) { return L.circleMarker(ll, localityStyle(f.properties)); }
 
   // ------------------------------------------------------------------ canvas label layer
   const LabelLayer = L.Layer.extend({
-    options: { pane: 'labels' },
+    options: { pane: 'labels', ptPerDeg: 157.6, anchor: 'origin' },
     initialize: function (features, options) { L.setOptions(this, options); this._features = features; },
     onAdd: function (m) {
       this._canvas = L.DomUtil.create('canvas', 'leaflet-zoom-hide');
@@ -102,13 +205,14 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, size.x, size.y);
       const degPerPx = 180 / (256 * Math.pow(2, m.getZoom()));
-      const ptPerPx = degPerPx / meta.georef.a;          // PDF points per screen pixel
+      const ptPerPx = degPerPx * this.options.ptPerDeg;          // PDF points per screen pixel
       const bounds = m.getBounds().pad(0.15);
-      ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left'; ctx.lineJoin = 'round';
+      const centre = this.options.anchor === 'centre';
+      ctx.textBaseline = centre ? 'middle' : 'alphabetic'; ctx.textAlign = centre ? 'center' : 'left'; ctx.lineJoin = 'round';
       for (const f of this._features) {
         const p = f.properties, c = f.geometry.coordinates;
         if (c[1] < bounds.getSouth() || c[1] > bounds.getNorth() || c[0] < bounds.getWest() || c[0] > bounds.getEast()) continue;
-        const natural = p.size_pt / ptPerPx;             // text height as printed, in px
+        const natural = (p.size_pt || 7) / ptPerPx;      // text height as printed, in px
         if (natural < 6) continue;                        // too small to read: skip (as on paper)
         const px = Math.max(natural, 9);
         const pt = m.latLngToContainerPoint([c[1], c[0]]);
@@ -119,7 +223,7 @@
         ctx.lineWidth = Math.max(2, px / 5);
         ctx.strokeStyle = 'rgba(255,255,255,0.85)';
         ctx.strokeText(p.text, 0, 0);
-        ctx.fillStyle = p.kind === 'water name' ? '#1d4ed8' : p.kind === 'state capital' ? '#7f1d1d' : '#111';
+        ctx.fillStyle = textColourFor(p);
         ctx.fillText(p.text, 0, 0);
         ctx.restore();
       }
@@ -134,33 +238,52 @@
   }
 
   // ------------------------------------------------------------------ map
+  function unionBounds() {
+    let b = null;
+    for (const m of Object.values(metas)) {
+      const pb = L.latLngBounds(m.tiles.page_bounds);
+      b = b ? b.extend(pb) : pb;
+    }
+    return b;
+  }
   function initMap() {
-    const page = meta.tiles.page_bounds;
+    const page = unionBounds();
     map = L.map('map', {
       crs: L.CRS.EPSG4326,
       renderer: L.canvas({ tolerance: 8, padding: 0.3 }),
       zoomControl: false, attributionControl: false,
       zoomSnap: 0.25, zoomDelta: 0.5, wheelPxPerZoomLevel: 90,
       minZoom: 4, maxZoom: 11,
-      maxBounds: L.latLngBounds([[page[0][0] - 2, page[0][1] - 2], [page[1][0] + 2, page[1][1] + 2]]),
+      maxBounds: page.pad(0.15),
       maxBoundsViscosity: 0.6,
     });
     map.createPane('pdf').style.zIndex = 250;
     map.createPane('labels').style.zIndex = 450;
     L.control.zoom({ position: 'topright' }).addTo(map);
     L.control.scale({ imperial: false, position: 'bottomleft', maxWidth: 120 }).addTo(map);
-    L.control.attribution({ prefix: false, position: 'bottomleft' })
-      .addAttribution('NGSA Geological Map of Nigeria 1:2M (PDF) · extraction: extract_shapefiles.py').addTo(map);
-
-    pdfLayer = L.tileLayer('build/tiles/{z}/{x}/{y}.png', {
-      pane: 'pdf', tileSize: 256, minZoom: 4, maxZoom: 11,
-      minNativeZoom: meta.tiles.zmin, maxNativeZoom: meta.tiles.zmax,
-      noWrap: true, bounds: L.latLngBounds(page), keepBuffer: 2, updateWhenIdle: true,
-    }).addTo(map);
-
-    map.fitBounds(L.latLngBounds(meta.map_face_bounds), { padding: [6, 6] });
+    map._attrib = L.control.attribution({ prefix: false, position: 'bottomleft' }).addTo(map);
+    setPdfSource(metas.geology ? 'geology' : 'minerals', true);
+    map.fitBounds(L.latLngBounds(metas[pdfSource].map_face_bounds), { padding: [6, 6] });
     map.on('move resize', updateClip);
     map.on('click', () => { if ($('#sheet').classList.contains('open')) closeSheet(); });
+  }
+
+  function setPdfSource(key, silent) {
+    if (!metas[key]) return;
+    pdfSource = key;
+    const m = metas[key], ds = DATASETS[key];
+    if (pdfLayer) map.removeLayer(pdfLayer);
+    pdfLayer = L.tileLayer(ds.tilesUrl, {
+      pane: 'pdf', tileSize: 256, minZoom: 4, maxZoom: 11,
+      minNativeZoom: m.tiles.zmin, maxNativeZoom: m.tiles.zmax,
+      noWrap: true, bounds: L.latLngBounds(m.tiles.page_bounds), keepBuffer: 2, updateWhenIdle: true,
+    }).addTo(map);
+    Object.values(DATASETS).forEach(d => map._attrib.removeAttribution(d.attribution));
+    map._attrib.addAttribution(ds.attribution);
+    $('#badge-left').textContent = 'PDF · ' + ds.short;
+    $$('input[name="pdf-src"]').forEach(r => { r.checked = r.value === key; });
+    const chip = $('#chip-pdf'); if (chip) chip.textContent = 'PDF: ' + ds.short + ' ⇄';
+    if (!silent) toast('PDF side now shows the ' + ds.title);
   }
 
   function vecPanes() { return [map.getPane('overlayPane'), map.getPane('labels'), map.getPane('tooltipPane')]; }
@@ -211,40 +334,48 @@
   // ------------------------------------------------------------------ vector layers
   function buildGroups() {
     for (const def of LAYERS) {
-      const fc = data[def.id];
+      const fc = def.virtual ? data[def.ds + ':' + def.from] : data[def.id];
       if (!fc) continue;
+      const ptPerDeg = (metas[def.ds] && metas[def.ds].georef.points_per_degree) || 157.6;
       if (def.kind === 'labels') {
-        // the PDF draws halo text twice (two slightly offset copies): keep one
-        const seen = new Set();
-        const feats = fc.features.filter(f => {
-          const c = f.geometry.coordinates, p = f.properties;
-          const key = p.kind + '|' + p.text + '|' + Math.round(c[0] / 0.01) + '|' + Math.round(c[1] / 0.01);
-          if (seen.has(key)) return false;
-          seen.add(key); return true;
-        });
-        labelLayer = new LabelLayer(feats);
-        groups[def.id] = labelLayer;
+        let feats = def.derive ? def.derive(fc) : fc.features;
+        if (def.id === 'geology:labels') {
+          // the PDF draws halo text twice (two slightly offset copies): keep one
+          const seen = new Set();
+          feats = feats.filter(f => {
+            const c = f.geometry.coordinates, p = f.properties;
+            const key = p.kind + '|' + p.text + '|' + Math.round(c[0] / 0.01) + '|' + Math.round(c[1] / 0.01);
+            if (seen.has(key)) return false;
+            seen.add(key); return true;
+          });
+        }
+        groups[def.id] = new LabelLayer(feats, { ptPerDeg, anchor: def.anchor || 'origin' });
       } else {
         groups[def.id] = L.geoJSON(fc, {
           style: def.style,
           pointToLayer: def.point,
           bubblingMouseEvents: false,
           smoothFactor: 0.8,
-          onEachFeature: (f, layer) => layer.on('click', e => showFeature(def, f, e.latlng)),
+          onEachFeature: (f, layer) => {
+            layer.on('click', e => showFeature(def, f, e.latlng));
+            if (def.tooltip) layer.bindTooltip(def.tooltip(f.properties), { permanent: true, direction: 'center', className: 'zone-tip' });
+          },
         });
       }
       visible[def.id] = def.on;
       if (def.on) groups[def.id].addTo(map);
     }
-    // spatial index for "what unit is here?"
-    unitsIndex = data.geology_units.features.map(f => {
+    restackLayers();
+    // spatial index for "what geology unit is here?"
+    const units = data['geology:geology_units'];
+    unitsIndex = units ? units.features.map(f => {
       let minx = 180, miny = 90, maxx = -180, maxy = -90;
       eachRing(f.geometry, ring => ring.forEach(c => {
         if (c[0] < minx) minx = c[0]; if (c[0] > maxx) maxx = c[0];
         if (c[1] < miny) miny = c[1]; if (c[1] > maxy) maxy = c[1];
       }));
       return { bbox: [minx, miny, maxx, maxy], feature: f };
-    });
+    }) : [];
   }
   function eachRing(geom, fn) {
     if (geom.type === 'Polygon') geom.coordinates.forEach(fn);
@@ -289,6 +420,8 @@
     if (on && !map.hasLayer(g)) g.addTo(map);
     if (!on && map.hasLayer(g)) map.removeLayer(g);
     restackLayers();
+    const cb = $('input[data-layer="' + id + '"]');
+    if (cb && cb.checked !== on) cb.checked = on;
   }
 
   // ------------------------------------------------------------------ bottom sheet
@@ -321,8 +454,15 @@
   const PRETTY = { ocg_id: 'PDF layer id', layer_no: 'layer order', unit: 'unit (PDF layer name)', fill: 'fill colour',
     code: 'code', code_src: 'code source', leg_code: 'legend code', leg_desc: 'legend description', lbl_code: 'label on map',
     n_lbl: 'labels inside', area_km2: 'area (km²)', n_rings: 'rings', src_seq: 'PDF sequence no.', dup_of: 'duplicate of',
-    width_pt: 'line width (pt)', n_frag: 'fragments merged', len_km: 'length (km)', name_kind: 'name source',
-    name_dist: 'label distance (pt)', size_pt: 'text size (pt)', stroke: 'stroke colour', 'class': 'class', text: 'text', kind: 'kind', font: 'font', angle: 'angle (°)' };
+    width_pt: 'line width (pt)', n_frag: 'fragments merged', len_km: 'length (km)', length_km: 'length (km)', name_kind: 'name source',
+    name_dist: 'label distance (pt)', size_pt: 'text size (pt)', stroke: 'stroke colour', 'class': 'class', text: 'text', kind: 'kind', font: 'font', angle: 'angle (°)',
+    zone_num: 'map number', zone: 'zone', number: 'number', locality: 'locality (table)', codes_raw: 'codes as printed', minerals: 'minerals',
+    min_conf: 'code confidence', match: 'table join', tbl_flags: 'table flags', pos_src: 'point position', snap_pt: 'snap distance (pt)',
+    sym_colour: 'symbol colour', sym_cands: 'symbol candidates', label_lon: 'number printed at lon', label_lat: 'number printed at lat',
+    colour: 'colour class', w_px: 'width (px)', h_px: 'height (px)', body_w: 'body width (px)', body_h: 'body height (px)', candidates: 'candidate minerals',
+    link: 'link to a number', near_num: 'nearest number', near_dist: 'distance (pt)', near_loc: 'its locality', near_mins: 'its minerals',
+    tbl_rows: 'table rows', labels: 'numbers on the map', src: 'position source', vp_value: 'GeoPDF value (°)', printed: 'printed label (°)',
+    n_glyphs: 'glyphs', meaning: 'meaning', symbol: 'symbol' };
   const SKIP = { layer: 1 };
 
   function propsTable(p) {
@@ -331,8 +471,8 @@
       if (SKIP[k]) continue;
       let v = p[k];
       if (v == null || v === '' || (k === 'dup_of' && !v)) continue;
-      if (typeof v === 'number' && !Number.isInteger(v)) v = v.toLocaleString('en', { maximumFractionDigits: 2 });
-      if (k === 'fill' || k === 'stroke') v = '<span class="pill" style="background:' + esc(v) + ';color:#000;border:1px solid #0003">' + esc(v) + '</span>';
+      if (typeof v === 'number' && !Number.isInteger(v)) v = v.toLocaleString('en', { maximumFractionDigits: 4 });
+      if ((k === 'fill' || k === 'stroke') && /^#/.test(String(v))) v = '<span class="pill" style="background:' + esc(v) + ';color:#000;border:1px solid #0003">' + esc(v) + '</span>';
       else v = esc(v);
       h += '<tr><th>' + esc(PRETTY[k] || k) + '</th><td>' + v + '</td></tr>';
     }
@@ -341,34 +481,47 @@
 
   function featureCard(def, f) {
     const p = f.properties || {};
-    const colour = def.id === 'geology_units' ? (p.fill || '#ccc') : (typeof def.swatch === 'string' && def.swatch[0] === '#' ? def.swatch : '#ddd');
+    let colour = typeof def.swatch === 'string' && def.swatch[0] === '#' ? def.swatch : '#ddd';
+    if (def.id === 'geology:geology_units') colour = p.fill || '#ccc';
+    if (def.id === 'minerals:mineral_localities') colour = localityColour(p);
+    if (def.id === 'minerals:mineral_symbols_raster') colour = SYMBOL_RGB[p.colour] || '#999';
     let flags = '';
-    if (def.id === 'geology_units') {
+    if (def.id === 'geology:geology_units') {
       flags += '<span class="pill">code from ' + esc(p.code_src) + '</span>';
       if (p.lbl_code && p.leg_code && p.lbl_code !== p.leg_code) flags += '<span class="pill warn">map label says ' + esc(p.lbl_code) + '</span>';
       if (p.dup_of) flags += '<span class="pill warn">duplicate geometry (of #' + esc(p.dup_of) + ')</span>';
       if (!p.leg_code) flags += '<span class="pill warn">not in printed legend</span>';
     }
-    if (def.id === 'state_capitals') flags += '<span class="pill warn">position ≈ label centre (±7–15 km)</span>';
-    if (def.id === 'towns' && !p.name) flags += '<span class="pill warn">no label matched</span>';
+    if (def.id === 'geology:state_capitals') flags += '<span class="pill warn">position ≈ label centre (±7–15 km)</span>';
+    if (def.id === 'geology:towns' && !p.name) flags += '<span class="pill warn">no label matched</span>';
+    if (def.id === 'minerals:mineral_localities') {
+      flags += /raster symbol/.test(p.pos_src || '') ? '<span class="pill">on its raster symbol (' + esc(p.snap_pt) + ' pt from the number)</span>'
+        : '<span class="pill warn">position = printed number (symbol not matched)</span>';
+      if (p.match !== 'exact') flags += '<span class="pill warn">' + esc(p.match) + '</span>';
+      if (/unknown/.test(p.min_conf || '')) flags += '<span class="pill warn">code not in legend</span>';
+      if (p.tbl_flags) flags += '<span class="pill warn">table row flagged</span>';
+    }
+    if (def.id === 'minerals:state_capitals') flags += '<span class="pill">' + esc(p.src) + '</span>';
+    if (def.id === 'minerals:towns' && p.kind !== 'town marker') flags += '<span class="pill warn">' + esc(p.kind) + '</span>';
     return '<div class="feature-head"><div class="sw" style="background:' + esc(colour) + '"></div><div>' +
-      '<div class="name">' + esc(def.name(p)) + '</div><div class="sub">' + esc(def.title) + '</div></div></div>' +
+      '<div class="name">' + esc(def.name(p)) + '</div><div class="sub">' + esc(def.title) + ' · ' + esc(DATASETS[def.ds].short) + '</div></div></div>' +
       (flags ? '<p>' + flags + '</p>' : '') + propsTable(p);
   }
 
   function showFeature(def, f, latlng) {
     let h = featureCard(def, f);
-    if (def.id !== 'geology_units' && latlng) {
+    const unitDef = byId['geology:geology_units'];
+    if (unitDef && def.id !== 'geology:geology_units' && latlng) {
       const under = unitsAt(latlng.lng, latlng.lat);
       if (under.length) {
-        h += '<div class="under"><h3>Geology unit at this point</h3>' +
-          under.map(u => featureCard(byId.geology_units, u)).join('<hr>') + '</div>';
+        h += '<div class="under"><h3>Geology unit at this point (2011 map)</h3>' +
+          under.map(u => featureCard(unitDef, u)).join('<hr>') + '</div>';
       }
-    } else if (latlng) {
+    } else if (unitDef && latlng) {
       const under = unitsAt(latlng.lng, latlng.lat).filter(u => u !== f);
       if (under.length) {
         h += '<div class="under"><h3>Overlapping unit polygon' + (under.length > 1 ? 's' : '') + '</h3>' +
-          under.map(u => featureCard(byId.geology_units, u)).join('<hr>') + '</div>';
+          under.map(u => featureCard(unitDef, u)).join('<hr>') + '</div>';
       }
     }
     $('[data-panel="feature"]').innerHTML = h;
@@ -382,123 +535,251 @@
 
   // ------------------------------------------------------------------ layers panel
   function renderLayersPanel() {
-    const counts = {}; meta.layers.forEach(l => { counts[l.id] = l.count; });
-    let h = '<div class="row-actions"><button class="btn" id="all-on">All on</button><button class="btn" id="all-off">All off</button>' +
-      '<button class="btn" id="units-only">Units only</button></div>';
-    for (const def of LAYERS) {
-      if (!groups[def.id]) continue;
-      h += '<label class="layer-row"><span class="sw" style="background:' + def.swatch + '"></span>' +
-        '<span class="lbl">' + esc(def.title) + '<br><span class="cnt">' + fmt(counts[def.id]) + ' features</span></span>' +
-        '<span class="switch"><input type="checkbox" data-layer="' + def.id + '"' + (visible[def.id] ? ' checked' : '') + '><i></i></span></label>';
+    const counts = {};
+    for (const [k, m] of Object.entries(metas)) m.layers.forEach(l => { counts[k + ':' + l.id] = l.count; });
+    counts['minerals:mineral_numbers'] = counts['minerals:mineral_localities'];
+    let h = '<div class="pdf-src"><span class="lbl">PDF side shows</span>';
+    for (const ds of Object.values(DATASETS)) {
+      if (!metas[ds.key]) continue;
+      h += '<label><input type="radio" name="pdf-src" value="' + ds.key + '"' + (pdfSource === ds.key ? ' checked' : '') + '> ' + esc(ds.title) + '</label>';
     }
-    h += '<label class="layer-row"><span class="sw" style="background:#fff;border:1.5px solid #333"></span><span class="lbl">Outline unit polygons</span>' +
-      '<span class="switch"><input type="checkbox" id="outline-toggle"><i></i></span></label>';
+    h += '</div>';
+    for (const ds of Object.values(DATASETS)) {
+      if (!metas[ds.key]) continue;
+      const defs = ds.layers.filter(d => groups[d.id]);
+      h += '<div class="group" data-group="' + ds.key + '"><div class="group-head"><h3>' + esc(ds.title) + '</h3>' +
+        '<div class="row-actions"><button class="btn" data-all="on">All on</button><button class="btn" data-all="off">All off</button>' +
+        (ds.key === 'geology' ? '<button class="btn" data-all="units">Units only</button>' : '<button class="btn" data-all="minerals">Minerals only</button>') +
+        '</div></div>';
+      for (const def of defs) {
+        h += '<label class="layer-row"><span class="sw" style="background:' + def.swatch + '"></span>' +
+          '<span class="lbl">' + esc(def.title) + '<br><span class="cnt">' + fmt(counts[def.id]) + ' features</span></span>' +
+          '<span class="switch"><input type="checkbox" data-layer="' + def.id + '"' + (visible[def.id] ? ' checked' : '') + '><i></i></span></label>';
+      }
+      if (ds.key === 'geology') {
+        h += '<label class="layer-row"><span class="sw" style="background:#fff;border:1.5px solid #333"></span><span class="lbl">Outline unit polygons</span>' +
+          '<span class="switch"><input type="checkbox" id="outline-toggle"><i></i></span></label>';
+      }
+      h += '</div>';
+    }
     const el = $('[data-panel="layers"]'); el.innerHTML = h;
     $$('input[data-layer]', el).forEach(cb => cb.addEventListener('change', () => setLayerVisible(cb.dataset.layer, cb.checked)));
-    const setAll = pred => { $$('input[data-layer]', el).forEach(cb => { const on = pred(cb.dataset.layer); if (cb.checked !== on) { cb.checked = on; setLayerVisible(cb.dataset.layer, on); } }); };
-    $('#all-on', el).addEventListener('click', () => setAll(() => true));
-    $('#all-off', el).addEventListener('click', () => setAll(() => false));
-    $('#units-only', el).addEventListener('click', () => setAll(id => id === 'geology_units'));
-    $('#outline-toggle', el).addEventListener('change', e => { outlineUnits = e.target.checked; groups.geology_units.setStyle(unitStyle); });
+    $$('input[name="pdf-src"]', el).forEach(r => r.addEventListener('change', () => { if (r.checked) setPdfSource(r.value); }));
+    $$('.group', el).forEach(g => {
+      const key = g.dataset.group;
+      $$('button[data-all]', g).forEach(b => b.addEventListener('click', () => {
+        const what = b.dataset.all;
+        $$('input[data-layer]', g).forEach(cb => {
+          const id = cb.dataset.layer;
+          const on = what === 'on' ? true : what === 'off' ? false : what === 'units' ? id === 'geology:geology_units'
+            : (id === 'minerals:mineral_localities' || id === 'minerals:mineral_numbers');
+          if (cb.checked !== on) { cb.checked = on; setLayerVisible(id, on); }
+        });
+        if (what === 'minerals') { /* make the mineral points readable: hide the dense geology text */ setLayerVisible('geology:labels', false); }
+        toast(what === 'on' ? 'All ' + DATASETS[key].short + ' layers on' : what === 'off' ? 'All ' + DATASETS[key].short + ' layers off' : 'Showing only the main layer');
+      }));
+    });
+    const ot = $('#outline-toggle', el);
+    if (ot) ot.addEventListener('change', e => { outlineUnits = e.target.checked; groups['geology:geology_units'].setStyle(unitStyle); });
   }
 
   // ------------------------------------------------------------------ legend panel
   function renderLegendPanel() {
-    const n = {}; data.geology_units.features.forEach(f => { const c = f.properties.code; n[c] = (n[c] || 0) + 1; });
     const el = $('[data-panel="legend"]');
-    let h = '<input class="legend-search" id="legend-q" type="search" placeholder="Filter legend (code or description)…">' +
-      '<p class="muted" style="margin:2px 0 6px">From the EXPLANATIONS panel of the PDF (legend.csv). Tap a row to highlight those polygons.</p>' +
-      '<div id="legend-rows">';
-    meta.legend.forEach((e, i) => {
-      h += '<div class="legend-row" data-code="' + esc(e.code) + '" data-i="' + i + '"><span class="sw" style="background:' + esc(e.fill) + '"></span>' +
-        '<span class="code">' + esc(e.code) + '</span><span class="desc">' + esc(e.description) + '</span>' +
-        '<span class="n">' + (n[e.code] ? fmt(n[e.code]) + ' pol.' : '<span class="pill warn">0</span>') + '</span></div>';
-    });
-    h += '</div>';
-    // units whose code is not in the printed legend
-    const legendCodes = new Set(meta.legend.map(e => e.code));
-    const missing = {};
-    data.geology_units.features.forEach(f => { const p = f.properties; if (!legendCodes.has(p.code)) { const k = p.code || '(none)'; missing[k] = missing[k] || { n: 0, unit: p.unit, fill: p.fill }; missing[k].n++; } });
-    const mk = Object.keys(missing);
-    if (mk.length) {
-      h += '<h3>Drawn on the map but missing from the printed legend</h3>';
-      mk.forEach(k => { const m = missing[k]; h += '<div class="legend-row" data-code="' + esc(k === '(none)' ? '' : k) + '"><span class="sw" style="background:' + esc(m.fill) + '"></span><span class="code">' + esc(k) + '</span><span class="desc">' + esc(m.unit) + '</span><span class="n">' + fmt(m.n) + ' pol.</span></div>'; });
+    let h = '<input class="legend-search" id="legend-q" type="search" placeholder="Filter legends (code, mineral, unit)…">';
+    if (metas.geology) {
+      const n = {}; data['geology:geology_units'].features.forEach(f => { const c = f.properties.code; n[c] = (n[c] || 0) + 1; });
+      h += '<h3>Geological Map (2011) – rock units</h3><p class="muted" style="margin:2px 0 6px">From the EXPLANATIONS panel of the PDF (legend.csv). Tap a row to highlight those polygons.</p>' +
+        '<div id="legend-rows" class="legend-list">';
+      metas.geology.legend.forEach((e, i) => {
+        h += '<div class="legend-row" data-code="' + esc(e.code) + '" data-i="' + i + '"><span class="sw" style="background:' + esc(e.fill) + '"></span>' +
+          '<span class="code">' + esc(e.code) + '</span><span class="desc">' + esc(e.description) + '</span>' +
+          '<span class="n">' + (n[e.code] ? fmt(n[e.code]) + ' pol.' : '<span class="pill warn">0</span>') + '</span></div>';
+      });
+      h += '</div>';
+      // units whose code is not in the printed legend
+      const legendCodes = new Set(metas.geology.legend.map(e => e.code));
+      const missing = {};
+      data['geology:geology_units'].features.forEach(f => { const p = f.properties; if (!legendCodes.has(p.code)) { const k = p.code || '(none)'; missing[k] = missing[k] || { n: 0, unit: p.unit, fill: p.fill }; missing[k].n++; } });
+      const mk = Object.keys(missing);
+      if (mk.length) {
+        h += '<h3>Drawn on the 2011 map but missing from its printed legend</h3><div class="legend-list">';
+        mk.forEach(k => { const m = missing[k]; h += '<div class="legend-row" data-code="' + esc(k === '(none)' ? '' : k) + '"><span class="sw" style="background:' + esc(m.fill) + '"></span><span class="code">' + esc(k) + '</span><span class="desc">' + esc(m.unit) + '</span><span class="n">' + fmt(m.n) + ' pol.</span></div>'; });
+        h += '</div>';
+      }
+    }
+    if (metas.minerals) {
+      const locs = data['minerals:mineral_localities'].features;
+      const nMin = {};
+      locs.forEach(f => { const seen = new Set(); String(f.properties.minerals || '').split(' | ').forEach(m => { const k = m.split(' (')[0].trim(); if (k && !seen.has(k)) { seen.add(k); nMin[k] = (nMin[k] || 0) + 1; } }); });
+      h += '<h3>Mineral Resources Map (2023) – find a locality</h3>' +
+        '<input class="legend-search" id="loc-q" type="search" placeholder="Number (e.g. B 12) or locality name…"><div id="loc-results" class="legend-list"></div>';
+      h += '<h3>Mineral Resources Map (2023) – legend symbols</h3><p class="muted" style="margin:2px 0 6px">The 67 legend entries (mineral_legend.csv) with their symbol cut from the PDF, the codes the table uses for them and the number of numbered localities listing that mineral. Tap a row to highlight those localities.</p>' +
+        '<div class="legend-list" id="mineral-legend-rows">';
+      metas.minerals.legend.forEach(e => {
+        const img = e.symbol_png ? '<img class="symimg" src="' + esc(DATASETS.minerals.dataDir + e.symbol_png) + '" alt="">' : '<span class="sw"></span>';
+        const nm = e.mineral;
+        h += '<div class="legend-row mineral" data-mineral="' + esc(nm) + '">' + img +
+          '<span class="code">' + esc(e.table_codes_mapped_here || (e.code_printed_in_legend || '')) + '</span><span class="desc">' + esc(nm) + '</span>' +
+          '<span class="n">' + (nMin[nm] ? fmt(nMin[nm]) + ' loc.' : '<span class="pill warn">0</span>') + '</span></div>';
+      });
+      h += '</div>';
+      const unknown = (metas.minerals.codes || []).filter(c => c.confidence === 'unknown' && Number(c.uses_in_table) > 0);
+      if (unknown.length) {
+        h += '<h3>Table codes that could not be resolved</h3><p class="muted">' + unknown.map(c => '<code>' + esc(c.code) + '</code> (' + esc(c.uses_in_table) + ')').join(', ') + '</p>';
+      }
     }
     el.innerHTML = h;
-    $$('.legend-row', el).forEach(row => row.addEventListener('click', () => {
+    $$('.legend-row:not(.mineral)', el).forEach(row => row.addEventListener('click', () => {
       const code = row.dataset.code;
       const same = highlighted === code;
-      $$('.legend-row', el).forEach(r => r.classList.remove('sel'));
+      $$('.legend-row:not(.mineral)', el).forEach(r => r.classList.remove('sel'));
       highlighted = same ? null : code;
       if (!same) row.classList.add('sel');
-      groups.geology_units.setStyle(unitStyle);
+      groups['geology:geology_units'].setStyle(unitStyle);
       if (!same) toast('Highlighting ' + (code || 'uncoded') + ' polygons – tap again to clear');
     }));
+    $$('.legend-row.mineral', el).forEach(row => row.addEventListener('click', () => {
+      const m = row.dataset.mineral;
+      const same = highlightMineral === m;
+      $$('.legend-row.mineral', el).forEach(r => r.classList.remove('sel'));
+      highlightMineral = same ? null : m;
+      if (!same) row.classList.add('sel');
+      const g = groups['minerals:mineral_localities'];
+      g.eachLayer(l => l.setStyle(localityStyle(l.feature.properties)));
+      if (!same) { setLayerVisible('minerals:mineral_localities', true); toast('Highlighting localities with ' + m + ' – tap again to clear'); }
+    }));
+    const lq = $('#loc-q', el);
+    if (lq) {
+      const res = $('#loc-results', el);
+      lq.addEventListener('input', () => {
+        const hits = findLocalities(lq.value);
+        res.innerHTML = hits.slice(0, 25).map((f, i) => { const p = f.properties; return '<div class="legend-row loc" data-i="' + i + '"><span class="sw" style="background:' + esc(localityColour(p)) + '"></span>' +
+          '<span class="code">' + esc(p.zone + ' ' + p.number) + '</span><span class="desc">' + esc(p.locality || '(not in table)') + '<br><span class="muted">' + esc(p.minerals || '') + '</span></span></div>'; }).join('') +
+          (hits.length > 25 ? '<p class="muted">… ' + (hits.length - 25) + ' more – refine the search</p>' : (lq.value.trim() && !hits.length ? '<p class="muted">no locality matches</p>' : ''));
+        $$('.legend-row.loc', res).forEach(row => row.addEventListener('click', () => {
+          const f = hits[+row.dataset.i], c = f.geometry.coordinates;
+          setLayerVisible('minerals:mineral_localities', true);
+          map.setView([c[1], c[0]], Math.max(map.getZoom(), 8.5), { animate: true });
+          showFeature(byId['minerals:mineral_localities'], f, L.latLng(c[1], c[0]));
+        }));
+      });
+    }
     $('#legend-q', el).addEventListener('input', e => {
       const q = e.target.value.trim().toLowerCase();
-      $$('#legend-rows .legend-row', el).forEach(r => { r.style.display = !q || r.textContent.toLowerCase().includes(q) ? '' : 'none'; });
+      $$('.legend-row', el).forEach(r => { r.style.display = !q || r.textContent.toLowerCase().includes(q) ? '' : 'none'; });
+    });
+  }
+
+  function findLocalities(q) {
+    const fc = data['minerals:mineral_localities'];
+    q = String(q || '').trim().toLowerCase();
+    if (!fc || !q) return [];
+    const num = /^([a-g])\s*(\d+)$/.exec(q);
+    return fc.features.filter(f => {
+      const p = f.properties;
+      if (num) return p.zone.toLowerCase() === num[1] && String(p.number) === num[2];
+      return (p.locality || '').toLowerCase().includes(q) || (p.minerals || '').toLowerCase().includes(q) || p.zone_num.toLowerCase() === q.replace(/\s+/g, '');
     });
   }
 
   // ------------------------------------------------------------------ compare / about panels
   function renderComparePanel() {
-    const s = meta.pdf_stats, total = meta.layers.reduce((a, l) => a + l.count, 0);
-    let h = '<div class="verdict"><b>Is the PDF a GeoPDF?</b> No. It is a layered vector PDF exported by ArcMap 9.2 (2011) with ' +
-      'no geospatial dictionaries, no projection and no attribute tables. The georeference used here was fitted to the drawn graticule ' +
-      '(' + meta.georef.points_per_degree.toFixed(2) + ' pt/°, residual ≈ ' + Math.round(meta.georef.max_residual_deg * 111000) + ' m, scale ≈ 1:' + fmt(meta.georef.scale) + ').</div>' +
-      '<div class="verdict"><b>Could the shapefiles be extracted?</b> Geometry: yes, completely (swipe to check the registration). ' +
-      'Attributes: rebuilt from layer names, the legend and map labels – see the caveats under “About”.</div>' +
-      '<div class="stat-grid">' +
-      '<div class="stat"><b>' + fmt(s.n_paths) + '</b><span>vector paths in the PDF</span></div>' +
-      '<div class="stat"><b>' + fmt(s.n_layers) + '</b><span>PDF layers (optional content groups)</span></div>' +
-      '<div class="stat"><b>' + fmt(s.n_words) + '</b><span>text strings (from ' + fmt(s.n_text_runs) + ' one-character runs)</span></div>' +
-      '<div class="stat"><b>' + fmt(total) + '</b><span>features in the 17 extracted layers</span></div></div>' +
-      '<h3>PDF primitives → extracted features</h3><table class="cmp"><tr><th>Output layer</th><th class="num">In PDF</th><th class="num">Extracted</th></tr>';
-    s.compare.forEach(r => {
-      h += '<tr><td><div class="out">' + esc(r.output) + '</div><div class="src">' + esc(r.sources) + (r.note ? ' · ' + esc(r.note) : '') + '</div></td>' +
-        '<td class="num">' + (r.pdf_primitives ? fmt(r.pdf_primitives) : '–') + '<div class="src">' + esc(r.pdf_kind) + '</div></td>' +
-        '<td class="num">' + esc(r.features == null ? '–' : (typeof r.features === 'number' ? fmt(r.features) : r.features)) + '</td></tr>';
-    });
-    h += '</table><details style="margin-top:10px"><summary style="font-size:13px;font-weight:600;color:var(--bar)">All ' + s.layers.length + ' PDF layers (paths / text)</summary><table class="cmp"><tr><th>PDF layer</th><th class="num">fills</th><th class="num">strokes</th><th class="num">text</th></tr>';
-    s.layers.forEach(l => { h += '<tr><td>' + esc(l.layer) + '</td><td class="num">' + fmt(l.fills) + '</td><td class="num">' + fmt(l.strokes) + '</td><td class="num">' + fmt(l.text) + '</td></tr>'; });
-    h += '</table></details>';
+    let h = '';
+    if (metas.geology) {
+      const meta = metas.geology, s = meta.pdf_stats, total = meta.layers.reduce((a, l) => a + l.count, 0);
+      h += '<h3>Geological Map of Nigeria (2011)</h3>' +
+        '<div class="verdict"><b>Is the PDF a GeoPDF?</b> No. It is a layered vector PDF exported by ArcMap 9.2 (2011) with ' +
+        'no geospatial dictionaries, no projection and no attribute tables. The georeference used here was fitted to the drawn graticule ' +
+        '(' + meta.georef.points_per_degree.toFixed(2) + ' pt/°, residual ≈ ' + Math.round(meta.georef.max_residual_deg * 111000) + ' m, scale ≈ 1:' + fmt(meta.georef.scale) + ').</div>' +
+        '<div class="verdict"><b>Could the shapefiles be extracted?</b> Geometry: yes, completely (swipe to check the registration). ' +
+        'Attributes: rebuilt from layer names, the legend and map labels – see the caveats under “About”.</div>' +
+        '<div class="stat-grid">' +
+        '<div class="stat"><b>' + fmt(s.n_paths) + '</b><span>vector paths in the PDF</span></div>' +
+        '<div class="stat"><b>' + fmt(s.n_layers) + '</b><span>PDF layers (optional content groups)</span></div>' +
+        '<div class="stat"><b>' + fmt(s.n_words) + '</b><span>text strings (from ' + fmt(s.n_text_runs) + ' one-character runs)</span></div>' +
+        '<div class="stat"><b>' + fmt(total) + '</b><span>features in the 17 extracted layers</span></div></div>' +
+        '<details><summary>PDF primitives → extracted features</summary><table class="cmp"><tr><th>Output layer</th><th class="num">In PDF</th><th class="num">Extracted</th></tr>';
+      s.compare.forEach(r => {
+        h += '<tr><td><div class="out">' + esc(r.output) + '</div><div class="src">' + esc(r.sources) + (r.note ? ' · ' + esc(r.note) : '') + '</div></td>' +
+          '<td class="num">' + (r.pdf_primitives ? fmt(r.pdf_primitives) : '–') + '<div class="src">' + esc(r.pdf_kind) + '</div></td>' +
+          '<td class="num">' + esc(r.features == null ? '–' : (typeof r.features === 'number' ? fmt(r.features) : r.features)) + '</td></tr>';
+      });
+      h += '</table></details><details><summary>All ' + s.layers.length + ' PDF layers (paths / text)</summary><table class="cmp"><tr><th>PDF layer</th><th class="num">fills</th><th class="num">strokes</th><th class="num">text</th></tr>';
+      s.layers.forEach(l => { h += '<tr><td>' + esc(l.layer) + '</td><td class="num">' + fmt(l.fills) + '</td><td class="num">' + fmt(l.strokes) + '</td><td class="num">' + fmt(l.text) + '</td></tr>'; });
+      h += '</table></details>';
+    }
+    if (metas.minerals) {
+      const m = metas.minerals, q = m.qa || {}, t = q.table || {}, nl = q.number_labels || {}, rs = q.raster_symbols || {}, cc = q.capital_check_km || {};
+      const total = m.layers.reduce((a, l) => a + l.count, 0);
+      h += '<h3>Mineral Resources Map of Nigeria (2023)</h3>' +
+        '<div class="verdict"><b>Is the PDF a GeoPDF?</b> Yes. ArcMap 10.2.2 wrote an ISO-32000 viewport (/VP with /Measure, 4 corner coordinates, GCS “' + esc(m.georef.gcs) + '”), ' +
+        'so the map frame is placed directly from the file (' + m.georef.points_per_degree.toFixed(2) + ' pt/°). Parallels agree with whole degrees to ' + (m.georef.parallel_max_residual_deg * 1).toFixed(4) + '°; ' +
+        'the printed <b>meridian labels sit ' + Math.abs(m.georef.meridian_label_offset_deg).toFixed(3) + '° (≈' + Math.round(Math.abs(m.georef.meridian_label_offset_deg) * 110) + ' km) west</b> of the GeoPDF values – the capital-city check (rms ' + esc(cc.VP_affine ? cc.VP_affine.rms_km : '–') + ' km vs ' + esc(cc.if_meridian_labels_were_right ? cc.if_meridian_labels_were_right.rms_km : '–') + ' km) shows the GeoPDF is right.</div>' +
+        '<div class="verdict"><b>Could the shapefiles be extracted?</b> Vector layers: yes. The mineral symbols and the geology background are a 75-dpi raster inside the PDF, so localities are keyed through the printed numbers and the EXPLANATIONS table; ' +
+        'symbols were detected in the raster and matched to the numbers by colour/size/fill.</div>' +
+        '<div class="stat-grid">' +
+        '<div class="stat"><b>' + fmt(t.entries) + '</b><span>EXPLANATIONS table rows (zones A–G)</span></div>' +
+        '<div class="stat"><b>' + fmt(nl.labels) + '</b><span>numbers printed on the map · ' + fmt(nl.matched) + ' joined to the table</span></div>' +
+        '<div class="stat"><b>' + fmt(rs.labels_snapped_to_colour_consistent_symbol_within_25pt) + '</b><span>numbers placed on their raster symbol (of ' + fmt(rs.labels_whose_minerals_have_a_legend_symbol) + ' with a legend symbol)</span></div>' +
+        '<div class="stat"><b>' + fmt(rs.blobs) + '</b><span>symbol blobs detected · ' + fmt(rs.symbols_without_any_label_within_14pt) + ' without a number</span></div>' +
+        '<div class="stat"><b>' + fmt(total) + '</b><span>features in the ' + m.layers.length + ' extracted layers</span></div>' +
+        '<div class="stat"><b>' + (cc.VP_affine ? cc.VP_affine.mean_dx_km + ' / ' + cc.VP_affine.mean_dy_km : '–') + '</b><span>km mean E / N offset of 33 capitals vs reference</span></div></div>';
+      if (nl.unmatched && nl.unmatched.length) h += '<p class="muted">Numbers on the map without a table row: ' + nl.unmatched.map(u => esc(u[0] + u[1])).join(', ') + ' (F110, G53, G86 are missing from the printed list; D256 is a misprint). ' + fmt(nl.table_entries_without_label) + ' table rows have no number on the map.</p>';
+      if (nl.rezoned_by_numbering_sequence && nl.rezoned_by_numbering_sequence.length) h += '<details><summary>Numbers re-zoned by numbering sequence (' + nl.rezoned_by_numbering_sequence.length + ')</summary><p class="muted">' + nl.rezoned_by_numbering_sequence.map(r => esc(r[1] + ': ' + r[0])).join('<br>') + '</p></details>';
+      h += '<details><summary>Extracted layers (2023)</summary><table class="cmp"><tr><th>Layer</th><th class="num">Features</th><th>Geometry</th></tr>';
+      m.layers.forEach(l => { h += '<tr><td>' + esc(l.id) + '</td><td class="num">' + fmt(l.count) + '</td><td>' + esc(l.geometry) + '</td></tr>'; });
+      h += '</table></details>';
+    }
     $('[data-panel="compare"]').innerHTML = h;
   }
 
   function renderAboutPanel() {
+    const g = metas.geology, m = metas.minerals;
     $('[data-panel="about"]').innerHTML =
       '<h3>How to compare</h3>' +
-      '<p><b>Swipe</b> – left of the divider is the original PDF (rendered at up to 330 dpi), right are the extracted layers drawn with a matching symbology. Drag the handle.<br>' +
+      '<p><b>Swipe</b> – left of the divider is an original PDF (rendered at up to 330 dpi), right are the extracted layers drawn with a matching symbology. Drag the handle. ' +
+      'Choose which PDF is on the left under <b>Layers → PDF side shows</b> (or the chip above the map).<br>' +
       '<b>Overlay</b> – extracted layers drawn over the PDF; use the slider to fade them in and out.<br>' +
-      '<b>PDF only / Extracted</b> – one side at a time. Tap any extracted feature for its attributes.</p>' +
-      '<h3>What you are looking at</h3>' +
-      '<p>Left: <code>' + esc(meta.pdf) + '</code>, placed on a longitude/latitude grid (EPSG:4326) with an affine fit to its graticule. ' +
-      'Right: the 17 shapefiles in <code>shapefiles/</code> produced by <code>extract_shapefiles.py</code> (same georeference), converted to GeoJSON for the browser.</p>' +
-      '<h3>Known limits of the extraction</h3>' +
-      '<p>• No attribute tables exist in the PDF; unit codes come from the legend colours + layer names (label on the map as fallback). The map prints “OGe” where the legend says “OGm”; seven units are missing from the printed legend.<br>' +
-      '• Datum is not stated – WGS 84 assumed (Minna datum would differ by ~100–200 m).<br>' +
-      '• Dashed symbols (boundary classes, faults, roads, railway) were re-assembled from fragments; roads were a double-line symbol and are shown as centrelines.<br>' +
-      '• State capitals have no marker in the PDF – points are label centres (±7–15 km). 82 of 486 towns have no matched name.<br>' +
-      '• Source topology is inherited: 16 duplicate polygons, ~2 % overlaps, small slivers.</p>' +
-      '<h3>Files</h3><p><code>shapefiles/*.shp</code>, <code>shapefiles/nigeria_geology.gpkg</code>, <code>shapefiles/legend.csv</code>, <code>shapefiles/georeferencing.json</code>, <code>README.md</code>. ' +
-      'Viewer data built ' + esc(meta.generated) + '.</p>';
+      '<b>PDF only / Extracted</b> – one side at a time. Tap any extracted feature for its attributes; the geology unit of the 2011 map under the tapped point is shown as well.</p>' +
+      '<h3>Two maps, one grid</h3>' +
+      '<p>Both maps are placed on the same longitude/latitude grid (EPSG:4326), so the mineral localities of the 2023 map can be read against the 2011 geology. Every layer of either map has its own switch under <b>Layers</b>.</p>' +
+      (g ? '<p><b>2011:</b> <code>' + esc(g.pdf) + '</code> – an affine fit to its graticule; 17 shapefiles in <code>shapefiles/</code> from <code>extract_shapefiles.py</code>.</p>' : '') +
+      (m ? '<p><b>2023:</b> <code>' + esc(m.pdf) + '</code> – a GeoPDF, placed with its own /VP viewport; ' + m.layers.length + ' shapefiles in <code>shapefiles_minerals/</code> from <code>extract_mineral_map.py</code>. ' +
+        'A locality point sits on its raster symbol when the symbol was matched (solid outline), otherwise on the printed number (dashed outline); the printed numbers themselves are drawn as text. Point colour = colour of the printed symbol for the first mineral code.</p>' : '') +
+      '<h3>Known limits</h3>' +
+      '<p>• 2011: no attribute tables in the PDF; unit codes come from legend colours + layer names. Datum not stated (WGS 84 assumed). Dashed symbols were re-assembled from fragments. State capitals are label centres. Source topology inherited.<br>' +
+      '• 2023: the GeoPDF declares an “assumed” geographic CRS; its printed meridian labels are 0.17° off the embedded georeference (the georeference is used). Mineral names come from the compiler’s codes – 19 codes are unresolved; 4 numbers of the printed list are missing (F 110, G 53, G 86, G 111) and D 256 is a misprint. Unnumbered symbols only carry candidate minerals. The geology background of the 2023 map is raster only.</p>' +
+      '<h3>Files</h3><p><code>shapefiles/</code>, <code>shapefiles_minerals/</code>, the two <code>georeferencing.json</code>, <code>shapefiles_minerals/qa_report.json</code>, <code>README.md</code>. ' +
+      'Viewer data built ' + esc((m || g).generated) + '.</p>';
   }
 
   // ------------------------------------------------------------------ bookmarks, toast
   function initChips() {
     const V = {
-      face: () => meta.map_face_bounds,
+      face: () => metas[pdfSource].map_face_bounds,
       jos: () => [[9.45, 8.3], [10.25, 9.35]],
       delta: () => [[4.2, 5.2], [5.8, 7.7]],
       chad: () => [[12.5, 12.8], [13.9, 14.7]],
       sokoto: () => [[12.3, 4.5], [13.5, 6.1]],
-      legend: () => [[meta.tiles.page_bounds[0][0], 14.45], [meta.tiles.page_bounds[1][0], meta.tiles.page_bounds[1][1]]],
+      legend: () => [[metas.geology.tiles.page_bounds[0][0], 14.45], [metas.geology.tiles.page_bounds[1][0], metas.geology.tiles.page_bounds[1][1]]],
+      mintable: () => metas.minerals.table_bounds,
     };
-    $$('#chips button').forEach(b => b.addEventListener('click', () => {
+    const chips = $('#chips');
+    if (metas.minerals) {
+      const b = document.createElement('button'); b.dataset.view = 'mintable'; b.textContent = 'Mineral table (PDF)'; chips.appendChild(b);
+      const c = document.createElement('button'); c.id = 'chip-pdf'; c.className = 'chip-pdf'; c.textContent = 'PDF: ' + DATASETS[pdfSource].short + ' ⇄';
+      chips.insertBefore(c, chips.firstChild);
+      c.addEventListener('click', () => setPdfSource(pdfSource === 'geology' ? 'minerals' : 'geology'));
+    }
+    if (!metas.geology) $('button[data-view="legend"]', chips).remove();
+    $$('#chips button[data-view]').forEach(b => b.addEventListener('click', () => {
       const k = b.dataset.view;
+      if (k === 'legend' && pdfSource !== 'geology') setPdfSource('geology', true);
+      if (k === 'mintable' && pdfSource !== 'minerals') setPdfSource('minerals', true);
       map.fitBounds(L.latLngBounds(V[k]()), { padding: [8, 8], animate: true });
-      if (k === 'legend') {
-        if (mode !== 'pdf' && mode !== 'overlay') { setMode('pdf'); toast('Showing the PDF only – the legend panel has no vector counterpart. legend.csv is under Legend.'); }
+      if (k === 'legend' || k === 'mintable') {
+        if (mode !== 'pdf' && mode !== 'overlay') { setMode('pdf'); toast(k === 'legend' ? 'Showing the PDF only – the legend panel has no vector counterpart. legend.csv is under Legend.' : 'Showing the 2023 PDF – the EXPLANATIONS table is in explanations_table.csv (tap a locality for its row).'); }
       }
     }));
   }
@@ -512,29 +793,33 @@
   }
 
   // ------------------------------------------------------------------ boot
-  async function fetchJSON(url) {
+  async function fetchJSON(url, optional) {
     const r = await fetch(url);
-    if (!r.ok) throw new Error(url + ' → HTTP ' + r.status);
+    if (!r.ok) { if (optional) return null; throw new Error(url + ' → HTTP ' + r.status); }
     return r.json();
   }
   async function boot() {
     const txt = $('#loading-text');
     try {
-      meta = await fetchJSON('build/data/meta.json');
+      const [g, m] = await Promise.all([fetchJSON(DATASETS.geology.metaUrl, true), fetchJSON(DATASETS.minerals.metaUrl, true)]);
+      if (g) metas.geology = g;
+      if (m) metas.minerals = m;
+      if (!g && !m) throw new Error('no viewer data – run python viewer/build_data.py');
       initMap(); initSwipe(); initSheet(); initChips();
       $$('#mode button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
       $('#opacity-range').addEventListener('input', e => { $('#opacity-val').textContent = e.target.value + '%'; setVecOpacity(e.target.value / 100); });
+      const toLoad = LAYERS.filter(d => metas[d.ds] && d.file);
       let done = 0;
-      await Promise.all(LAYERS.map(async def => {
-        data[def.id] = await fetchJSON('build/data/' + def.id + '.geojson');
-        done++; txt.textContent = 'Loading extracted layers… ' + done + '/' + LAYERS.length;
+      await Promise.all(toLoad.map(async def => {
+        data[def.id] = await fetchJSON(DATASETS[def.ds].dataDir + def.file + '.geojson');
+        done++; txt.textContent = 'Loading extracted layers… ' + done + '/' + toLoad.length;
       }));
       buildGroups();
       renderLayersPanel(); renderLegendPanel(); renderComparePanel(); renderAboutPanel();
       setMode('swipe');
       $('#loading').classList.add('hidden');
-      toast('Drag the handle to compare · tap features for attributes');
-      window.__viewer = { map, groups, data, setMode, showFeature, unitsAt, setLayerVisible, LAYERS, byId };  // for debugging / tests
+      toast(metas.minerals ? 'Both maps loaded · Layers ▸ toggle any layer, choose the PDF side' : 'Drag the handle to compare · tap features for attributes');
+      window.__viewer = { map, groups, data, metas, setMode, showFeature, unitsAt, setLayerVisible, setPdfSource, LAYERS, byId, findLocalities };  // for debugging / tests
     } catch (err) {
       txt.textContent = 'Failed to load: ' + err.message;
       console.error(err);

@@ -4,8 +4,8 @@ Live comparison viewer: original PDF (rendered tiles) vs. extracted shapefiles (
 
     python viewer/serve.py [--port 8080] [--host 0.0.0.0] [--rebuild]
 
-On first start (or with --rebuild) it runs build_data.py, which renders the PDF tiles and
-converts the shapefiles (about 30 s). Everything generated lives in viewer/build/.
+On first start (or with --rebuild) it runs build_data.py, which renders the PDF tiles of both
+maps and converts the shapefiles (about 2 min). Everything generated lives in viewer/build/.
 """
 import argparse
 import os
@@ -53,10 +53,14 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 def ensure_build(rebuild=False):
-    needed = [os.path.join(BUILD, 'data', 'meta.json'), os.path.join(BUILD, 'tiles', '9')]
-    if rebuild or not all(os.path.exists(p) for p in needed):
-        print('building viewer data (PDF tiles + GeoJSON) ...', flush=True)
-        subprocess.check_call([sys.executable, os.path.join(HERE, 'build_data.py')])
+    """Build whichever dataset is missing (geology: build/data + build/tiles, minerals: build/data/minerals +
+    build/tiles_minerals).  A dataset whose PDF/shapefiles are absent is skipped by build_data.py."""
+    needed = {'geology': [os.path.join(BUILD, 'data', 'meta.json'), os.path.join(BUILD, 'tiles', '9')],
+              'minerals': [os.path.join(BUILD, 'data', 'minerals', 'meta.json'), os.path.join(BUILD, 'tiles_minerals', '9')]}
+    for ds, paths in needed.items():
+        if rebuild or not all(os.path.exists(p) for p in paths):
+            print(f'building viewer data for {ds} (PDF tiles + GeoJSON) ...', flush=True)
+            subprocess.check_call([sys.executable, os.path.join(HERE, 'build_data.py'), '--dataset', ds])
 
 
 def main():

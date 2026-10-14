@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 """
 Build the data the comparison viewer needs (everything goes to viewer/build/, which is
-not committed):
+not committed).  Two datasets are supported:
 
-  build/tiles/{z}/{x}/{y}.png   the ORIGINAL PDF page rendered as Leaflet EPSG:4326
-                                 tiles (zoom 4-9, i.e. up to ~330 dpi), placed with the
-                                 graticule georeference from shapefiles/georeferencing.json
-  build/data/<layer>.geojson     the EXTRACTED shapefiles as GeoJSON (+ .gz copies)
-  build/data/meta.json           layer inventory, legend, georeference, PDF-vs-output
-                                 comparison statistics
+  geology   (ilide.info-geological-map-of-nigeria-*.pdf  ->  shapefiles/)
+      build/tiles/{z}/{x}/{y}.png        the PDF page rendered as Leaflet EPSG:4326 tiles
+                                         (zoom 4-9, ~330 dpi), placed with the graticule fit
+      build/data/<layer>.geojson(.gz)    the extracted shapefiles
+      build/data/meta.json               inventory, legend, georeference, PDF-vs-output stats
 
-Run:  python viewer/build_data.py [--tiles-only|--data-only] [--zmax 9]
+  minerals  (Mineral_Resources_Map_of_Nigeria_2023.pdf  ->  shapefiles_minerals/)
+      build/tiles_minerals/{z}/{x}/{y}.png   placed with the GeoPDF /VP affine
+      build/data/minerals/<layer>.geojson(.gz)
+      build/data/minerals/legend_symbols/*.png
+      build/data/minerals/meta.json      inventory, legend, code dictionary, QA report
+
+Run:  python viewer/build_data.py [--dataset geology|minerals|all] [--tiles-only|--data-only] [--zmax 9]
 """
 import argparse
 import collections
@@ -27,33 +32,53 @@ import time
 import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PDF = (glob.glob(os.path.join(ROOT, 'ilide.info-geological-map-of-nigeria*.pdf'))
-       or [f for f in glob.glob(os.path.join(ROOT, '*.pdf')) if 'Mineral' not in os.path.basename(f)])[0]
-SHP_DIR = os.path.join(ROOT, 'shapefiles')
 BUILD = os.path.join(ROOT, 'viewer', 'build')
 TILE = 256
 
+GEOLOGY_PDF = (glob.glob(os.path.join(ROOT, 'ilide.info-geological-map-of-nigeria*.pdf'))
+               or [f for f in glob.glob(os.path.join(ROOT, '*.pdf')) if 'Mineral' not in os.path.basename(f)] or [None])[0]
+MINERALS_PDF = os.path.join(ROOT, 'Mineral_Resources_Map_of_Nigeria_2023.pdf')
 
-def load_georef():
-    g = json.load(open(os.path.join(SHP_DIR, 'georeferencing.json')))
-    a, b = g['lon = a*x + b']['a'], g['lon = a*x + b']['b']
-    c, d = g['lat = c*y + d']['c'], g['lat = c*y + d']['d']
+GEOLOGY_LAYERS = ['geology_units', 'major_rivers_poly', 'geological_boundaries', 'younger_granite_outlines',
+                  'faults', 'fold_axes', 'ridges', 'rivers', 'major_rivers_outline', 'state_boundaries',
+                  'roads', 'railway', 'graticule', 'towns', 'volcanic_plugs', 'state_capitals', 'labels']
+MINERAL_LAYERS = ['map_zones', 'division_lines', 'map_frame', 'international_boundary', 'rivers', 'roads', 'railway',
+                  'graticule', 'mineral_symbols_raster', 'mineral_localities', 'towns', 'state_capitals',
+                  'state_name_labels', 'river_labels', 'pegmatite_marks', 'map_labels']
+
+DATASETS = {
+    'geology': {'pdf': GEOLOGY_PDF, 'shp_dir': os.path.join(ROOT, 'shapefiles'),
+                'tiles': os.path.join(BUILD, 'tiles'), 'data': os.path.join(BUILD, 'data'),
+                'layers': GEOLOGY_LAYERS},
+    'minerals': {'pdf': MINERALS_PDF, 'shp_dir': os.path.join(ROOT, 'shapefiles_minerals'),
+                 'tiles': os.path.join(BUILD, 'tiles_minerals'), 'data': os.path.join(BUILD, 'data', 'minerals'),
+                 'layers': MINERAL_LAYERS},
+}
+
+
+# --------------------------------------------------------------------------- georeference
+def load_georef(ds):
+    """Return (a, b, c, d, raw) with lon = a*x + b, lat = c*y + d in PDF points (y up)."""
+    g = json.load(open(os.path.join(DATASETS[ds]['shp_dir'], 'georeferencing.json')))
+    if ds == 'geology':
+        return g['lon = a*x + b']['a'], g['lon = a*x + b']['b'], g['lat = c*y + d']['c'], g['lat = c*y + d']['d'], g
+    (a, b), (c, d) = g['affine']['lon = a*x + b'], g['affine']['lat = c*y + d']
     return a, b, c, d, g
 
 
 # --------------------------------------------------------------------------- tiles
-def build_tiles(zmin=4, zmax=9):
+def build_tiles(ds, zmin=4, zmax=9):
     import pymupdf
     from PIL import Image
 
-    a, b, c, d, _ = load_georef()
-    doc = pymupdf.open(PDF)
+    a, b, c, d, _ = load_georef(ds)
+    doc = pymupdf.open(DATASETS[ds]['pdf'])
     page = doc[0]
     W, H = page.rect.width, page.rect.height
     dl = page.get_displaylist()
     lon0, lon1 = b, a * W + b          # page extent in "map" degrees
     lat0, lat1 = d, c * H + d
-    out_root = os.path.join(BUILD, 'tiles')
+    out_root = DATASETS[ds]['tiles']
     if os.path.isdir(out_root):
         shutil.rmtree(out_root)
     t0 = time.time()
@@ -100,18 +125,13 @@ def build_tiles(zmin=4, zmax=9):
 
 
 # --------------------------------------------------------------------------- vectors
-LAYER_FILES = ['geology_units', 'major_rivers_poly', 'geological_boundaries', 'younger_granite_outlines',
-               'faults', 'fold_axes', 'ridges', 'rivers', 'major_rivers_outline', 'state_boundaries',
-               'roads', 'railway', 'graticule', 'towns', 'volcanic_plugs', 'state_capitals', 'labels']
-
-
-def build_vectors():
+def build_vectors(ds):
     from pyogrio.raw import read, write
-    out_dir = os.path.join(BUILD, 'data')
+    out_dir = DATASETS[ds]['data']
     os.makedirs(out_dir, exist_ok=True)
     layers = []
-    for name in LAYER_FILES:
-        src = os.path.join(SHP_DIR, name + '.shp')
+    for name in DATASETS[ds]['layers']:
+        src = os.path.join(DATASETS[ds]['shp_dir'], name + '.shp')
         meta, _, geometry, field_data = read(src)
         dst = os.path.join(out_dir, name + '.geojson')
         if os.path.exists(dst):
@@ -129,7 +149,14 @@ def build_vectors():
     return layers
 
 
-# --------------------------------------------------------------------------- PDF statistics
+def write_json(path, obj):
+    with open(path, 'w') as f:
+        json.dump(obj, f, indent=1, default=lambda o: int(o) if isinstance(o, np.integer) else float(o))
+    with open(path, 'rb') as f_in, gzip.open(path + '.gz', 'wb') as f_out:
+        shutil.copyfileobj(f_in, f_out)
+
+
+# --------------------------------------------------------------------------- geology: PDF statistics
 def pdf_statistics():
     """Count the drawing primitives per PDF layer (optional content group) so the viewer can
     show "what was in the PDF" next to "what was extracted"."""
@@ -137,7 +164,7 @@ def pdf_statistics():
     import pikepdf
     import extract_shapefiles as ex
 
-    pdf = pikepdf.open(PDF)
+    pdf = pikepdf.open(GEOLOGY_PDF)
     page = pdf.pages[0]
     oc_names = {}
     for k, v in page.Resources.get('/Properties', {}).items():
@@ -208,13 +235,13 @@ def pdf_statistics():
             'compare': compare, 'layers': layer_table}
 
 
-def build_meta(tile_info, layers):
-    a, b, c, d, g = load_georef()
-    legend = list(csv.DictReader(open(os.path.join(SHP_DIR, 'legend.csv'), newline='')))
-    pgw = [float(v) for v in open(os.path.join(SHP_DIR, 'map_raster', 'geological_map_nigeria.pgw')).read().split()]
-    # map face bounds from the QA raster world file
+def build_meta_geology(tile_info, layers):
+    a, b, c, d, g = load_georef('geology')
+    shp = DATASETS['geology']['shp_dir']
+    legend = list(csv.DictReader(open(os.path.join(shp, 'legend.csv'), newline='')))
+    pgw = [float(v) for v in open(os.path.join(shp, 'map_raster', 'geological_map_nigeria.pgw')).read().split()]
     from PIL import Image
-    im = Image.open(os.path.join(SHP_DIR, 'map_raster', 'geological_map_nigeria.png'))
+    im = Image.open(os.path.join(shp, 'map_raster', 'geological_map_nigeria.png'))
     face = [[pgw[5] + pgw[3] * im.height, pgw[4]], [pgw[5], pgw[4] + pgw[0] * im.width]]
     stats = pdf_statistics()
     counts = {l['id']: l['count'] for l in layers}
@@ -225,7 +252,7 @@ def build_meta(tile_info, layers):
             row['features'] = f"{counts['major_rivers_poly']} / {counts['major_rivers_outline']}"
     meta = {
         'generated': time.strftime('%Y-%m-%d %H:%M'),
-        'pdf': os.path.basename(PDF),
+        'pdf': os.path.basename(GEOLOGY_PDF),
         'tiles': tile_info,
         'map_face_bounds': face,
         'georef': {'a': a, 'b': b, 'c': c, 'd': d, 'points_per_degree': g['points_per_degree_x'],
@@ -234,32 +261,90 @@ def build_meta(tile_info, layers):
         'legend': legend,
         'pdf_stats': stats,
     }
-    with open(os.path.join(BUILD, 'data', 'meta.json'), 'w') as f:
-        json.dump(meta, f, indent=1, default=lambda o: int(o) if isinstance(o, np.integer) else float(o))
-    with open(os.path.join(BUILD, 'data', 'meta.json'), 'rb') as f_in, \
-            gzip.open(os.path.join(BUILD, 'data', 'meta.json.gz'), 'wb') as f_out:
-        shutil.copyfileobj(f_in, f_out)
+    write_json(os.path.join(DATASETS['geology']['data'], 'meta.json'), meta)
     print('meta.json written')
+
+
+def build_meta_minerals(tile_info, layers):
+    a, b, c, d, g = load_georef('minerals')
+    shp = DATASETS['minerals']['shp_dir']
+    out = DATASETS['minerals']['data']
+    bb = g['bbox_pt']
+    face = [[c * bb['y_bottom'] + d, a * bb['x0'] + b], [c * bb['y_top'] + d, a * bb['x1'] + b]]
+    legend = list(csv.DictReader(open(os.path.join(shp, 'mineral_legend.csv'), newline='')))
+    codes = list(csv.DictReader(open(os.path.join(shp, 'mineral_code_dictionary.csv'), newline='')))
+    qa = json.load(open(os.path.join(shp, 'qa_report.json')))
+    # legend symbol cut-outs for the legend panel
+    sym_dir = os.path.join(out, 'legend_symbols')
+    os.makedirs(sym_dir, exist_ok=True)
+    for row in legend:
+        src = os.path.join(shp, row['symbol_png']) if row['symbol_png'] else ''
+        if src and os.path.exists(src):
+            shutil.copyfile(src, os.path.join(sym_dir, os.path.basename(src)))
+            row['symbol_png'] = 'legend_symbols/' + os.path.basename(src)
+    # the EXPLANATIONS table (for search / "not on the map" rows)
+    table = []
+    for r in csv.DictReader(open(os.path.join(shp, 'explanations_table.csv'), newline='')):
+        table.append({'z': r['zone'], 'n': int(r['number']), 'np': r['number_printed'], 'loc': r['locality'],
+                      'codes': r['codes'], 'min': r['minerals'], 'on': r['on_map'] == 'yes', 'flags': r['flags']})
+    write_json(os.path.join(out, 'table.json'), table)
+    # map face area (pt) -> degrees, for the "PDF table" bookmark: everything right of the frame
+    page_w = 3960.0
+    meta = {
+        'generated': time.strftime('%Y-%m-%d %H:%M'),
+        'pdf': os.path.basename(MINERALS_PDF),
+        'tiles': tile_info,
+        'map_face_bounds': face,
+        'table_bounds': [[tile_info['page_bounds'][0][0], a * bb['x1'] + b], [tile_info['page_bounds'][1][0], a * page_w + b]],
+        'georef': {'a': a, 'b': b, 'c': c, 'd': d, 'points_per_degree': g['points_per_degree']['x'],
+                   'gcs': g['gcs_wkt'].split(',')[0].split('[')[1].strip('"'),
+                   'parallel_max_residual_deg': g.get('parallel_max_residual_deg'),
+                   'meridian_label_offset_deg': g.get('meridian_label_offset_deg'),
+                   'notes': g.get('notes', [])},
+        'layers': layers,
+        'legend': legend,
+        'codes': codes,
+        'qa': {'table': qa.get('table'), 'number_labels': qa.get('number_labels'),
+               'raster_symbols': {k: v for k, v in qa.get('raster_symbols', {}).items() if k != 'by_colour'},
+               'capital_check_km': {k: v for k, v in qa.get('capital_check_km', {}).items() if k != 'per_capital'}},
+    }
+    write_json(os.path.join(out, 'meta.json'), meta)
+    print('minerals/meta.json written')
+
+
+def build(ds, tiles=True, data=True, zmax=9):
+    if not DATASETS[ds]['pdf'] or not os.path.exists(DATASETS[ds]['pdf']):
+        print(f'{ds}: PDF not found, skipped')
+        return
+    if not os.path.isdir(DATASETS[ds]['shp_dir']):
+        print(f'{ds}: {DATASETS[ds]["shp_dir"]} not found, skipped')
+        return
+    os.makedirs(DATASETS[ds]['data'], exist_ok=True)
+    tiles_json = os.path.join(DATASETS[ds]['data'], 'tiles.json')
+    tile_info = None
+    if tiles:
+        print(f'[{ds}] rendering PDF tiles ...', flush=True)
+        tile_info = build_tiles(ds, zmax=zmax)
+        json.dump(tile_info, open(tiles_json, 'w'))
+    if data:
+        if tile_info is None:
+            legacy = os.path.join(BUILD, 'tiles.json')
+            tile_info = json.load(open(tiles_json if os.path.exists(tiles_json) else legacy))
+        print(f'[{ds}] converting shapefiles ...', flush=True)
+        layers = build_vectors(ds)
+        (build_meta_geology if ds == 'geology' else build_meta_minerals)(tile_info, layers)
 
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument('--dataset', choices=['geology', 'minerals', 'all'], default='all')
     ap.add_argument('--tiles-only', action='store_true')
     ap.add_argument('--data-only', action='store_true')
     ap.add_argument('--zmax', type=int, default=9)
     args = ap.parse_args()
     os.makedirs(BUILD, exist_ok=True)
-    tile_info = None
-    if not args.data_only:
-        print('rendering PDF tiles ...', flush=True)
-        tile_info = build_tiles(zmax=args.zmax)
-        json.dump(tile_info, open(os.path.join(BUILD, 'tiles.json'), 'w'))
-    if not args.tiles_only:
-        if tile_info is None:
-            tile_info = json.load(open(os.path.join(BUILD, 'tiles.json')))
-        print('converting shapefiles ...', flush=True)
-        layers = build_vectors()
-        build_meta(tile_info, layers)
+    for ds in (['geology', 'minerals'] if args.dataset == 'all' else [args.dataset]):
+        build(ds, tiles=not args.data_only, data=not args.tiles_only, zmax=args.zmax)
     print('done')
 
 
