@@ -1,0 +1,122 @@
+code,meaning,commodity_group,confidence,uses_in_table,uses_on_map
+A,unknown code,unknown,unknown,1,0
+Ab,Asbestos / Serpentine,industrial minerals,probable,4,3
+Ag,Silver,precious metals,legend,5,4
+Aq,"Beryl, Aquamarine, Emerald",gemstones,probable,3,3
+Au,Gold,precious metals,certain,87,71
+Ba,Baryte,industrial minerals,certain,30,25
+Bc,Brick Clay,construction materials,probable,3,3
+Bcl,Ball Clay,construction materials,probable,2,1
+Be,"Beryl, Aquamarine, Emerald",gemstones,certain,37,27
+Bi,Bismuth,base metals,probable,1,1
+Bit,Bitumen,energy,certain,2,0
+Bn,Bentonite,industrial minerals,certain,11,10
+Br,Brine,industrial minerals,probable,38,29
+Bx,Bauxitic Clay,construction materials,probable,4,4
+By,unknown code,unknown,unknown,1,1
+C,Coal,energy,certain,25,20
+Ca,Calcite,industrial minerals,probable,6,4
+Cl,Clay / Pottery Clay,construction materials,certain,131,110
+Cm,unknown code,unknown,unknown,1,0
+Cor,"Corundum, Sapphire & Ruby",gemstones,certain,3,1
+Cr,Chromite,ferrous metals,certain,7,6
+Cs,unknown code,unknown,unknown,1,0
+Cu,Copper minerals,base metals,certain,6,6
+Cy,unknown code (Clay or Gypsum misprint?),unknown,unknown,2,1
+Cz,unknown code,unknown,unknown,1,1
+Da,unknown code,unknown,unknown,1,0
+Di,Diatomite,industrial minerals,uncertain,1,1
+Dl,Dolomite (not in legend),construction materials,probable,2,2
+Ds,Dimension Stone,construction materials,certain,4,2
+Dt,Diatomite,industrial minerals,certain,5,4
+E,"Beryl, Aquamarine, Emerald",gemstones,probable,7,4
+EmI,"Beryl, Aquamarine, Emerald (emerald; printed ""EmI"")",gemstones,probable,1,1
+Ev,Evaporite,industrial minerals,certain,0,0
+F,Flourite,industrial minerals,probable,2,1
+Fc,Fire Clay,construction materials,probable,3,2
+Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,41,31
+Fl,Flourite,industrial minerals,probable,0,0
+Fp,Feldspar,industrial minerals,certain,24,20
+Fr,Flourite,industrial minerals,probable,5,4
+G,Gold (typo for Au?),precious metals,uncertain,2,1
+Gm,Gemstone (not in legend),gemstones,uncertain,16,13
+Gn,Garnet,gemstones,probable,4,4
+Gr,Graphite,industrial minerals,probable,11,7
+Grl,River Gravel,construction materials,probable,1,1
+Gs,Glass Sand,construction materials,certain,35,25
+Gvl,River Gravel,construction materials,certain,2,1
+Gy,Gypsum,industrial minerals,certain,43,37
+Gys,Gypsum,industrial minerals,probable,1,1
+Ilm,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,2,2
+In,unknown code,unknown,unknown,1,1
+Ka,Kaolin / kaolinitic clay,industrial minerals,certain,76,65
+Ke,unknown code,unknown,unknown,2,2
+Ks,Kaolinitic sand/clay (not in legend),industrial minerals,uncertain,4,4
+Ky,Kyanite,industrial minerals,certain,6,5
+La,Laterite (not in legend),construction materials,uncertain,1,1
+Lg,Lignite,energy,certain,9,6
+Li,"Lithium (Ambligonite, Kunzite, Moganite, Spodumene, etc)",rare metals,certain,0,0
+Lp,Lepidolite,rare metals,certain,1,1
+Ls,Limestone,construction materials,certain,63,57
+M,Mica,industrial minerals,legend,21,19
+MI,"Marl (printed ""MI"" for the legend code ""mi"")",construction materials,probable,1,1
+MS,Mica schist / muscovite (not in legend),industrial minerals,uncertain,1,1
+Ma,unknown code,unknown,unknown,1,1
+Mb,Marble,construction materials,certain,41,32
+Mc,Marcasite,industrial minerals,legend,2,2
+Mg,Magnesite,industrial minerals,certain,2,1
+Mi,Marl,construction materials,legend,1,1
+Ml,Marl,construction materials,probable,3,2
+Mn,Manganese,ferrous metals,certain,6,5
+Mo,Molybdenite,ferrous metals,legend,2,2
+Ms,Mica schist / muscovite (not in legend),industrial minerals,uncertain,1,1
+Mu,Mica (muscovite),industrial minerals,probable,4,2
+Mz,Monazite,rare metals,certain,3,3
+Na,Saltlake/ Potash (salt),industrial minerals,probable,12,10
+Nb,Columbite,rare metals,certain,51,46
+Ni,Nickel,ferrous metals,legend,1,1
+Ocr,Ochre (not in legend),industrial minerals,probable,1,1
+Oil,Oil and Gas,energy,certain,10,7
+Os,unknown code,unknown,unknown,1,1
+P,Phosphate,industrial minerals,certain,18,15
+Pb,Lead - Zinc (lead),base metals,certain,30,24
+PbS,Galena (PbS),base metals,probable,1,1
+Pbs,Galena,base metals,probable,4,4
+Pr,Phosphate Rock,industrial minerals,probable,0,0
+Ps,Psammite,construction materials,probable,0,0
+Py,Pyrite / Pyroclore,rare metals,legend,8,7
+Qa,Quartz (not in legend),construction materials,uncertain,20,18
+Qs,Quartz sand (not in legend),construction materials,uncertain,2,1
+Qz,Quartz (not in legend),construction materials,uncertain,11,9
+R,Rose Quartz,gemstones,legend,0,0
+RS,unknown code,unknown,unknown,1,1
+Rb,"Ruby? (Corundum, Sapphire & Ruby)",gemstones,uncertain,1,1
+Ru,"Corundum, Sapphire & Ruby (ruby)",gemstones,certain,3,3
+S,Sulphur / salt (not in legend),industrial minerals,uncertain,3,3
+SI,unknown code (Silica sand?),unknown,unknown,1,1
+Sd,Sand (not in legend),construction materials,uncertain,7,5
+Si,unknown code (Silica sand?),unknown,unknown,1,0
+Sl,Sillimanite,industrial minerals,legend,1,1
+Sm,Tin? (probably a misprint of Sn),rare metals,uncertain,1,0
+Sn,Tin / cassiterite (no legend symbol),rare metals,certain,84,74
+Sp,unknown code,unknown,unknown,1,1
+Sr,unknown code,unknown,unknown,1,1
+Ss,Silica Sand,construction materials,legend,2,2
+St,Stone? (not in legend),construction materials,uncertain,1,1
+Sul,Sulphur (not in legend),industrial minerals,probable,1,1
+Ta,Tantalite,rare metals,legend,66,55
+Tc,Talc,industrial minerals,legend,21,14
+Tm,Tourmaline,gemstones,legend,16,14
+Tn,unknown code,unknown,unknown,1,1
+To,Topaz,gemstones,probable,2,2
+Tpz,Topaz,gemstones,legend,2,2
+Tr,Trona,industrial minerals,legend,13,9
+Ts,Tar Sand,energy,legend,9,8
+U,Uranium,energy,legend,4,4
+Us,unknown code,unknown,unknown,2,2
+W,Wolframite,rare metals,legend,18,16
+Wa,unknown code,unknown,unknown,1,1
+Zn,Lead - Zinc (zinc),base metals,certain,29,24
+Zr,Zircon,rare metals,legend,9,7
+m,Mica,industrial minerals,legend,1,1
+sT,unknown code,unknown,unknown,1,1

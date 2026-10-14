@@ -1,0 +1,1172 @@
+zone,number,number_printed,locality,codes_raw,codes,minerals,commodity_groups,code_confidence,unknown_codes,on_map,flags,table_column,raw_text
+A,1,I,Rafin Duma,Gy,Gy,Gypsum,industrial minerals,certain,,no,"number token ""I"" unreadable - inferred from sequence",1,I Rafin Duma | Gy
+A,2,2,Gada,Gy. P,Gy P,Gypsum | Phosphate,industrial minerals,certain certain,,no,,1,2. Gada | Gy. P
+A,3,3,Kwadoma,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,,1,3. Kwadoma | Ka
+A,4,4,Wurno,Cy,Cy,unknown code (Clay or Gypsum misprint?),unknown,unknown,Cy,no,,1,4. Wurno | Cy
+A,5,5,Taloka,Cy,Cy,unknown code (Clay or Gypsum misprint?),unknown,unknown,Cy,yes,,1,5. Taloka | Cy
+A,6,6,Zugama,Us,Us,unknown code,unknown,unknown,Us,yes,,1,6. Zugama | Us
+A,7,7,Jama,Us,Us,unknown code,unknown,unknown,Us,yes,,1,7. Jama | Us
+A,8,8,Nachiadu,F,F,Flourite,industrial minerals,probable,,yes,,1,8. Nachiadu | F
+A,9,9,Balah,E,E,"Beryl, Aquamarine, Emerald",gemstones,probable,,yes,,1,9. Balah | E
+A,10,10,Sokoto,Ls,Ls,Limestone,construction materials,certain,,no,,1,10 Sokoto | Ls
+A,11,11,MARNONA,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,1,11 MARNONA | Gy
+A,12,12,KALABAINA,Ls,Ls,Limestone,construction materials,certain,,yes,,1,12 KALABAINA | Ls
+A,13,13,Wamakko,Ls,Ls,Limestone,construction materials,certain,,yes,,1,13.Wamakko | Ls
+A,14,14,Sauna,E,E,"Beryl, Aquamarine, Emerald",gemstones,probable,,no,,1,14.Sauna | E
+A,15,15,DANCE,P,P,Phosphate,industrial minerals,certain,,no,,1,15 DANCE | P
+A,16,16,Lambamaso,P,P,Phosphate,industrial minerals,certain,,yes,,1,16.Lambamaso | P
+A,17,17,G. Makode,P,P,Phosphate,industrial minerals,certain,,no,,1,17.G. Makode | P
+A,18,18,Jaida,P,P,Phosphate,industrial minerals,certain,,yes,,1,18.Jaida | P
+A,19,19,Dabba,P,P,Phosphate,industrial minerals,certain,,yes,,1,19. Dabba | P
+A,20,20,Gwande,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,1,20. Gwande | Fe
+A,21,21,Pinaye,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,21. Pinaye | Cl
+A,22,22,Kaigo,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,no,,1,22. Kaigo | Fe
+A,23,23,Jeya,Ls,Ls,Limestone,construction materials,certain,,yes,,1,23. Jeya | Ls
+A,24,24,Mayana,P,P,Phosphate,industrial minerals,certain,,yes,,1,24. Mayana               P |
+A,25,25,Mayana,Ls,Ls,Limestone,construction materials,certain,,yes,,1,25. Mayana | Ls
+A,26,26,Kamba,Ocr,Ocr,Ochre (not in legend),industrial minerals,probable,,yes,,1,26. Kamba | Ocr
+A,27,27,Kwawal,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,27 Kwawal | CI
+A,28,28,Dakin Garin plateau,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,codes split from name cell,1,28. Dakin Garin plateau- Fe |
+A,29,29,Fanpa,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,1,29. Fanpa | Fe
+A,30,30,Dutsin Kato,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,1,30. Dutsin Kato | Ka
+A,31,31,Kiri,Au,Au,Gold,precious metals,certain,,yes,,1,31. Kiri | Au
+A,32,32,Wasagu,M,M,Mica,industrial minerals,legend,,no,,1,32. Wasagu | M
+A,33,33,Danko,Au,Au,Gold,precious metals,certain,,yes,,1,33. Danko | Au
+A,34,34,Gidan Gadu,Tm,Tm,Tourmaline,gemstones,legend,,yes,,1,34. Gidan Gadu | Tm
+A,35,35,Kaoje,Mn,Mn,Manganese,ferrous metals,certain,,no,,1,35. Kaoje | Mn
+A,36,36,Kaoje,ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,1,36. Kaoje | ka
+A,37,37,Kangiwa,Tm,Tm,Tourmaline,gemstones,legend,,yes,,1,37 Kangiwa | Tm
+A,38,38,Kangiwa,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,,1,38 Kangiwa | Qa
+A,39,39,Buya,Mn,Mn,Manganese,ferrous metals,certain,,yes,,1,39. Buya | Mn
+A,40,40,T. Mallam,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,"name printed ""T. MaIlam"" (letter glitch corrected)",1,40 T. MaIlam | Ka
+A,41,41,Gidan Gadu,M,M,Mica,industrial minerals,legend,,yes,,1,41. Gidan Gadu | M
+A,42,42,Sakaba,M,M,Mica,industrial minerals,legend,,yes,,1,42. Sakaba | M
+A,43,43,Sakaba,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,1,43. Sakaba | Fp
+A,44,44,DUKU,Au,Au,Gold,precious metals,certain,,yes,,1,44. DUKU | Au
+A,45,45,DUKU,Au,Au,Gold,precious metals,certain,,yes,,1,45. DUKU | Au
+A,46,46,Iri,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,,1,46. Iri | Qa
+A,47,47,Shirikafe,Sd,Sd,Sand (not in legend),construction materials,uncertain,,yes,,1,47. Shirikafe | Sd
+A,48,48,Zurmi,Au,Au,Gold,precious metals,certain,,no,,1,48. Zurmi | Au
+A,49,49,Boko,Au,Au,Gold,precious metals,certain,,yes,,1,49. Boko | Au
+A,50,50,Maradun,Au,Au,Gold,precious metals,certain,,yes,,1,50. Maradun | Au
+A,51,51,Maradun,Ta,Ta,Tantalite,rare metals,legend,,yes,,1,51. Maradun | Ta
+A,52,52,Maradun,Gn,Gn,Garnet,gemstones,probable,,yes,,1,52. Maradun | Gn
+A,53,53,Maradun,Grl,Grl,River Gravel,construction materials,probable,,yes,,1,53. Maradun | Grl
+A,54,54,Makera,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,54. Makera | Cl
+A,55,55,Talata Mafara,Au,Au,Gold,precious metals,certain,,no,,1,55. Talata Mafara | Au
+A,56,56,Talata Mafara,Cr,Cr,Chromite,ferrous metals,certain,,yes,,1,56. Talata Mafara | Cr
+A,57,57,Sabri,A,A,unknown code,unknown,unknown,A,no,,1,57. Sabri | A
+A,58,58,Kwashebawa,Au,Au,Gold,precious metals,certain,,yes,,1,58. Kwashebawa | Au
+A,59,59,Dampo,Au,Au,Gold,precious metals,certain,,yes,,1,59 Dampo | Au
+A,60,60,Damaga Maru,Au,Au,Gold,precious metals,certain,,yes,,1,60 Damaga Maru | Au
+A,61,61,Damaga Maru,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,no,,1,61. Damaga Maru | Fe
+A,62,62,Damaga Maru,Ta,Ta,Tantalite,rare metals,legend,,no,,1,62. Damaga Maru | Ta
+A,63,63,MAINCHI,Au,Au,Gold,precious metals,certain,,yes,,1,63. MAINCHI | Au
+A,64,64,MARU,Au,Au,Gold,precious metals,certain,,yes,,1,64. MARU | Au
+A,65,65,Garla,Au,Au,Gold,precious metals,certain,,yes,,1,65. Garla | Au
+A,66,66,Roge,W,W,Wolframite,rare metals,legend,,yes,,1,66. Roge | W
+A,67,67,R Dorowa,Au,Au,Gold,precious metals,certain,,yes,,1,67. R Dorowa | Au
+A,68,68,GUMMI,Au,Au,Gold,precious metals,certain,,yes,,1,68. GUMMI | Au
+A,69,69,GAMMI,Sd,Sd,Sand (not in legend),construction materials,uncertain,,yes,,1,69. GAMMI | Sd
+A,70,70,BUKKUYUM,Au,Au,Gold,precious metals,certain,,yes,,1,70. BUKKUYUM | Au
+A,71,71,ANKA,Au,Au,Gold,precious metals,certain,,yes,,1,71. ANKA | Au
+A,72,72,DanGaramk,Au,Au,Gold,precious metals,certain,,yes,,1,72. DanGaramk | Au
+A,73,73,Kanoma,Au,Au,Gold,precious metals,certain,,yes,,1,73. Kanoma | Au
+A,74,74,Maje,Ta,Ta,Tantalite,rare metals,legend,,yes,,1,74. Maje | Ta
+A,75,75,Maje,Mn,Mn,Manganese,ferrous metals,certain,,yes,,1,75. Maje | Mn
+A,76,76,Chafe,Gn,Gn,Garnet,gemstones,probable,,yes,,1,76. Chafe | Gn
+A,77,77,Gwashi,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,1,77. Gwashi | Pb. Zn
+A,78,78,Gwashi,Mo,Mo,Molybdenite,ferrous metals,legend,,yes,,1,78 Gwashi | Mo
+A,79,79,Bagega,Ag,Ag,Silver,precious metals,legend,,yes,,1,79. Bagega | Ag
+A,80,80,Bagega,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,1,80 Bagega | Pb. Zn
+A,81,81,Bagega,Cr,Cr,Chromite,ferrous metals,certain,,yes,,1,81. Bagega | Cr
+A,82,82,Bagega,Ba,Ba,Baryte,industrial minerals,certain,,no,,1,82 Bagega | Ba
+A,83,83,Chafe,Ab. Tc,Ab Tc,Asbestos / Serpentine | Talc,industrial minerals,probable legend,,yes,,1,83. Chafe | Ab. Tc
+A,84,84,Baboali,Tc. Ab,Tc Ab,Talc | Asbestos / Serpentine,industrial minerals,legend probable,,no,,1,84. Baboali | Tc. Ab
+A,85,85,Magami,Ta,Ta,Tantalite,rare metals,legend,,no,,1,85 Magami | Ta
+A,86,86,DAN GULBI,Au,Au,Gold,precious metals,certain,,yes,,1,86. DAN GULBI | Au
+A,87,87,Dan Fasa,G,G,Gold (typo for Au?),precious metals,uncertain,,yes,,1,87. Dan Fasa | G
+A,88,88,R. Dawa,Ta,Ta,Tantalite,rare metals,legend,,yes,,1,88 R. Dawa | Ta
+A,89,69,Funtayi,Ta,Ta,Tantalite,rare metals,legend,,yes,printed number 69 out of sequence - corrected to 89,1,69 Funtayi | Ta
+A,90,90,Zaman,Au,Au,Gold,precious metals,certain,,yes,,1,90 Zaman | Au
+A,91,91,Dansado,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,1,91 Dansado | Be
+A,92,92,MALELE,Au,Au,Gold,precious metals,certain,,yes,,1,92 MALELE | Au
+A,93,93,DAKAGA,Au,Au,Gold,precious metals,certain,,yes,,1,93 DAKAGA | Au
+A,94,94,Gobirana,Au,Au,Gold,precious metals,certain,,yes,,1,94 Gobirana | Au
+A,95,95,DAN GULBI,Au,Au,Gold,precious metals,certain,,yes,,1,95 DAN GULBI | Au
+A,96,96,KA RIVER,Au,Au,Gold,precious metals,certain,,yes,,1,96. KA RIVER | Au
+A,97,97,BIRNIN GWARI,Au,Au,Gold,precious metals,certain,,yes,codes split from name cell,1,97. BIRNIN GWARI Au |
+A,98,98,BIRNIN GWARI,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,codes split from name cell,1,98 BIRNIN GWARI Fe |
+A,99,99,Kweillo,Au,Au,Gold,precious metals,certain,,yes,,1,99 Kweillo | Au
+A,100,100,Wasagu,M,M,Mica,industrial minerals,legend,,yes,,1,100.Wasagu | M
+A,101,101,Kwawai,Bx. Cl,Bx Cl,Bauxitic Clay | Clay / Pottery Clay,construction materials,probable certain,,yes,,1,101 Kwawai | Bx. Cl
+A,102,102,Dutsin Koko,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,1,102 Dutsin Koko | Ka
+A,103,103,Bunza,E,E,"Beryl, Aquamarine, Emerald",gemstones,probable,,no,,1,103 Bunza | E
+B,1,1,Jibiya,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,1. Jibiya | Cl
+B,2,2,Jibiya,Ni,Ni,Nickel,ferrous metals,legend,,yes,,1,2. Jibiya | Ni
+B,3,3,Jibiya,Cr,Cr,Chromite,ferrous metals,certain,,yes,,1,3. Jibiya | Cr
+B,4,4,Kadoji,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,4. Kadoji | Cl
+B,5,5,Kadoji,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,1,5. Kadoji | Fp
+B,6,6,Jibiya,Py,Py,Pyrite / Pyroclore,rare metals,legend,,yes,,1,6 Jibiya | Py
+B,7,7,Ruma (Mahuta),Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,1,7 Ruma (Mahuta)  Ka |
+B,8,8,Ruma,Au,Au,Gold,precious metals,certain,,no,,1,8. Ruma | Au
+B,9,9,Ruma,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,1,9. Ruma | Sn
+B,10,10,Ruma,Cr,Cr,Chromite,ferrous metals,certain,,yes,,1,10. Ruma | Cr
+B,11,11,Bassari,Au,Au,Gold,precious metals,certain,,no,,1,11. Bassari | Au
+B,12,12,Bassari,Cu,Cu,Copper minerals,base metals,certain,,yes,,1,12. Bassari | Cu
+B,13,13,Wajini,Py,Py,Pyrite / Pyroclore,rare metals,legend,,yes,,1,13. Wajini | Py
+B,14,14,Wajini,Au,Au,Gold,precious metals,certain,,yes,,1,14. Wajini | Au
+B,15,15,kurfi,Qs,Qs,Quartz sand (not in legend),construction materials,uncertain,,yes,,1,15. kurfi | Qs
+B,16,16,Dutsin- Ma,Sn.Ta,Sn Ta,Tin / cassiterite (no legend symbol) | Tantalite,rare metals,certain legend,,yes,,1,16. Dutsin- Ma | Sn.Ta
+B,17,17,Dutsin-Ma,Au,Au,Gold,precious metals,certain,,yes,,1,17. Dutsin-Ma | Au
+B,17,I7A,Dutsin- Ma,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,"number token ""I7"" read as 17; number suffix ""A"" in source (inserted entry)",1,I7ADutsin- Ma | Sn
+B,18,I8,Dutsin - Ma,Nb,Nb,Columbite,rare metals,certain,,yes,"number token ""I8"" read as 18",1,I8 Dutsin - Ma | Nb
+B,19,19,D. Sabo,Au,Au,Gold,precious metals,certain,,yes,,1,19.  D. Sabo | Au
+B,20,20,Kankawa,Sn. Nb. Mb,Sn Nb Mb,Tin / cassiterite (no legend symbol) | Columbite | Marble,construction materials | rare metals,certain certain certain,,yes,,1,20. Kankawa | Sn. Nb. Mb
+B,21,21,Kankawa,Nb. Mb,Nb Mb,Columbite | Marble,construction materials | rare metals,certain certain,,yes,,1,21 Kankawa | Nb. Mb
+B,22,22,KANKARA,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,1,22. KANKARA | Ka
+B,23,23,Gwarzo,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,1,23 Gwarzo | Fp
+B,24,24,Malumfashi,Mb,Mb,Marble,construction materials,certain,,yes,,1,24. Malumfashi | Mb
+B,25,25,Boni,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,,1,25. Boni | Ka
+B,26,26,Adanimai,Wa,Wa,unknown code,unknown,unknown,Wa,yes,,1,26. Adanimai | Wa
+B,27,27,Shemi,Ab.Sp,Ab Sp,Asbestos / Serpentine | unknown code,industrial minerals | unknown,probable unknown,Sp,yes,,1,27 Shemi | Ab.Sp
+B,28,28,Bakori,Au,Au,Gold,precious metals,certain,,yes,,1,28 Bakori | Au
+B,29,29,BQkor~,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,1,29 BQkor~ | Sn
+B,30,30,Karage,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,30 Karage | Cl
+B,31,31,Dan maiDak,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,31 Dan maiDak | Cl
+B,32,32,Giwa,Mn,Mn,Manganese,ferrous metals,certain,,yes,,1,32. Giwa | Mn
+B,33,33,Babura,Os,Os,unknown code,unknown,unknown,Os,yes,,1,33 Babura | Os
+B,34,34,Kasanmu,Br,Br,Brine,industrial minerals,probable,,yes,,1,34. Kasanmu | Br
+B,35,35,Guri,Br,Br,Brine,industrial minerals,probable,,no,,1,35. Guri | Br
+B,36,36,Gumel,MI,MI,"Marl (printed ""MI"" for the legend code ""mi"")",construction materials,probable,,yes,,1,36. Gumel | MI
+B,37,37,Gumel,Br,Br,Brine,industrial minerals,probable,,no,,1,37. Gumel | Br
+B,38,36,Gumel,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,printed number 36 out of sequence - corrected to 38,1,36. Gumel | Ka
+B,39,39,Roni,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,1,39 Roni | Fe
+B,40,40,Rode,GS,Gs,Glass Sand,construction materials,certain,,yes,,1,40. Rode | GS
+B,41,41,Kazaure,Gs,Gs,Glass Sand,construction materials,certain,,yes,,1,41. Kazaure | Gs
+B,42,42,Malam- Madori,Ml,Ml,Marl,construction materials,probable,,yes,codes split from name cell,1,42. Malam- Madori Ml |
+B,43,43,Auyo,Ml,Ml,Marl,construction materials,probable,,yes,,1,43 Auyo | Ml
+B,44,44,Danladi,Gs,Gs,Glass Sand,construction materials,certain,,no,,1,44. Danladi | Gs
+B,45,45,Doko,Gs,Gs,Glass Sand,construction materials,certain,,no,,1,45. Doko | Gs
+B,46,46,Wurno,Cu,Cu,Copper minerals,base metals,certain,,yes,,1,46. Wurno | Cu
+B,47,47,Dutse,Nb. Sn,Nb Sn,Columbite | Tin / cassiterite (no legend symbol),rare metals,certain certain,,yes,,1,47. Dutse | Nb. Sn
+B,48,48,Birnin kudu,Sn.Nb.Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,,1,48. Birnin kudu | Sn.Nb.Ta
+B,49,49,Wurno,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,1,49. Wurno | Ka
+B,50,50,Gweram,Gr,Gr,Graphite,industrial minerals,probable,,yes,,1,50. Gweram | Gr
+B,51,SI,Fagam,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,"number token ""SI"" unreadable - inferred from sequence",1,SI. Fagam | Sn
+B,52,52,Fagam,Ta,Ta,Tantalite,rare metals,legend,,yes,,1,52. Fagam | Ta
+B,53,53,Gumsi,Br,Br,Brine,industrial minerals,probable,,yes,,1,53. Gumsi | Br
+B,54,54,Gumsi,E,E,"Beryl, Aquamarine, Emerald",gemstones,probable,,yes,,1,54. Gumsi | E
+B,55,55,Kumaganum,Tr,Tr,Trona,industrial minerals,legend,,yes,,1,55. Kumaganum | Tr
+B,56,56,Garrarak,Br,Br,Brine,industrial minerals,probable,,yes,,1,56. Garrarak | Br
+B,57,57,Yusufari,E,E,"Beryl, Aquamarine, Emerald",gemstones,probable,,yes,,1,57. Yusufari | E
+B,58,58,,Tr,Tr,Trona,industrial minerals,legend,,yes,,1,58. | Tr
+B,59,59,Nguru,Br,Br,Brine,industrial minerals,probable,,yes,,1,59 Nguru | Br
+B,60,60,Nguru,Tr,Tr,Trona,industrial minerals,legend,,yes,,1,60. Nguru | Tr
+B,61,61,Tikire,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,61. Tikire | CI
+B,62,62,Katagum,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,62. Katagum | CI
+B,63,63,Shufa,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,63. Shufa | CI
+B,64,64,Hadejia,Mi,Mi,Marl,construction materials,legend,,yes,,1,64 Hadejia | Mi
+B,65,65,Ita-Ladau,Cr,Cr,Chromite,ferrous metals,certain,,yes,"name printed ""lta-Ladau"" (letter glitch corrected)",1,65. lta-Ladau | Cr
+B,66,66,Zubuki,Ci,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,66. Zubuki | Ci
+B,67,67,Danman,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,67. Danman | Cl
+B,68,SE,River Jumare,CI,Cl,Clay / Pottery Clay,construction materials,certain,,no,"number token ""SE"" unreadable - inferred from sequence; codes split from name cell",1,SE. River Jumare CI |
+B,69,69,Misau,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,yes,,1,69. Misau | Na
+B,70,70,Jagudu,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,70. Jagudu | Cl
+B,71,71,Yana,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,71. Yana | Cl
+B,72,72,Lumbu,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,1,72. Lumbu | Sn
+B,73,73,Ningi Hill,Gr,Gr,Graphite,industrial minerals,probable,,yes,,1,73. Ningi Hill | Gr
+B,74,74,Dutsin Hai,Gr,Gr,Graphite,industrial minerals,probable,,yes,,1,74 Dutsin Hai | Gr
+B,75,75,River Gongola,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,yes,codes split from name cell,1,75. River Gongola Na |
+B,76,76,Alkaleri,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,yes,,1,76 Alkaleri | Na
+B,77,77,Kirti,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,no,,1,77. Kirti | Na
+B,78,78,Ningi Hill,Sn. Nb W,Sn Nb W,Tin / cassiterite (no legend symbol) | Columbite | Wolframite,rare metals,certain certain legend,,yes,,1,78. Ningi Hill | Sn. Nb W
+B,79,79,Gidanjo,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,1,79. Gidanjo | Be
+B,80,80,Gidanjo,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,1,80. Gidanjo | Pb. Zn
+B,81,81,Kwado Kaya Hill,Sn. Ta,Sn Ta,Tin / cassiterite (no legend symbol) | Tantalite,rare metals,certain legend,,yes,,1,81. Kwado Kaya Hill | Sn. Ta
+B,82,82,Daga Allah Hills,Sn. Ta,Sn Ta,Tin / cassiterite (no legend symbol) | Tantalite,rare metals,certain legend,,yes,"name printed ""Daqa Allah Hills"" (letter glitch corrected)",1,82. Daqa Allah Hills | Sn. Ta
+B,83,83,Amo Hill,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,,1,83. Amo Hill | Sn. Nb. Ta
+B,84,84,Yeli Hills,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,"name printed ""YeIi HIlls"" (letter glitch corrected)",1,84. YeIi HIlls | Sn. Nb. Ta
+B,85,85,Targo Hills,Ca Cz,Ca Cz,Calcite | unknown code,industrial minerals | unknown,probable unknown,Cz,yes,,1,85 Targo Hills | Ca Cz
+B,86,86,Yelwa Rish,Cu Pb. Zn,Cu Pb Zn,Copper minerals | Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain certain,,yes,,2,86 Yelwa Rish | Cu Pb. Zn
+B,87,87,Rjshi hills,Sn. W. Nb. Ta,Sn W Nb Ta,Tin / cassiterite (no legend symbol) | Wolframite | Columbite | Tantalite,rare metals,certain legend certain legend,,yes,"name printed ""Rjshi hIlls"" (letter glitch corrected)",2,87 Rjshi hIlls | Sn. W. Nb. Ta
+B,88,88,Torgo Hills,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,,2,88 Torgo Hills | Sn. Nb. Ta
+B,89,89,Liruein Kano,Py,Py,Pyrite / Pyroclore,rare metals,legend,,no,,2,89 Liruein Kano  Py |
+B,90,90,TIBICHI HILL,Sn. Mb.Ta.W,Sn Mb Ta W,Tin / cassiterite (no legend symbol) | Marble | Tantalite | Wolframite,construction materials | rare metals,certain certain legend legend,,yes,,2,90. TIBICHI HILL  Sn. Mb.Ta.W |
+B,91,91,G. Abba,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,yes,,2,91 G. Abba | Na
+B,92,92,Wawa,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,yes,,2,92 Wawa | Na
+B,93,93,Lomi Jamji,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,93. Lomi Jamji | Cl
+B,94,94,Danbala,Gs,Gs,Glass Sand,construction materials,certain,,yes,,2,94. Danbala | Gs
+B,95,95,Bichi,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,yes,,2,95. Bichi | Na
+B,96,96,Bichi,Br,Br,Brine,industrial minerals,probable,,yes,,2,96. Bichi | Br
+B,97,97,Tofa,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,2,97. Tofa | Ka
+B,98,98,Fogolama,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,2,98. Fogolama | Ka
+B,99,99,Gezawa,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,2,99. Gezawa | Ka
+B,100,100,Kumbotsho,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,,2,100.Kumbotsho       Ka |
+B,101,101,Gwarzo,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,2,101 Gwarzo | Ka
+B,102,102,Gwarzo,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,2,102 Gwarzo | Fp
+B,103,103,Gwarzo,Br,Br,Brine,industrial minerals,probable,,no,,2,103.Gwarzo | Br
+B,104,104,Wudil,Gs,Gs,Glass Sand,construction materials,certain,,no,,2,104.Wudil | Gs
+B,105,105,Karaye,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,105 Karaye               Cl |
+B,106,106,Karaye,Qz Qa,Qz Qa,Quartz (not in legend) | Quartz (not in legend),construction materials,uncertain uncertain,,yes,,2,106.Karaye | Qz Qa
+B,107,107,Kafin-chiri,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,yes,,2,107.Kafin-chiri | Gm
+B,108,109,Kafin-chiri,m,m,Mica,industrial minerals,legend,,yes,printed number 109 out of sequence - corrected to 108,2,109.Kafin-chiri | m
+B,109,109,Kofin-chini,,,,,,,yes,,2,109 Kofin-chini |
+B,110,110,Burum,Qz. Qa,Qz Qa,Quartz (not in legend) | Quartz (not in legend),construction materials,uncertain uncertain,,no,,2,110 Burum | Qz. Qa
+B,111,111,Banda,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,2,111 Banda | Sn
+B,112,112,Dando,Sn.Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,2,112.Dando | Sn.Nb
+B,113,113,Rimi,Au,Au,Gold,precious metals,certain,,yes,,2,113.Rimi | Au
+B,114,114,Saya Saya,Qz.Qa,Qz Qa,Quartz (not in legend) | Quartz (not in legend),construction materials,uncertain uncertain,,yes,,2,114.Saya Saya | Qz.Qa
+B,115,115,Dando,Ls,Ls,Limestone,construction materials,certain,,yes,,2,115.Dando | Ls
+B,116,116,Makarfii,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,2,116.Makarfii | Ka
+B,117,117,Giwa,Tm,Tm,Tourmaline,gemstones,legend,,yes,,2,117.Giwa | Tm
+B,118,118,Ungunan Mallam Ayuba,Mn,Mn,Manganese,ferrous metals,certain,,yes,,2,118. Ungunan Mallam Ayuba  Mn |
+B,119,119,Zaria,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,2,119. Zaria | Ka
+B,120,120,Zaria,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,,2,120. Zaria | Qa
+B,121,121,Yakasai,Bc,Bc,Brick Clay,construction materials,probable,,yes,,2,121. Yakasai | Bc
+B,122,122,Yakasai,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,2,122. Yakasai | Be
+B,123,123,Maigana,Bi,Bi,Bismuth,base metals,probable,,yes,,2,123. Maigana | Bi
+B,124,124,Maigana,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,2,124. Maigana | Fp
+B,125,125,Ikara,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,"name printed ""lkara"" (letter glitch corrected)",2,125. lkara | Be
+B,126,126,Ikara,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,2,126. Ikara | Fp
+B,127,127,Ikara,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,,2,127. Ikara | Qa
+B,128,128,Ikara,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,yes,,2,128.Ikara | Na
+B,129,129,Anchau,Sn.Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,2,129. Anchau | Sn.Nb
+B,130,130,Anchau,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,2,130. Anchau | Ka
+B,131,131,Soba,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,2,131. Soba | Ka
+B,132,132,Sharu,Ta,Ta,Tantalite,rare metals,legend,,yes,,2,132. Sharu | Ta
+B,133,133,Yelwa,Au,Au,Gold,precious metals,certain,,yes,,2,133. Yelwa | Au
+B,134,134,Dutsin wai,Sn.Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,2,134. Dutsin wai | Sn.Nb
+B,135,135,BANKE HILL,Sn.Nb.Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,,2,135. BANKE HILL | Sn.Nb.Ta
+B,136,136,GINIYA,W.Sn.Ta,W Sn Ta,Wolframite | Tin / cassiterite (no legend symbol) | Tantalite,rare metals,legend certain legend,,no,,2,136 GINIYA | W.Sn.Ta
+B,137,137,Banke,W,W,Wolframite,rare metals,legend,,yes,,2,137. Banke | W
+B,138,138,Zarara Hill,Cu,Cu,Copper minerals,base metals,certain,,yes,,2,138. Zarara Hill | Cu
+B,139,139,LIRUEIN KANO,Sn.Ta.Nb.W,Sn Ta Nb W,Tin / cassiterite (no legend symbol) | Tantalite | Columbite | Wolframite,rare metals,certain legend certain legend,,yes,"name printed ""LIRUEIN KAN0"" (letter glitch corrected)",2,139. LIRUEIN KAN0    Sn.Ta.Nb.W |
+B,140,140,LIRUEIN KANO WEST,Py.Zn.Cu,Py Zn Cu,Pyrite / Pyroclore | Lead - Zinc (zinc) | Copper minerals,base metals | rare metals,legend certain certain,,yes,"name printed ""LIRUEIN KAN0 WEST"" (letter glitch corrected)",2,140. LIRUEIN KAN0 WEST  Py.Zn.Cu |
+B,141,141,Shibure,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,2,141. Shibure | Fe
+B,142,142,Shibure,Pb.Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,2,142. Shibure | Pb.Zn
+B,143,143,Rumani,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,2,143. Rumani | Sn
+B,144,144,Dariye,Py,Py,Pyrite / Pyroclore,rare metals,legend,,yes,,2,144. Dariye | Py
+B,145,145,Dariye,W,W,Wolframite,rare metals,legend,,yes,,2,145. Dariye | W
+B,146,146,Kubau,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,2,146. Kubau | Ka
+B,147,147,MAI GISHER,Au,Au,Gold,precious metals,certain,,yes,,2,147. MAI GISHER | Au
+B,148,146,TSIBIRI,Au,Au,Gold,precious metals,certain,,yes,printed number 146 out of sequence - corrected to 148,2,146. TSIBIRI | Au
+B,149,149,Kaduna,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,2,149 Kaduna | Ka
+B,150,150,MARARABA RIDO,Ci,Cl,Clay / Pottery Clay,construction materials,certain,,no,,2,150. MARARABA RIDO         Ci |
+B,151,161,Kujama,Bc,Bc,Brick Clay,construction materials,probable,,yes,printed number 161 out of sequence - corrected to 151,2,161. Kujama | Bc
+B,152,152,Kujama,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,no,,2,152. Kujama | Na
+B,153,153,Galadimawa,Sn.Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,2,153. Galadimawa | Sn.Nb
+B,154,154,Kakau,Bc,Bc,Brick Clay,construction materials,probable,,yes,,2,154. Kakau | Bc
+B,155,155,Gwagwada,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,no,,2,155. Gwagwada | Be
+B,156,156,Gwagwada,Ta,Ta,Tantalite,rare metals,legend,,yes,,3,156. Gwagwada | Ta
+B,157,157,Bakin Kasuwa,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,3,157. Bakin Kasuwa | Cl
+B,158,158,Chikun,Au,Au,Gold,precious metals,certain,,yes,,3,158. Chikun | Au
+B,159,159,Chikun,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,3,159. Chikun | Ka
+B,160,160,Kajuru,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,,3,160. Kajuru | Ka
+B,161,164,Geshare,Sn.Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,printed number 164 out of sequence - corrected to 161,3,164. Geshare | Sn.Nb
+B,162,162,Ramin Kura,Sn Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,3,162. Ramin Kura | Sn Nb
+B,163,163,Ishem,Au,Au,Gold,precious metals,certain,,yes,,3,163 Ishem | Au
+B,164,164,Rafi Gusu River,Sn Ta,Sn Ta,Tin / cassiterite (no legend symbol) | Tantalite,rare metals,certain legend,,yes,,3,164 Rafi Gusu River | Sn Ta
+C,1,1,Yusufari,Br,Br,Brine,industrial minerals,probable,,yes,,2,1. Yusufari | Br
+C,2,2,Kwada Kaya Hill,E,E,"Beryl, Aquamarine, Emerald",gemstones,probable,,yes,,2,2. Kwada Kaya Hill | E
+C,3,3,Zumugu,Tn,Tn,unknown code,unknown,unknown,Tn,yes,,2,3. Zumugu | Tn
+C,4,4,Bagayam,Tr,Tr,Trona,industrial minerals,legend,,no,,2,4. Bagayam | Tr
+C,5,5,Arlonjirori,Tr,Tr,Trona,industrial minerals,legend,,yes,,2,5 Arlonjirori | Tr
+C,6,6,Dagambi,Tr,Tr,Trona,industrial minerals,legend,,no,,2,6 Dagambi | Tr
+C,7,7,GEIDAM,Tr,Tr,Trona,industrial minerals,legend,,no,,2,7. GEIDAM | Tr
+C,8,8,Dobiri,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,yes,,2,8. Dobiri | Na
+C,9,9,Dobiri -Koluri,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,yes,,2,9. Dobiri -Koluri | Na
+C,10,10,DAPCHI,Di,Di,Diatomite,industrial minerals,uncertain,,yes,,2,10. DAPCHI | Di
+C,11,11,Jawa,In,In,unknown code,unknown,unknown,In,yes,,2,11. Jawa | In
+C,12,12,Mogono,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,12. Mogono | Cl
+C,13,13,Lantewa,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,13. Lantewa | Cl
+C,14,14,Kalawa,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,14. Kalawa | Cl
+C,15,15,Ngelzanma,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,15. Ngelzanma | Gy
+C,16,16,Damagum,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,16. Damagum                 Gy |
+C,17,17,Ngaldum,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,17. Ngaldum | Gy
+C,18,18,Badejo,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,18. Badejo | Gy
+C,19,19,Badishi,Dt,Dt,Diatomite,industrial minerals,certain,,no,,2,19. Badishi | Dt
+C,20,20,Boikolo,Dt,Dt,Diatomite,industrial minerals,certain,,yes,,2,20. Boikolo | Dt
+C,21,21,Makin fari,Dt,Dt,Diatomite,industrial minerals,certain,,yes,,2,21. Makin fari | Dt
+C,22,22,Mutwe,Ls,Ls,Limestone,construction materials,certain,,yes,,2,22. Mutwe | Ls
+C,23,22,Nyakre,Ls,Ls,Limestone,construction materials,certain,,yes,printed number 22 out of sequence - corrected to 23,2,22. Nyakre | Ls
+C,24,24,Abakire,Dt,Dt,Diatomite,industrial minerals,certain,,yes,,2,24. Abakire | Dt
+C,25,25,Gabai,Ls,Ls,Limestone,construction materials,certain,,yes,,2,25. Gabai | Ls
+C,26,26,Gulat,Ls,Ls,Limestone,construction materials,certain,,yes,,2,26. Gulat | Ls
+C,27,27,Bularaba,Ls,Ls,Limestone,construction materials,certain,,yes,,2,27 Bularaba | Ls
+C,28,28,Malo,Gy,Gy,Gypsum,industrial minerals,certain,,no,,2,28. Malo | Gy
+C,29,29,Fike,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,29. Fike | Gy
+C,30,30,Bumgai,By,By,unknown code,unknown,unknown,By,yes,,2,30. Bumgai | By
+C,31,31,Gongila,Dl,Dl,Dolomite (not in legend),construction materials,probable,,yes,,2,31. Gongila | Dl
+C,32,32,Falatau,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,2,32. Falatau | Sn
+C,33,32,Bakin Kasuwa,Fp,Fp,Feldspar,industrial minerals,certain,,yes,printed number 32 out of sequence - corrected to 33,2,32. Bakin Kasuwa | Fp
+C,34,34,Wurajeloye,Ls,Ls,Limestone,construction materials,certain,,yes,,2,34. Wurajeloye | Ls
+C,35,35,Kapiwoi,Ls,Ls,Limestone,construction materials,certain,,yes,,2,35. Kapiwoi | Ls
+C,36,36,Kapiwoi,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,36 Kapiwoi | Gy
+C,37,37,Chongwon,Dl,Dl,Dolomite (not in legend),construction materials,probable,,yes,,2,37. Chongwon | Dl
+C,38,38,Hongila,Ls,Ls,Limestone,construction materials,certain,,yes,,2,38. Hongila | Ls
+C,39,39,Waldosahu,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,39. Waldosahu | Gy
+C,40,40,Wawa,Na,Na,Saltlake/ Potash (salt),industrial minerals,probable,,yes,,2,40. Wawa | Na
+C,41,41,Tango,Ca,Ca,Calcite,industrial minerals,probable,,no,,2,41 Tango | Ca
+C,42,42,Garba Maidugi,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,42. Garba Maidugi | CI
+C,43,43,Doho,C,C,Coal,energy,certain,,yes,,2,43. Doho | C
+C,44,44,Gombe,Fr,Fr,Flourite,industrial minerals,probable,,yes,,2,44. Gombe | Fr
+C,45,45,Gombe,Fp,Fp,Feldspar,industrial minerals,certain,,no,,2,45. Gombe | Fp
+C,46,46,Kanawa,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,46. Kanawa | Gy
+C,47,47,Kanawa,Zr,Zr,Zircon,rare metals,legend,,yes,,2,47. Kanawa | Zr
+C,48,49,Kanawa,Br,Br,Brine,industrial minerals,probable,,yes,printed number 49 out of sequence - corrected to 48,2,49. Kanawa | Br
+C,49,49,Kalshiogi,Ls,Ls,Limestone,construction materials,certain,,yes,,2,49. Kalshiogi | Ls
+C,50,50,Pindiga,Br,Br,Brine,industrial minerals,probable,,no,,2,50. Pindiga | Br
+C,51,SI,Kumo,Lg,Lg,Lignite,energy,certain,,yes,"number token ""SI"" unreadable - inferred from sequence",2,SI. Kumo | Lg
+C,52,52,Gombe,U,U,Uranium,energy,legend,,yes,,2,52 Gombe | U
+C,53,53,Kembu,C,C,Coal,energy,certain,,yes,,2,53. Kembu | C
+C,54,54,Kukawa,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,54. Kukawa | Cl
+C,55,55,Sinduldul,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,55. Sinduldul | Gy
+C,56,56,Cubio,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,56. Cubio | Gy
+C,57,57,Mongunu,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,57. Mongunu | Cl
+C,58,58,Marte,CI,Cl,Clay / Pottery Clay,construction materials,certain,,no,,2,58. Marte | CI
+C,59,59,Gambaru,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,59 Gambaru | Cl
+C,60,60,Karachri,Bn,Bn,Bentonite,industrial minerals,certain,,yes,,2,60. Karachri | Bn
+C,61,61,Ngala,Bn,Bn,Bentonite,industrial minerals,certain,,no,,2,61. Ngala | Bn
+C,62,62,Dikwa,Bn,Bn,Bentonite,industrial minerals,certain,,yes,,2,62. Dikwa | Bn
+C,63,63,Maiduguri,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,63. Maiduguri . | Cl
+C,64,64,Maiduguri,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,64. Maiduguri | Cl
+C,65,65,Ngamdu,Tr,Tr,Trona,industrial minerals,legend,,no,,2,65. Ngamdu | Tr
+C,66,66,Bama,Dt,Dt,Diatomite,industrial minerals,certain,,yes,,2,66. Bama | Dt
+C,67,67,Nseyo,Ag,Ag,Silver,precious metals,legend,,no,,2,67 Nseyo | Ag
+C,68,68,Gau,Ag,Ag,Silver,precious metals,legend,,yes,,2,68. Gau | Ag
+C,69,69,Wupti,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,69. Wupti                       Cl |
+C,70,70,Wupti,Bn,Bn,Bentonite,industrial minerals,certain,,yes,,2,70 Wupti | Bn
+C,71,71,GWOZA,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,2,71 GWOZA                   Fp |
+C,72,72,Damboa,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,72. Damboa | Gy
+C,73,73,Gilam,Ls,Ls,Limestone,construction materials,certain,,yes,,2,73. Gilam | Ls
+C,74,74,Kurnari,Cor,Cor,"Corundum, Sapphire & Ruby",gemstones,certain,,no,,2,74. Kurnari | Cor
+C,75,75,Shaffa,Ls,Ls,Limestone,construction materials,certain,,yes,,2,75. Shaffa | Ls
+C,76,76,Kida,Bn,Bn,Bentonite,industrial minerals,certain,,yes,,2,76. Kida | Bn
+C,77,77,Kwaya Kusar,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,2,77. Kwaya Kusar | Gy
+C,78,78,Sakwa,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,78 Sakwa | Cl
+C,79,79,SAKASIMITA,Mg,Mg,Magnesite,industrial minerals,certain,,no,,2,79. SAKASIMITA | Mg
+C,80,80,Bashir,M,M,Mica,industrial minerals,legend,,yes,,2,80.  Bashir | M
+C,81,81,Garkida,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,81. Garkida | Cl
+C,82,82,Mubi,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,82. Mubi | Cl
+C,83,83,Girikilan,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,2,83. Girikilan | Cl
+C,84,84,Gombi,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,2,84.Gombi | Fp
+C,85,85,Gombi,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,,2,85.Gombi | Cl
+C,86,86,Kilalula,Mg,Mg,Magnesite,industrial minerals,certain,,yes,"name printed ""KilaIuIa"" (letter glitch corrected)",2,86.KilaIuIa | Mg
+D,1,I,Birnin Gwari,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,"number token ""I"" unreadable - inferred from sequence",3,I Birnin Gwari | Ka
+D,2,2,Birnin Gwari,Ms,Ms,Mica schist / muscovite (not in legend),industrial minerals,uncertain,,yes,,3,2  Birnin Gwari | Ms
+D,3,3,Birnin Gwari,Gr,Gr,Graphite,industrial minerals,probable,,no,,3,3. Birnin Gwari | Gr
+D,4,4,Dodo,Ky,Ky,Kyanite,industrial minerals,certain,,yes,,3,4. Dodo | Ky
+D,5,5,Kakangi,Tm,Tm,Tourmaline,gemstones,legend,,no,,3,5. Kakangi | Tm
+D,6,6,kakangi,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,3,6. kakangi | Be
+D,7,7,Randeji,Ru,Ru,"Corundum, Sapphire & Ruby (ruby)",gemstones,certain,,yes,,3,7. Randeji | Ru
+D,8,8,Sabon Birnin Gwari,Ky,Ky,Kyanite,industrial minerals,certain,,yes,codes split from name cell,3,8. Sabon Birnin Gwari Ky |
+D,9,9,Sabon Birnin Gwari,Ta,Ta,Tantalite,rare metals,legend,,no,codes split from name cell,3,9. Sabon Birnin Gwari Ta |
+D,10,10,Kumuna,Si,Si,unknown code (Silica sand?),unknown,unknown,Si,no,,3,10. Kumuna | Si
+D,11,11,Manda,Au,Au,Gold,precious metals,certain,,yes,,3,11. Manda | Au
+D,12,12,MADADA,Au,Au,Gold,precious metals,certain,,yes,,3,12. MADADA | Au
+D,13,13,Sabon Birnin Gwari,Au,Au,Gold,precious metals,certain,,no,codes split from name cell,3,13. Sabon Birnin Gwari Au |
+D,14,14,Kajuru,Au,Au,Gold,precious metals,certain,,yes,,3,14. Kajuru | Au
+D,15,15,KARIGA RIVER,Au,Au,Gold,precious metals,certain,,no,,3,15. KARIGA RIVER | Au
+D,16,16,Dutsin Fari,Ky,Ky,Kyanite,industrial minerals,certain,,yes,,3,16. Dutsin Fari | Ky
+D,17,17,Sakaba,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,no,,3,17. Sakaba | Be
+D,18,18,Sakaba,M,M,Mica,industrial minerals,legend,,no,,3,18. Sakaba | M
+D,19,19,Sakaba,Ta,Ta,Tantalite,rare metals,legend,,no,,3,19. Sakaba | Ta
+D,20,20,Warri,Ta,Ta,Tantalite,rare metals,legend,,yes,,3,20 .Warri | Ta
+D,21,21,Warri,Be. Cr,Be Cr,"Beryl, Aquamarine, Emerald | Chromite",ferrous metals | gemstones,certain certain,,no,,3,21. Warri | Be. Cr
+D,22,22,Galete,Au,Au,Gold,precious metals,certain,,yes,,3,22.Galete                       Au |
+D,23,23,Konkwesso,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,3,23.Konkwesso | Ka
+D,24,24,Agwara,W,W,Wolframite,rare metals,legend,,no,,3,24.Agwara                     W |
+D,25,25,Kinimu,Tc,Tc,Talc,industrial minerals,legend,,no,,3,25.Kinimu                      Tc |
+D,26,26,Iboli,Be. Gm,Be Gm,"Beryl, Aquamarine, Emerald | Gemstone (not in legend)",gemstones,certain uncertain,,no,,3,26.Iboli | Be. Gm
+D,27,27,Iboli,Ta,Ta,Tantalite,rare metals,legend,,yes,"name printed ""lboli"" (letter glitch corrected)",3,27.lboli | Ta
+D,28,28,kontagora,Ab,Ab,Asbestos / Serpentine,industrial minerals,probable,,yes,,3,28.kontagora | Ab
+D,29,29,Kontagora,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,3,29.Kontagora | Fp
+D,30,30,Pandogari,Tc,Tc,Talc,industrial minerals,legend,,yes,,3,30.Pandogari | Tc
+D,31,31,Pandogari,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,,3,31.Pandogari | Qa
+D,32,32,Bakura,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,3,32.Bakura | Fp
+D,33,33,Bakura,Be. Gm,Be Gm,"Beryl, Aquamarine, Emerald | Gemstone (not in legend)",gemstones,certain uncertain,,yes,,3,33.Bakura | Be. Gm
+D,34,34,G. Wushiyyu,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,no,,3,34.G. Wushiyyu | Be
+D,35,35,KAGARA,Tc,Tc,Talc,industrial minerals,legend,,no,,3,35.KAGARA | Tc
+D,36,36,MOMAJI,Au,Au,Gold,precious metals,certain,,yes,,3,36 MOMAJI | Au
+D,37,37,KARIGA RIVER,Au,Au,Gold,precious metals,certain,,yes,,3,37.KARIGA RIVER | Au
+D,38,38,MADAKA,Au,Au,Gold,precious metals,certain,,yes,,3,38.MADAKA | Au
+D,39,39,Galadima Kogo,Au,Au,Gold,precious metals,certain,,yes,,3,39.Galadima Kogo | Au
+D,40,40,KUTA,Au,Au,Gold,precious metals,certain,,no,,3,40.KUTA | Au
+D,41,41,Kuta,Ky,Ky,Kyanite,industrial minerals,certain,,yes,,3,41.Kuta | Ky
+D,42,42,Tegina,sT,sT,unknown code,unknown,unknown,sT,yes,,3,42.Tegina | sT
+D,43,43,Rawo,Ky,Ky,Kyanite,industrial minerals,certain,,no,,3,43.Rawo | Ky
+D,44,44,Guni,Tr,Tr,Trona,industrial minerals,legend,,yes,,3,44 Guni | Tr
+D,45,45,Minna,Au,Au,Gold,precious metals,certain,,yes,,3,45 Minna | Au
+D,46,46,WUSHISHI,Au,Au,Gold,precious metals,certain,,yes,,3,46.WUSHISHI | Au
+D,47,47,Kishi,W,W,Wolframite,rare metals,legend,,yes,,3,47.Kishi | W
+D,48,48,Kutuwengi,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,3,48 Kutuwengi | Cl
+D,49,49,Dabban,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,3,49.Dabban | Cl
+D,50,50,Lemu,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,3,50 Lemu | Cl
+D,51,51,River Kaduna,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,,3,51.River Kaduna | Cl
+D,52,52,KWAKUTI,Mb,Mb,Marble,construction materials,certain,,yes,,3,52.KWAKUTI | Mb
+D,53,53,Kwakuti,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,3,53.Kwakuti | Pb. Zn
+D,54,54,Geji,Mb,Mb,Marble,construction materials,certain,,yes,,3,54.Geji | Mb
+D,55,55,Kumatu,Mo,Mo,Molybdenite,ferrous metals,legend,,yes,,3,55.Kumatu | Mo
+D,56,56,Lambata,M,M,Mica,industrial minerals,legend,,yes,,3,56.Lambata | M
+D,57,57,Lambata,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,,3,57.Lambata | Qa
+D,58,58,Lambata,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,3,58.Lambata | Pb. Zn
+D,59,59,Lemu,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,3,59.Lemu | Cl
+D,60,60,Badeggi,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,3,60.Badeggi | Cl
+D,61,61,Bida,SS,Ss,Silica Sand,construction materials,legend,,yes,,3,61.Bida | SS
+D,62,62,Bida,Tc,Tc,Talc,industrial minerals,legend,,yes,,3,62.Bida | Tc
+D,63,63,Bakeka,M,M,Mica,industrial minerals,legend,,yes,,3,63.Bakeka | M
+D,64,64,Dakogi,SS,Ss,Silica Sand,construction materials,legend,,yes,,3,64.Dakogi | SS
+D,65,55,Dakogi,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,printed number 55 out of sequence - corrected to 65,3,55.Dakogi | Pb. Zn
+D,66,66,Kuchikpa,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,3,66.Kuchikpa | Cl
+D,67,67,Kokoro,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,3,67.Kokoro | Cl
+D,67,67A,MELENDO RIVER,Au,Au,Gold,precious metals,certain,,yes,"number suffix ""A"" in source (inserted entry)",3,67A. MELENDO RIVER   Au |
+D,68,68,SHASHI,Au,Au,Gold,precious metals,certain,,no,,3,68.SHASHI | Au
+D,69,69,BIN - YAURI,Au,Au,Gold,precious metals,certain,,no,,3,69.BIN - YAURI | Au
+D,70,70,LAKA,Au,Au,Gold,precious metals,certain,,no,,3,70.LAKA | Au
+D,71,71,Kuli,Au,Au,Gold,precious metals,certain,,yes,,3,71.Kuli | Au
+D,72,72,Wurumokato,Au,Au,Gold,precious metals,certain,,yes,,3,72.Wurumokato | Au
+D,73,73,YASHIKIRA,Fp,Fp,Feldspar,industrial minerals,certain,,no,,3,73.YASHIKIRA | Fp
+D,74,74,KAIAMA,W. Sn,W Sn,Wolframite | Tin / cassiterite (no legend symbol),rare metals,legend certain,,yes,,3,74.KAIAMA | W. Sn
+D,75,75,KAIAMA,Au,Au,Gold,precious metals,certain,,yes,,3,75.KAIAMA | Au
+D,76,76,Kugegi,Gm. Au,Gm Au,Gemstone (not in legend) | Gold,gemstones | precious metals,uncertain certain,,yes,,3,76.Kugegi | Gm. Au
+D,77,77,OKe,Mb,Mb,Marble,construction materials,certain,,yes,,3,77.OKe | Mb
+D,78,78,Gbanara,Au,Au,Gold,precious metals,certain,,yes,,3,78.Gbanara | Au
+D,79,79,Bacita,Au,Au,Gold,precious metals,certain,,no,,3,79.Bacita | Au
+D,80,80,Bacita,Sn. Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,3,80.Bacita | Sn. Nb
+D,81,81,M. Lafiagi,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,,3,81.M. Lafiagi | Ka
+D,82,82,Latiagi,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,,3,82.Latiagi | Sn. Nb. Ta
+D,83,83,Lade,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,yes,,3,83.Lade | Gm
+D,84,84,Maga,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,3,84.Maga | Ka
+D,85,85,Kosoti,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,3,85.Kosoti | Ka
+D,86,86,Erufu — Erufu,Au,Au,Gold,precious metals,certain,,yes,,3,86.Erufu — Erufu | Au
+D,87,87,Koro,Tc,Tc,Talc,industrial minerals,legend,,yes,,3,87.Koro | Tc
+D,88,88,Koro,Au,Au,Gold,precious metals,certain,,yes,,3,88 Koro | Au
+D,89,89,Okolushe,Sn. Nb. Ta. Au,Sn Nb Ta Au,Tin / cassiterite (no legend symbol) | Columbite | Tantalite | Gold,precious metals | rare metals,certain certain legend certain,,yes,,3,89. Okolushe | Sn. Nb. Ta. Au
+D,90,90,Mashe,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,no,,3,90. Mashe | Sn. Nb. Ta
+D,91,91,Bishowa,Sm. Nb. Ta,Sm Nb Ta,Tin? (probably a misprint of Sn) | Columbite | Tantalite,rare metals,uncertain certain legend,,no,,3,91. Bishowa | Sm. Nb. Ta
+D,92,92,SHARE,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,3,92. SHARE | Ka
+D,93,93,Okolom,Sn. Au,Sn Au,Tin / cassiterite (no legend symbol) | Gold,precious metals | rare metals,certain certain,,yes,,3,93. Okolom | Sn. Au
+D,94,94,Babanloma,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,,3,94. Babanloma | Sn. Nb. Ta
+D,95,95,ELEBU,Mb,Mb,Marble,construction materials,certain,,no,,3,95. ELEBU | Mb
+D,96,96,Alaka,Mb,Mb,Marble,construction materials,certain,,no,,3,96. Alaka | Mb
+D,97,97,Adio,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,yes,,3,97. Adio | Gm
+D,98,98,Alapa popoola,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,3,98. Alapa popoola            Fp |
+D,99,99,Onire,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,,3,99. Onire | Cl
+D,100,I00,Owode,Gn,Gn,Garnet,gemstones,probable,,yes,"number token ""I00"" read as 100",3,I00.Owode | Gn
+D,101,101,Lajola,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,yes,,3,101. Lajola | Gm
+D,102,102,Ayetoro,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,yes,,3,102. Ayetoro | Gm
+D,103,103,Oreke,Mb,Mb,Marble,construction materials,certain,,no,,3,103. Oreke | Mb
+D,104,104,Yaru,M,M,Mica,industrial minerals,legend,,yes,,3,104. Yaru | M
+D,105,105,Yaru,Mb,Mb,Marble,construction materials,certain,,yes,,3,105. Yaru | Mb
+D,106,106,Yaru,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,no,,3,106 Yaru | Gm
+D,107,107,Igbaja,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,"name printed ""lgbaja"" (letter glitch corrected)",3,107 lgbaja | Cl
+D,108,108,Ilorin,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,3,108.Ilorin | Cl
+D,109,109,Owa,Fe.M,Fe M,"Iron Ore (Magnetite, Ilmenite) | Mica",ferrous metals | industrial minerals,certain legend,,yes,,3,109.Owa | Fe.M
+D,110,110,Elere,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,3,110. Elere | Cl
+D,111,111,Kajora,Fe. Cl,Fe Cl,"Iron Ore (Magnetite, Ilmenite) | Clay / Pottery Clay",construction materials | ferrous metals,certain certain,,yes,,3,111. Kajora | Fe. Cl
+D,112,112,Akutukpa,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,3,112. Akutukpa | Ka
+D,113,113,JAKURA,Mb,Mb,Marble,construction materials,certain,,yes,,3,113. JAKURA | Mb
+D,114,114,Koton-Karfe,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,no,,3,114. Koton-Karfe | Fe
+D,115,115,IGBETTI,Mb,Mb,Marble,construction materials,certain,,yes,,3,115. IGBETTI | Mb
+D,116,116,ODOGBE,Tc,Tc,Talc,industrial minerals,legend,,no,,3,116. ODOGBE | Tc
+D,117,117,Odogbe,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,3,117. Odogbe | Sn
+D,118,118,Odosin,Au.Mb,Au Mb,Gold | Marble,construction materials | precious metals,certain certain,,yes,,3,118. Odosin | Au.Mb
+D,119,119,Ejiba,Tc,Tc,Talc,industrial minerals,legend,,yes,,3,119. Ejiba | Tc
+D,120,120,Mope,Mb,Mb,Marble,construction materials,certain,,yes,,3,120. Mope | Mb
+D,121,121,Isanlu - ESa,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,3,121. Isanlu - ESa | Fp
+D,122,122,Isanlu - Esa,M. Au,M Au,Mica | Gold,industrial minerals | precious metals,legend certain,,yes,,3,122. Isanlu - Esa | M. Au
+D,123,123,Egbe,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,,3,123. Egbe | Sn. Nb. Ta
+D,124,124,Ogga,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,3,124. Ogga | Sn
+D,125,125,Idofin,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,no,,3,125. Idofin | Sn. Nb. Ta
+D,126,126,Kwali,Ke,Ke,unknown code,unknown,unknown,Ke,yes,,3,126. Kwali | Ke
+D,127,127,Dangara,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,3,127. Dangara | Cl
+D,128,128,Tsauni,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,3,128. Tsauni | Pb. Zn
+D,129,129,Tsauni,Au,Au,Gold,precious metals,certain,,no,,3,129. Tsauni | Au
+D,130,130,Zango Kara,Tc,Tc,Talc,industrial minerals,legend,,yes,,3,130. Zango Kara | Tc
+D,131,131,Iga lyere,Tc,Tc,Talc,industrial minerals,legend,,yes,,3,131. Iga lyere | Tc
+D,132,132,Iga Iyere,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,"name printed ""lga Iyere"" (letter glitch corrected)",3,132. lga Iyere | Be
+D,133,133,Irawo - Ile,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,3,133. Irawo - Ile | Fe
+D,134,134,Ladele,Ta,Ta,Tantalite,rare metals,legend,,yes,,3,134. Ladele | Ta
+D,135,135,Ladele,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,yes,,3,135. Ladele | Gm
+D,136,136,Ikomu,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,3,136. Ikomu | Be
+D,137,137,Ikomu,Tc,Tc,Talc,industrial minerals,legend,,yes,,3,137. Ikomu | Tc
+D,138,138,Igbo Ijiaye,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,"name printed ""lgbo ljiaye"" (letter glitch corrected)",3,138. lgbo ljiaye       Qa |
+D,139,139,Igbo Ijiaye,M,M,Mica,industrial minerals,legend,,yes,"name printed ""lgbo ljiaye"" (letter glitch corrected)",3,139. lgbo ljiaye       M |
+D,140,140,Itasa,Ta,Ta,Tantalite,rare metals,legend,,yes,"name printed ""ltasa"" (letter glitch corrected)",3,140. ltasa               Ta |
+D,141,141,Itasa,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,3,141. Itasa               Be |
+D,142,142,Ikoyi,Mb,Mb,Marble,construction materials,certain,,yes,"name printed ""lkoyi"" (letter glitch corrected)",3,142. lkoyi               Mb |
+D,143,143,Morai,Fp,Fp,Feldspar,industrial minerals,certain,,no,,3,143. Morai              Fp |
+D,144,144,Ajashe,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,3,144. Ajashe            Fe |
+D,145,145,Foko,M,M,Mica,industrial minerals,legend,,yes,,3,145. Foko               M |
+D,146,146,Ajashe,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,,3,146. Ajashe            Sn. Nb. Ta |
+D,147,147,Ajashe,Fe. Cl,Fe Cl,"Iron Ore (Magnetite, Ilmenite) | Clay / Pottery Clay",construction materials | ferrous metals,certain certain,,no,,3,147.  Ajashe             Fe. Cl |
+D,148,148,Oro,Ke,Ke,unknown code,unknown,unknown,Ke,yes,,3,148.  Oro                  Ke |
+D,149,149,Elerin-Oke,Nb. Ta,Nb Ta,Columbite | Tantalite,rare metals,certain legend,,yes,,3,149  Elerin-Oke        Nb. Ta |
+D,150,150,Irore,Cor,Cor,"Corundum, Sapphire & Ruby",gemstones,certain,,no,"name printed ""lrore"" (letter glitch corrected)",3,150.  lrore                  Cor |
+D,151,151,Oro-Agor,MS,MS,Mica schist / muscovite (not in legend),industrial minerals,uncertain,,yes,,3,151  Oro-Agor | MS
+D,152,152,Oro-Agor,Ks,Ks,Kaolinitic sand/clay (not in legend),industrial minerals,uncertain,,yes,,3,152  Oro-Agor | Ks
+D,153,153,Omu-Aran,Sn. Nb. Ta C.,Sn Nb Ta C,Tin / cassiterite (no legend symbol) | Columbite | Tantalite | Coal,energy | rare metals,certain certain legend certain,,yes,,3,153  Omu-Aran | Sn. Nb. Ta C.
+D,154,154,Kawari,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,codes split from name cell,3,154  Kawari Cl |
+D,155,155,Old Dokolo,Tc,Tc,Talc,industrial minerals,legend,,yes,out of sequence (previous 156),3,155  Old Dokolo | Tc
+D,156,156,Odo-Ore,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,no,out of sequence (previous 154),3,156.  Odo-Ore | Sn
+E,1,1,Zunmo,Tr,Tr,Trona,industrial minerals,legend,,yes,,4,1.  Zunmo | Tr
+E,2,2,Guyuk,Bn,Bn,Bentonite,industrial minerals,certain,,yes,,4,2.  Guyuk | Bn
+E,3,3,Guyuk,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,4,3. Guyuk | Gy
+E,4,4,Kuma,Ls,Ls,Limestone,construction materials,certain,,no,,4,4.  Kuma | Ls
+E,5,5,Demsa,Gy P,Gy P,Gypsum | Phosphate,industrial minerals,certain certain,,yes,,4,5  Demsa | Gy P
+E,6,6,Nzuruwei,C,C,Coal,energy,certain,,no,,4,6.  Nzuruwei | C
+E,7,•7,Vera Hills,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,no,"number token ""•7"" unreadable - inferred from sequence",4,•7  Vera Hills | Sn
+E,8,S,Mantari,Ba,Ba,Baryte,industrial minerals,certain,,yes,"number token ""S"" unreadable - inferred from sequence; letter-for-digit reading would give 5",4,S.  Mantari | Ba
+E,9,9,Ganye,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,4,9  Ganye | Cl
+E,10,10,Shebshi Hill,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,no,,4,10. Shebshi Hill | Sn
+E,11,11,Mayo Butale,Gr,Gr,Graphite,industrial minerals,probable,,yes,,4,11. Mayo Butale | Gr
+E,12,12,Beti,Gr,Gr,Graphite,industrial minerals,probable,,yes,,4,12 Beti | Gr
+E,13,13,Beti,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,4,13 Beti | Sn
+E,14,14,Gomoti,Ds,Ds,Dimension Stone,construction materials,certain,,yes,,4,14 Gomoti | Ds
+E,15,15,Lara,P,P,Phosphate,industrial minerals,certain,,yes,,4,15 Lara | P
+E,16,16,Pindiga,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,4,16 Pindiga | Gy
+E,17,17,Kaltungo,Pb Zn. Bn,Pb Zn Bn,Lead - Zinc (lead) | Lead - Zinc (zinc) | Bentonite,base metals | industrial minerals,certain certain certain,,yes,"name printed ""Kaltunqo"" (letter glitch corrected)",4,17 Kaltunqo | Pb Zn. Bn
+E,18,18,Kaltungo,Tr,Tr,Trona,industrial minerals,legend,,yes,,4,18 Kaltungo | Tr
+E,19,19,Chongwon,Ag,Ag,Silver,precious metals,legend,,yes,,4,19. Chongwon | Ag
+E,20,20,Chongwon,Tpz,Tpz,Topaz,gemstones,legend,,yes,,4,20. Chongwon | Tpz
+E,21,21,Kukam,Bn,Bn,Bentonite,industrial minerals,certain,,yes,,4,21. Kukam | Bn
+E,22,22,Kyadawa,Bn,Bn,Bentonite,industrial minerals,certain,,yes,,4,22. Kyadawa | Bn
+E,23,23,Kaltungo,Zr,Zr,Zircon,rare metals,legend,,yes,,4,23. Kaltungo | Zr
+E,24,24,Kunini,Ls,Ls,Limestone,construction materials,certain,,yes,,4,24. Kunini | Ls
+E,25,25,Dumgel,Ba,Ba,Baryte,industrial minerals,certain,,yes,,4,25 Dumgel | Ba
+E,26,26,Gusuni,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,no,,4,26 Gusuni | Pb. Zn
+E,27,27,Kwoji,Ca,Ca,Calcite,industrial minerals,probable,,yes,,4,27 Kwoji | Ca
+E,28,28,Jauro Magu,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,4,28 Jauro Magu | Fe
+E,29,29,Ranewo,Br,Br,Brine,industrial minerals,probable,,yes,,4,29 Ranewo | Br
+E,30,30,Bumanda,Br,Br,Brine,industrial minerals,probable,,yes,,4,30 Bumanda | Br
+E,31,31,Bali,Gr,Gr,Graphite,industrial minerals,probable,,no,,4,31  Bali | Gr
+E,32,32,K. Boyi,Ba,Ba,Baryte,industrial minerals,certain,,yes,,4,32  K. Boyi | Ba
+E,33,33,K. Boyi,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,4,33 K. Boyi | Pb. Zn
+E,34,34,Gindima waya,Fr,Fr,Flourite,industrial minerals,probable,,no,,4,34 Gindima waya  Fr |
+E,35,35,Gujuba,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,no,,4,35 Gujuba | Fe
+E,36,36,Lav,E,E,"Beryl, Aquamarine, Emerald",gemstones,probable,,no,,4,36 Lav | E
+E,37,37,Panguru,Br,Br,Brine,industrial minerals,probable,,yes,,4,37 Panguru | Br
+E,38,38,Futuk,Ls,Ls,Limestone,construction materials,certain,,yes,,4,38 Futuk | Ls
+E,39,39,Futuk,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,4,39  Futuk | Gy
+E,40,40,Dass,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,4,40 Dass | Ka
+E,41,41,Dass,Tm,Tm,Tourmaline,gemstones,legend,,yes,,4,41. Dass | Tm
+E,42,42,S. Goal,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,4,42. S. Goal | Ka
+E,43,43,Jankari,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,4,43 Jankari | Cl
+E,44,44,Jagudu,Ta,Ta,Tantalite,rare metals,legend,,yes,,4,44. Jagudu | Ta
+E,45,45,SHONA MILES,Sn. W,Sn W,Tin / cassiterite (no legend symbol) | Wolframite,rare metals,certain legend,,yes,codes split from name cell,4,45. SHONA MILES Sn. W |
+E,46,46,JARAWA HILL,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,codes split from name cell,4,46. JARAWA HILL Sn. Nb. Ta |
+E,47,47,Yerima,Br,Br,Brine,industrial minerals,probable,,yes,,4,47. Yerima | Br
+E,48,48,Yerima,Ls,Ls,Limestone,construction materials,certain,,yes,,4,48. Yerima | Ls
+E,49,49,Garin,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,4,49. Garin | Gy
+E,50,50,Sanji,Br,Br,Brine,industrial minerals,probable,,yes,,4,50. Sanji | Br
+E,51,51,Wunri,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,4,51. Wunri | Pb. Zn
+E,52,52,Burkulu,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,4,52. Burkulu | Pb. Zn
+E,53,53,Burkulu,Ls,Ls,Limestone,construction materials,certain,,yes,,4,53. Burkulu | Ls
+E,54,54,River Lere,Ru,Ru,"Corundum, Sapphire & Ruby (ruby)",gemstones,certain,,yes,,4,54. River Lere | Ru
+E,55,55,Mansur,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,4,55. Mansur | Gy
+E,56,56,A. Dabo,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,4,56. A. Dabo | Ka
+E,57,57,Shere Hills,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,"name printed ""Shere HilIs"" (letter glitch corrected)",4,57. Shere HilIs         Ka |
+E,58,58,SHERE HILLS,Ta,Ta,Tantalite,rare metals,legend,,yes,codes split from name cell,4,58. SHERE HILLS Ta |
+E,59,69,Naraguta,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,printed number 69 out of sequence - corrected to 59,4,69. Naraguta | Cl
+E,60,60,RAYFIEEO,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,,4,60. RAYFIEEO | Sn. Nb. Ta
+E,61,61,Fadera,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,4,61. Fadera | Be
+E,62,62,RUKUBA,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,,4,62. RUKUBA | Sn. Nb. Ta
+E,63,63,Kona,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,4,63. Kona | Be
+E,64,64,KIGOM HILLS,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,codes split from name cell,4,64. KIGOM HILLS Sn. Nb. Ta |
+E,65,65,VOM,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,4,65. VOM | Be
+E,66,66,BUKURU,Zr,Zr,Zircon,rare metals,legend,,no,,4,66 BUKURU | Zr
+E,67,67,JOS,Nb,Nb,Columbite,rare metals,certain,,yes,,4,67. JOS | Nb
+E,68,68,Laugai,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,4,68. Laugai | Sn
+E,69,69,Fursun,Mz,Mz,Monazite,rare metals,certain,,yes,,4,69. Fursun | Mz
+E,70,70,Werram,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,4,70. Werram | Ka
+E,71,71,Bukuru,G,G,Gold (typo for Au?),precious metals,uncertain,,no,,4,71. Bukuru | G
+E,72,72,Koro,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,4,72. Koro | Sn
+E,73,73,Sho — Gindi Akwati,,,,,,,yes,,4,73. Sho — Gindi Akwati |
+E,74,74,ROPP,Nb: Ta,Nb Ta,Columbite | Tantalite,rare metals,certain legend,,yes,,4,74. ROPP | Nb: Ta
+E,75,75,MAJOR PORTER,,,,,,,yes,,4,75. MAJOR PORTER |
+E,76,76,Garam,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,4,76. Garam | Cl
+E,77,77,Ampere,Qz,Qz,Quartz (not in legend),construction materials,uncertain,,yes,,4,77. Ampere | Qz
+E,78,78,Ampere,Mb,Mb,Marble,construction materials,certain,,yes,,4,78. Ampere | Mb
+E,79,79,Dal,Ta,Ta,Tantalite,rare metals,legend,,yes,,4,79. Dal | Ta
+E,80,80,Fan,Mz,Mz,Monazite,rare metals,certain,,yes,,4,80. Fan | Mz
+E,81,81,Fan,Sn.Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,4,81. Fan | Sn.Nb
+E,82,82,Mangu,Ma,Ma,unknown code,unknown,unknown,Ma,yes,,4,82 Mangu | Ma
+E,83,53,Basuras,Qz,Qz,Quartz (not in legend),construction materials,uncertain,,yes,printed number 53 out of sequence - corrected to 83,4,53. Basuras | Qz
+E,84,84,Dengi,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,4,84. Dengi | Be
+E,85,65,Kwal,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,printed number 65 out of sequence - corrected to 85,4,65. Kwal | Qa
+E,86,86,Mbar,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,4,86 Mbar | Ka
+E,87,87,Mangun,Nb,Nb,Columbite,rare metals,certain,,yes,,4,87 Mangun | Nb
+E,88,88,Lankan,Gs,Gs,Glass Sand,construction materials,certain,,yes,,4,88 Lankan | Gs
+E,89,89,Gwaktok,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,4,89. Gwaktok | Cl
+E,90,90,Kunikyen,Ta,Ta,Tantalite,rare metals,legend,,yes,,4,90. Kunikyen | Ta
+E,91,93,Gurua,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,printed number 93 out of sequence - corrected to 91,4,93. Gurua | Cl
+E,92,92,Belnin,To,To,Topaz,gemstones,probable,,yes,,4,92. Belnin | To
+E,93,93,Libam,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,4,93. Libam | Be
+E,94,94,Mustieve,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,4,94 Mustieve | Be
+E,95,95,Kup,Gs,Gs,Glass Sand,construction materials,certain,,yes,,4,95 Kup | Gs
+E,96,86,Baltup,Tc,Tc,Talc,industrial minerals,legend,,no,"printed number 86 out of sequence - corrected to 96; name printed ""BaItup"" (letter glitch corrected)",4,86 BaItup | Tc
+E,97,97,Jowandu,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,4,97 Jowandu | CI
+E,98,98,F. Ruwa,Pbs,Pbs,Galena,base metals,probable,,yes,,4,98. F. Ruwa | Pbs
+E,99,99,S Gida,Pbs,Pbs,Galena,base metals,probable,,yes,,4,99 S Gida | Pbs
+E,100,100,Maro,Ls,Ls,Limestone,construction materials,certain,,yes,,4,100 Maro | Ls
+E,101,101,Wase,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,4,101 Wase | Pb. Zn
+E,102,102,Mbar,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,4,102 Mbar | Cl
+E,103,103,Trum,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,4,103 Trum | Cl
+E,104,104,Sha Hill,Sn. Ta,Sn Ta,Tin / cassiterite (no legend symbol) | Tantalite,rare metals,certain legend,,yes,,4,104 Sha Hill | Sn. Ta
+E,105,105,Mushero,Ks,Ks,Kaolinitic sand/clay (not in legend),industrial minerals,uncertain,,yes,,4,105. Mushero | Ks
+E,106,106,Bwoi,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,4,106. Bwoi | CI
+E,107,107,Taram,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,4,107. Taram | CI
+E,108,108,N. Fohkan,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,4,108. N. Fohkan | CI
+E,109,409,Damshia,CI,Cl,Clay / Pottery Clay,construction materials,certain,,no,printed number 409 out of sequence (one digit misread) - corrected to 109,4,409. Damshia | CI
+E,110,140,B.Chiyawa,Ba,Ba,Baryte,industrial minerals,certain,,yes,printed number 140 out of sequence - corrected to 110,4,140. B.Chiyawa | Ba
+E,111,111,Namu,S,S,Sulphur / salt (not in legend),industrial minerals,uncertain,,yes,,4,111. Namu | S
+E,112,112,Nymus,Ba,Ba,Baryte,industrial minerals,certain,,yes,,4,112 Nymus | Ba
+E,113,113,South Mada Hill,Sn. W,Sn W,Tin / cassiterite (no legend symbol) | Wolframite,rare metals,certain legend,,yes,,4,113. South Mada Hill  Sn. W |
+E,114,114,Take Iafia,Fp. M,Fp M,Feldspar | Mica,industrial minerals,certain legend,,yes,,4,114. Take Iafia | Fp. M
+E,115,115,Don Swam,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,4,115 Don Swam | Gy
+E,116,116,Shargam,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,4,116. Shargam | Fp
+E,117,117,Namu,Ba,Ba,Baryte,industrial minerals,certain,,yes,,4,117 Namu | Ba
+E,118,118,Takara,Mu,Mu,Mica (muscovite),industrial minerals,probable,,yes,,4,118. Takara | Mu
+E,119,119,Gitata,Tm,Tm,Tourmaline,gemstones,legend,,no,,4,119. Gitata | Tm
+E,120,120,Gitata,Sn. Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,4,120 Gitata | Sn. Nb
+E,121,121,G.Ejigba,Qz,Qz,Quartz (not in legend),construction materials,uncertain,,yes,"name printed ""G.Ejiqba"" (letter glitch corrected)",4,121. G.Ejiqba | Qz
+E,122,122,G.Aruwa,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,4,122. G.Aruwa | Be
+E,123,123,G. Aruwa,Lp,Lp,Lepidolite,rare metals,certain,,yes,,4,123. G. Aruwa | Lp
+E,124,124,Nikoro,Qz,Qz,Quartz (not in legend),construction materials,uncertain,,yes,,4,124. Nikoro | Qz
+E,125,125,Ninva,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,no,,4,125. Ninva | Sn
+E,126,126,Ancho,Mu,Mu,Mica (muscovite),industrial minerals,probable,,no,,4,126. Ancho | Mu
+E,127,127,Ancho,Ca,Ca,Calcite,industrial minerals,probable,,yes,,4,127. Ancho | Ca
+E,128,128,Ganje,W,W,Wolframite,rare metals,legend,,yes,,4,128. Ganje | W
+E,129,129,Wamba,Tr,Tr,Trona,industrial minerals,legend,,yes,,4,129. Wamba | Tr
+E,130,130,Mada,Pbs,Pbs,Galena,base metals,probable,,yes,,4,130. Mada | Pbs
+E,131,131,Wamba,Mu,Mu,Mica (muscovite),industrial minerals,probable,,no,,4,131. Wamba | Mu
+E,132,132,Akwanga,M,M,Mica,industrial minerals,legend,,yes,,4,132. Akwanga | M
+E,133,133,Uke,Sn.Ta,Sn Ta,Tin / cassiterite (no legend symbol) | Tantalite,rare metals,certain legend,,no,,4,133 Uke | Sn.Ta
+E,134,134,Keffi,Aq,Aq,"Beryl, Aquamarine, Emerald",gemstones,probable,,yes,,4,134. Keffi | Aq
+E,135,135,Keffi,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,4,135. Keffi | Sn
+E,136,136,Keffi,Ta,Ta,Tantalite,rare metals,legend,,no,,4,136. Keffi | Ta
+E,137,137,Ketfi,Tm,Tm,Tourmaline,gemstones,legend,,yes,,4,137. Ketfi | Tm
+E,138,138,Langalanga,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,no,"name printed ""Lanqalanga"" (letter glitch corrected)",4,138. Lanqalanga   Be |
+E,139,139,South Mada Hill,Sn.W,Sn W,Tin / cassiterite (no legend symbol) | Wolframite,rare metals,certain legend,,yes,,4,139. South Mada Hill  Sn.W |
+E,140,140,Made,Tm. Rb,Tm Rb,"Tourmaline | Ruby? (Corundum, Sapphire & Ruby)",gemstones,legend uncertain,,yes,,4,140. Made | Tm. Rb
+E,141,141,N. Eggon,Ta,Ta,Tantalite,rare metals,legend,,yes,,4,141. N. Eggon | Ta
+E,142,142,N. Eggon,Aq,Aq,"Beryl, Aquamarine, Emerald",gemstones,probable,,yes,,4,142. N. Eggon | Aq
+E,143,143,N. Eggon,Qz,Qz,Quartz (not in legend),construction materials,uncertain,,no,,4,143 N. Eggon | Qz
+E,144,144,N Eggon,EmI,EmI,"Beryl, Aquamarine, Emerald (emerald; printed ""EmI"")",gemstones,probable,,yes,,4,144. N Eggon | EmI
+E,145,145,T. Jankua,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,4,145. T. Jankua | Sn
+E,146,146,Kaffin Shanu,Ca,Ca,Calcite,industrial minerals,probable,,yes,,4,146 Kaffin Shanu  Ca |
+E,147,147,Takwa,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,4,147. Takwa | Be
+E,148,148,Siyabu,Gs,Gs,Glass Sand,construction materials,certain,,yes,,4,148. Siyabu | Gs
+E,149,149,Siyabu,Zr,Zr,Zircon,rare metals,legend,,yes,,4,149. Siyabu | Zr
+E,150,150,Lafia,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,4,150 Lafia | Ka
+E,151,151,LAFIA,C,C,Coal,energy,certain,,no,,5,151 LAFIA | C
+E,152,152,Nassarawa,"Ta, W",Ta W,Tantalite | Wolframite,rare metals,legend legend,,yes,,5,"152. Nassarawa | Ta, W"
+E,153,153,Nassarawa,"Sn, Ta",Sn Ta,Tin / cassiterite (no legend symbol) | Tantalite,rare metals,certain legend,,yes,,5,"153. Nassarawa | Sn, Ta"
+E,154,154,Keffi,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,5,154. Keffi | Be
+E,155,155,Roguwa,Fc,Fc,Fire Clay,construction materials,probable,,yes,,5,155 Roguwa | Fc
+E,156,156,Roguwa,Aq,Aq,"Beryl, Aquamarine, Emerald",gemstones,probable,,yes,,5,156 Roguwa | Aq
+E,157,157,Zagwan Daji,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,5,157 Zagwan Daji | Be
+E,158,158,Ombi,Tm,Tm,Tourmaline,gemstones,legend,,yes,,5,158 Ombi | Tm
+E,159,159,Shabire,C,C,Coal,energy,certain,,yes,,5,159 Shabire | C
+E,160,160,OBI,C,C,Coal,energy,certain,,yes,,5,160 OBI | C
+E,161,161,Agwatashi,Sr,Sr,unknown code,unknown,unknown,Sr,yes,,5,161 Agwatashi | Sr
+E,162,162,ALOSHI,Ba,Ba,Baryte,industrial minerals,certain,,yes,,5,162 ALOSHI | Ba
+E,163,162,KEANA,"Pb,Zn",Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,printed number 162 out of sequence - corrected to 163,5,"162 KEANA | Pb,Zn"
+E,164,164,Adashu,"Pb,Zn",Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,5,"164 Adashu | Pb,Zn"
+E,165,165,Adashu,Ba,Ba,Baryte,industrial minerals,certain,,yes,,5,165 Adashu | Ba
+E,166,166,Azare,Br,Br,Brine,industrial minerals,probable,,yes,,5,166. Azare | Br
+E,167,167,AWE,Ba,Ba,Baryte,industrial minerals,certain,,yes,,5,167 AWE | Ba
+E,168,168,Wuse,Ba,Ba,Baryte,industrial minerals,certain,,yes,,5,168 Wuse | Ba
+E,169,169,Wuse,Br,Br,Brine,industrial minerals,probable,,yes,,5,169. Wuse | Br
+E,170,170,AWE,Br,Br,Brine,industrial minerals,probable,,yes,,5,170. AWE | Br
+E,171,171,Ndora,PbS,PbS,Galena (PbS),base metals,probable,,yes,,5,171 Ndora | PbS
+E,172,172,Wanke,"Ba,Br",Ba Br,Baryte | Brine,industrial minerals,certain probable,,no,,5,"172 Wanke | Ba,Br"
+E,173,173,Osogh,Pbs,Pbs,Galena,base metals,probable,,yes,,5,173 Osogh | Pbs
+E,174,174,Akwuya,Pb.Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,no,,5,174 Akwuya | Pb.Zn
+E,175,175,Keana,Ba,Ba,Baryte,industrial minerals,certain,,yes,,5,175   Keana | Ba
+E,176,176,Demakaa,Br,Br,Brine,industrial minerals,probable,,yes,,5,176 Demakaa | Br
+E,177,177,Kadarko,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,5,177 Kadarko | Sn
+E,178,178,Yerwata,Gr,Gr,Graphite,industrial minerals,probable,,yes,,5,178 Yerwata | Gr
+E,179,179,Gidan Zabutu,Gs,Gs,Glass Sand,construction materials,certain,,no,,5,179 Gidan Zabutu | Gs
+E,180,180,Gidan Zabutu,Zr,Zr,Zircon,rare metals,legend,,yes,,5,180 Gidan Zabutu | Zr
+E,181,181,Udegi-Beki,Gs,Gs,Glass Sand,construction materials,certain,,yes,,5,181 Udegi-Beki | Gs
+E,182,182,Udegi-BeKi,Zr,Zr,Zircon,rare metals,legend,,yes,,5,182 Udegi-BeKi | Zr
+E,183,183,Udegi-Beki,Sn. Tr,Sn Tr,Tin / cassiterite (no legend symbol) | Trona,industrial minerals | rare metals,certain legend,,yes,,5,183 Udegi-Beki | Sn. Tr
+E,184,184,Gano,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,5,184 Gano | Sn
+E,185,185,TOTO,Fe. Mb,Fe Mb,"Iron Ore (Magnetite, Ilmenite) | Marble",construction materials | ferrous metals,certain certain,,yes,,5,185 TOTO | Fe. Mb
+E,186,186,Atarana,Mb,Mb,Marble,construction materials,certain,,yes,,5,186 Atarana | Mb
+E,187,187,Ugia,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,,5,187 Ugia | Qa
+E,188,188,Sharwa Hill,Sn.Nb.Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,no,,5,188 Sharwa Hill | Sn.Nb.Ta
+E,189,189,Kachia,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,5,189 Kachia | Ka
+E,190,190,Kachia,Sn. Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,no,,5,190. Kachia | Sn. Nb
+E,191,191,ZONKWA,Tc,Tc,Talc,industrial minerals,legend,,yes,,5,191. ZONKWA | Tc
+E,192,192,Kagoro,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,5,192 Kagoro | Ka
+E,193,193,Kagoro,Sn Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,"name printed ""Kaqoro"" (letter glitch corrected)",5,193. Kaqoro | Sn Nb
+E,194,194,Kafanchan,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,5,194 Kafanchan | Ka
+E,195,195,Kurmin Dagana,Sn Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,codes split from name cell,5,195 Kurmin Dagana Sn Nb |
+E,196,196,Nok,Ta,Ta,Tantalite,rare metals,legend,,yes,,5,196 Nok | Ta
+E,197,197,Kagama,Sn. Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,5,197 Kagama | Sn. Nb
+E,198,198,kwoi,"Sn, Nb",Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,5,"198 kwoi | Sn, Nb"
+E,199,199,Godogodo,"Sn, Nb",Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,5,"199 Godogodo  Sn, Nb |"
+E,200,200,Jama’a,"Sn,Nb,Ta,Zr",Sn Nb Ta Zr,Tin / cassiterite (no legend symbol) | Columbite | Tantalite | Zircon,rare metals,certain certain legend legend,,yes,,5,"200 Jama’a             Sn,Nb,Ta,Zr |"
+E,201,201,Sabongida,"Sn, Nb",Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,codes split from name cell,5,"201 Sabongida Sn, Nb |"
+E,202,202,Sabongida,Tm,Tm,Tourmaline,gemstones,legend,,yes,,5,202 Sabongida       Tm |
+E,203,203,Bokana,Tm,Tm,Tourmaline,gemstones,legend,,yes,,5,203 Bokana  Tm |
+E,204,204,Ningishi Hill,"Sn, Tm, Zr",Sn Tm Zr,Tin / cassiterite (no legend symbol) | Tourmaline | Zircon,gemstones | rare metals,certain legend legend,,yes,,5,"204 Ningishi Hill  Sn, Tm, Zr |"
+E,205,205,Saw mill,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,codes split from name cell,5,205 Saw mill Be |
+E,206,206,Agameti,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,no,codes split from name cell,5,206 Agameti Be |
+E,207,207,Mayir,"Sn, Nb",Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,rare metals,certain certain,,yes,,5,"207 Mayir  Sn, Nb |"
+E,208,208,DIKO,Au,Au,Gold,precious metals,certain,,yes,,5,208 DIKO  Au |
+E,209,209,Sarkin Pawa,Tm,Tm,Tourmaline,gemstones,legend,,yes,,5,209 Sarkin Pawa | Tm
+E,210,210,Borari,Qz,Qz,Quartz (not in legend),construction materials,uncertain,,yes,,5,210 Borari  Qz |
+E,211,211,Borari,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,5,211 Borari  Fp |
+E,212,212,Shenagu,Ky,Ky,Kyanite,industrial minerals,certain,,yes,codes split from name cell,5,212. Shenagu Ky |
+E,213,213,Tsauni,Au,Au,Gold,precious metals,certain,,no,,5,213. Tsauni  Au |
+E,214,214,Kwarana,Ta,Ta,Tantalite,rare metals,legend,,yes,codes split from name cell,5,214. Kwarana Ta |
+E,215,215,Kwarana,Zr,Zr,Zircon,rare metals,legend,,no,,5,215. Kwarana  Zr |
+E,216,216,Kabuso koro,Cm,Cm,unknown code,unknown,unknown,Cm,no,,5,216 Kabuso koro | Cm
+E,217,217,TAKALAFIA,Mb,Mb,Marble,construction materials,certain,,yes,,5,217. TAKALAFIA | Mb
+E,218,218,BURUM,Mb Mb,Mb Mb,Marble | Marble,construction materials,certain certain,,no,,5,218. BURUM  Mb |
+E,219,219,Yanga,Sn. Ta,Sn Ta,Tin / cassiterite (no legend symbol) | Tantalite,rare metals,certain legend,,yes,,5,219. Yanga   Sn. Ta |
+E,220,220,Yanga,M Ka,M Ka,Mica | Kaolin / kaolinitic clay,industrial minerals,legend certain,,yes,,5,220 Yanga   M |
+E,221,221,Kapati,Mb,Mb,Marble,construction materials,certain,,yes,,5,221. Kapati   Mb |
+E,222,222,Bwari,Qs. Fp,Qs Fp,Quartz sand (not in legend) | Feldspar,construction materials | industrial minerals,uncertain certain,,no,,5,222. Bwari   Qs. Fp |
+E,223,223,Tukuba,Sn. Au,Sn Au,Tin / cassiterite (no legend symbol) | Gold,precious metals | rare metals,certain certain,,yes,,5,223. Tukuba  Sn. Au |
+E,224,224,Kuje,Ta. Qa,Ta Qa,Tantalite | Quartz (not in legend),construction materials | rare metals,legend uncertain,,yes,,5,224. Kuje   Ta. Qa |
+E,225,225,AFU HILL,Sn. Ta.Nb.W,Sn Ta Nb W,Tin / cassiterite (no legend symbol) | Tantalite | Columbite | Wolframite,rare metals,certain legend certain legend,,yes,codes split from name cell,5,225. AFU HILL Sn. Ta.Nb.W |
+E,226,226,Zazaga,M,M,Mica,industrial minerals,legend,,yes,,5,226. Zazaga   M |
+E,227,227,Zazaga,W. Be,W Be,"Wolframite | Beryl, Aquamarine, Emerald",gemstones | rare metals,legend certain,,yes,,5,227. Zazaga   W. Be |
+E,228,228,KAZAI,Au,Au,Gold,precious metals,certain,,yes,,5,228. KAZAI   Au |
+E,229,229,BERI,Au,Au,Gold,precious metals,certain,,yes,,5,229. BERI   Au |
+E,230,230,Old Dokolo,Pb.Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,5,230. Old Dokolo   Pb.Zn |
+E,231,231,Old dokole,Au,Au,Gold,precious metals,certain,,yes,,5,231. Old dokole  Au |
+E,232,232,Abuchi,Tc,Tc,Talc,industrial minerals,legend,,yes,,5,232. Abuchi   Tc |
+E,233,232,Kein-Yaku,Tc,Tc,Talc,industrial minerals,legend,,yes,printed number 232 out of sequence - corrected to 233,5,232. Kein-Yaku  Tc |
+E,234,234,Wana,Tpz,Tpz,Topaz,gemstones,legend,,yes,,5,234. Wana   Tpz |
+F,1,1,Ade,Mb,Mb,Marble,construction materials,certain,,no,,5,1. Ade | Mb
+F,2,2,Mopa,Mb,Mb,Marble,construction materials,certain,,no,,5,2. Mopa | Mb
+F,3,2,Igbagun,Mb,Mb,Marble,construction materials,certain,,no,"printed number 2 out of sequence - corrected to 3; name printed ""lgbagun"" (letter glitch corrected)",5,2 lgbagun | Mb
+F,4,4,AIYETORO,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,no,,5,4. AIYETORO | Fe
+F,5,5,Aiyetoro,Au. Ca,Au Ca,Gold | Calcite,industrial minerals | precious metals,certain probable,,no,,5,5. Aiyetoro | Au. Ca
+F,6,6,Egbede,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,no,,5,6. Egbede | Fe
+F,7,7,CHOKO-CHOKO,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,codes split from name cell,5,7. CHOKO-CHOKO Fe |
+F,8,8,Obajana,M,M,Mica,industrial minerals,legend,,yes,,5,8. Obajana | M
+F,9,9,Obajana,Mb,Mb,Marble,construction materials,certain,,yes,,5,9. Obajana | Mb
+F,10,10,OBAJANA,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,5,10. OBAJANA            Fp |
+F,11,11,Emoa,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,5,11 Emoa | Cl
+F,12,12,Emoa,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,5,12 Emoa | Fe
+F,13,13,lyara,Mb,Mb,Marble,construction materials,certain,,yes,,5,13. lyara | Mb
+F,14,14,Okomoba,Mb,Mb,Marble,construction materials,certain,,yes,,5,14. Okomoba | Mb
+F,15,15,Akpara,U,U,Uranium,energy,legend,,yes,,5,15. Akpara | U
+F,16,16,LOKOJA (AGBAJA),Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,no,codes split from name cell,5,16 LOKOJA (AGBAJA) Fe |
+F,17,17,Lokoja,CI. Cs,Cl Cs,Clay / Pottery Clay | unknown code,construction materials | unknown,certain unknown,Cs,no,,5,17. Lokoja | CI. Cs
+F,18,IS,Aforo-Odugbo,Fc.Qa,Fc Qa,Fire Clay | Quartz (not in legend),construction materials,probable uncertain,,yes,"number token ""IS"" unreadable - inferred from sequence; letter-for-digit reading would give 15",5,IS. Aforo-Odugbo | Fc.Qa
+F,19,19,Zangon Daji,Fp.M,Fp M,Feldspar | Mica,industrial minerals,certain legend,,yes,,5,19. Zangon Daji | Fp.M
+F,20,20,Lokoja,U,U,Uranium,energy,legend,,yes,,5,20. Lokoja | U
+F,21,21,OSARA FOREST,Mb,Mb,Marble,construction materials,certain,,yes,codes split from name cell,5,21. OSARA FOREST Mb |
+F,22,22,OSARA FOREST,Fp,Fp,Feldspar,industrial minerals,certain,,yes,codes split from name cell,5,22. OSARA FOREST Fp |
+F,23,22,Osara,Qz,Qz,Quartz (not in legend),construction materials,uncertain,,yes,printed number 22 out of sequence - corrected to 23,5,22 Osara - | Qz
+F,24,24,ITAKPE HILLS,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,codes split from name cell,5,24 ITAKPE HILLS Fe |
+F,25,25,Itakpe,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,"name printed ""ltakpe"" (letter glitch corrected)",5,25. ltakpe | Be
+F,26,26,Itakpe,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,"name printed ""ltakpe"" (letter glitch corrected)",5,26. ltakpe | Qa
+F,27,27,UBO,Mb,Mb,Marble,construction materials,certain,,yes,,5,27. UBO | Mb
+F,28,28,Ukpilla,AU,Au,Gold,precious metals,certain,,yes,,5,28 Ukpilla | AU
+F,29,29,Ukpilla,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,5,29 Ukpilla | Fp
+F,30,30,UKPILLA,Mb,Mb,Marble,construction materials,certain,,yes,,5,30 UKPILLA | Mb
+F,31,31,AJAOKUTA,Mb,Mb,Marble,construction materials,certain,,yes,,5,31 AJAOKUTA | Mb
+F,32,32,AJAOKUTA,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,5,32 AJAOKUTA | Fe
+F,33,32,Ajaokuta,Sn. Nb Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,printed number 32 out of sequence - corrected to 33,5,32. Ajaokuta | Sn. Nb Ta
+F,34,34,Itobe,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,no,,5,34. Itobe | Qa
+F,35,35,Onado,Tc,Tc,Talc,industrial minerals,legend,,no,,5,35 Onado | Tc
+F,36,36,ITOBE,Mb,Mb,Marble,construction materials,certain,,yes,"name printed ""lTOBE"" (letter glitch corrected)",5,36.  lTOBE | Mb
+F,37,37,Gwoligyo,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,5,37. Gwoligyo | Ka
+F,38,38,Okokonvi,Mb,Mb,Marble,construction materials,certain,,yes,,5,38. Okokonvi | Mb
+F,39,39,Oyedega,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,5,39. Oyedega | CI
+F,40,40,Aguleri,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,5,40. Aguleri | CI
+F,41,41,Igbarian,Gs,Gs,Glass Sand,construction materials,certain,,yes,"name printed ""lgbarian"" (letter glitch corrected)",5,41. lgbarian | Gs
+F,42,42,Nnegi - Umuleri,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,codes split from name cell,5,42. Nnegi - Umuleri Fe |
+F,43,43,Onitsha,Gs,Gs,Glass Sand,construction materials,certain,,no,,5,43. Onitsha | Gs
+F,44,44,Omuoji,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,,5,44. Omuoji | Cl
+F,45,45,Nnewi,Lg,Lg,Lignite,energy,certain,,yes,,5,45 Nnewi | Lg
+F,46,46,Ozubulu-Ukpo,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,codes split from name cell,5,46 Ozubulu-Ukpo Ka |
+F,47,47,Ukpor,Lg,Lg,Lignite,energy,certain,,no,,5,47. Ukpor | Lg
+F,48,48,okija,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,,5,48. okija | Ka
+F,49,49,Awomama,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,5,49. Awomama | Ka
+F,50,50,Assa,Oil,Oil,Oil and Gas,energy,certain,,yes,,5,50. Assa | Oil
+F,51,51,Akabuna,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,5,51. Akabuna | Cl
+F,52,52,OGBADA,Oil,Oil,Oil and Gas,energy,certain,,yes,,5,52. OGBADA | Oil
+F,53,53,Abua,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,5,53. Abua | Cl
+F,54,54,Tombia,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,5,54. Tombia | CI
+F,55,65,Asamabari,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,printed number 65 out of sequence - corrected to 55,5,65. Asamabari | Cl
+F,56,56,Sagbama,Gs,Gs,Glass Sand,construction materials,certain,,no,,5,56. Sagbama | Gs
+F,57,57,Opukushi,Oil,Oil,Oil and Gas,energy,certain,,no,,5,57. Opukushi | Oil
+F,58,58,Ogbia,Gs,Gs,Glass Sand,construction materials,certain,,yes,,5,58. Ogbia | Gs
+F,59,59,Ogbia,Ci,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,5,59. Ogbia | Ci
+F,60,60,Ogwashi-Uku,Lg,Lg,Lignite,energy,certain,,yes,codes split from name cell,5,60. Ogwashi-Uku Lg |
+F,61,61,Asama,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,5,61. Asama | Ka
+F,62,62,Agbor,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,5,62. Agbor | Ka
+F,63,63,Akiewe,Gs,Gs,Glass Sand,construction materials,certain,,yes,,5,63 Akiewe | Gs
+F,64,64,UZERE EAST,Oil,Oil,Oil and Gas,energy,certain,,yes,,5,64. UZERE EAST  Oil |
+F,65,65,UGHELLI EAST,Oil,Oil,Oil and Gas,energy,certain,,yes,,5,65 UGHELLI EAST  Oil |
+F,66,66,UGHSELLI,Gs,Gs,Glass Sand,construction materials,certain,,no,,5,66. UGHSELLI | Gs
+F,67,67,ESCRAVOS BEACH,Oil,Oil,Oil and Gas,energy,certain,,yes,codes split from name cell,5,67. ESCRAVOS BEACH Oil |
+F,68,68,Oja-sale,Mb. M,Mb M,Marble | Mica,construction materials | industrial minerals,certain legend,,yes,,5,68. Oja-sale | Mb. M
+F,69,69,Komino,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,5,69. Komino | Ka
+F,70,70,Igarra,Au,Au,Gold,precious metals,certain,,yes,,5,70. Igarra | Au
+F,71,71,Igarra,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,"name printed ""lgarra"" (letter glitch corrected)",5,71. lgarra | Ka
+F,72,72,Agenebodo,Gy,Gy,Gypsum,industrial minerals,certain,,no,,5,72. Agenebodo | Gy
+F,73,73,Ago-ogbodo,U,U,Uranium,energy,legend,,yes,,5,73 Ago-ogbodo | U
+F,74,74,Ago-egbedo,Ls,Ls,Limestone,construction materials,certain,,yes,,5,74 Ago-egbedo | Ls
+F,75,75,Auchi,Gs,Gs,Glass Sand,construction materials,certain,,yes,,5,75 Auchi | Gs
+F,76,76,Auchi,Mb,Mb,Marble,construction materials,certain,,yes,,5,76Auchi | Mb
+F,77,77,Auchi,Sd,Sd,Sand (not in legend),construction materials,uncertain,,no,,5,77Auchi | Sd
+F,78,78,Auchi,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,5,78Auchi | Ka
+F,79,79,Ekpeshi,Ls,Ls,Limestone,construction materials,certain,,yes,,5,79.Ekpeshi | Ls
+F,80,80,Afuze,C,C,Coal,energy,certain,,yes,,5,80.Afuze | C
+F,81,81,Sabon gida,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,5,81 Sabon gida | Ka
+F,82,82,Ora,Ls,Ls,Limestone,construction materials,certain,,no,,5,82 Ora | Ls
+F,83,83,Ora,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,6,83 Ora | Gy
+F,84,84,Uhonmora,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,84 Uhonmora | Cl
+F,85,85,ETSAKO WEST,Gy,Gy,Gypsum,industrial minerals,certain,,yes,codes split from name cell,6,85 ETSAKO WEST Gy |
+F,86,86,Uhen,Py,Py,Pyrite / Pyroclore,rare metals,legend,,yes,,6,86 Uhen | Py
+F,87,87,Okada,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,87 Okada | Cl
+F,88,88,Owoboana,Bit,Bit,Bitumen,energy,certain,,no,,6,88 Owoboana | Bit
+F,89,89,Uromi,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,89 Uromi | Cl
+F,90,90,Ubiaja,Lg,Lg,Lignite,energy,certain,,yes,,6,90 Ubiaja | Lg
+F,91,91,Ilushi,Sd,Sd,Sand (not in legend),construction materials,uncertain,,no,,6,91.Ilushi | Sd
+F,92,92,Orah,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,92.Orah | Cl
+F,93,93,Orah,Sd,Sd,Sand (not in legend),construction materials,uncertain,,yes,,6,93.Orah | Sd
+F,94,94,Ute (Owa),La,La,Laterite (not in legend),construction materials,uncertain,,yes,,6,94.Ute (Owa) | La
+F,95,95,IKPOBA RIVER BENIN,Gs,Gs,Glass Sand,construction materials,certain,,yes,codes split from name cell,6,95.IKPOBA RIVER BENIN Gs |
+F,96,96,Benin-City,Gvl,Gvl,River Gravel,construction materials,certain,,no,,6,96.Benin-City | Gvl
+F,97,97,Benin-City,Sd,Sd,Sand (not in legend),construction materials,uncertain,,yes,,6,97.Benin-City | Sd
+F,98,98,Ago-Okoro,Gvl,Gvl,River Gravel,construction materials,certain,,yes,,6,98.Ago-Okoro | Gvl
+F,99,99,GILLI-GILLI,Oil,Oil,Oil and Gas,energy,certain,,no,,6,99.GILLI-GILLI | Oil
+F,100,100,SAPELE,Oil,Oil,Oil and Gas,energy,certain,,no,,6,100. SAPELE | Oil
+F,101,101,Ikara,Cor,Cor,"Corundum, Sapphire & Ruby",gemstones,certain,,yes,,6,101. Ikara | Cor
+F,102,102,Oke - Agbo,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,6,102. Oke - Agbo            Be |
+F,103,103,Akoko North West,Mu,Mu,Mica (muscovite),industrial minerals,probable,,yes,codes split from name cell,6,103. Akoko North West Mu |
+F,104,104,Bode,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,,6,104. Bode | Qa
+F,105,105,Ikeram,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,6,105. Ikeram | Fe
+F,106,106,Akoko North East,Ds,Ds,Dimension Stone,construction materials,certain,,yes,,6,106. Akoko North East   Ds |
+F,107,107,Igbara-Oke,Ds,Ds,Dimension Stone,construction materials,certain,,no,,6,107. Igbara-Oke | Ds
+F,108,lOB,Alade,Ds,Ds,Dimension Stone,construction materials,certain,,no,"number token ""lOB"" unreadable - inferred from sequence",6,lOB. Alade | Ds
+F,109,109,Idoani,Mb,Mb,Marble,construction materials,certain,,no,,6,109. Idoani | Mb
+F,111,111,Oja-Odan,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,out of sequence (previous 109),6,111 Oja-Odan | Ka
+F,112,112,Ugbolan,Ks,Ks,Kaolinitic sand/clay (not in legend),industrial minerals,uncertain,,yes,,6,112. Ugbolan | Ks
+F,113,113,Ifon,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,113 Ifon | Cl
+F,114,114,Ijagba,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,114 Ijagba | Cl
+F,115,115,Ute,Mb,Mb,Marble,construction materials,certain,,yes,,6,115. Ute | Mb
+F,116,116,Okoluke,Cr,Cr,Chromite,ferrous metals,certain,,yes,,6,116 Okoluke | Cr
+F,117,117,Ute,C,C,Coal,energy,certain,,no,,6,117 Ute | C
+F,118,116,Ode-Aiye,Ts,Ts,Tar Sand,energy,legend,,yes,printed number 116 out of sequence - corrected to 118,6,116. Ode-Aiye | Ts
+F,119,119,IFON,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,6,119 IFON | Ka
+F,120,120,Okitipupa,Ts,Ts,Tar Sand,energy,legend,,no,,6,120 Okitipupa | Ts
+F,121,121,Shogbon (Okitipupa),CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,codes split from name cell,6,121. Shogbon (Okitipupa) CI |
+F,122,122,IGBOKODA,Gs Ts,Gs Ts,Glass Sand | Tar Sand,construction materials | energy,certain legend,,yes,,6,122 IGBOKODA | Gs Ts
+F,123,123,Agbabu,Ts,Ts,Tar Sand,energy,legend,,yes,,6,123 Agbabu | Ts
+F,124,124,Shabomi,C,C,Coal,energy,certain,,yes,,6,124. Shabomi | C
+F,125,125,Igodan-Lisa,Ks,Ks,Kaolinitic sand/clay (not in legend),industrial minerals,uncertain,,yes,"name printed ""lgodan-Lisa"" (letter glitch corrected)",6,125. lgodan-Lisa | Ks
+F,126,126,Gbekebo,Gs,Gs,Glass Sand,construction materials,certain,,yes,,6,126 Gbekebo | Gs
+F,127,127,Atokogbo,Ts,Ts,Tar Sand,energy,legend,,yes,,6,127. Atokogbo | Ts
+F,128,128,Ipepe,Sd,Sd,Sand (not in legend),construction materials,uncertain,,yes,,6,128. Ipepe | Sd
+F,129,129,Ishan,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,"name printed ""lshan"" (letter glitch corrected)",6,129  lshan | Cl
+F,130,130,IJERO,Sn. Nb. Ta,Sn Nb Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,rare metals,certain certain legend,,yes,,6,130  IJERO | Sn. Nb. Ta
+F,131,131,Ipoti,M,M,Mica,industrial minerals,legend,,yes,,6,131 Ipoti | M
+F,132,132,Ipoti,Tm. Ag,Tm Ag,Tourmaline | Silver,gemstones | precious metals,legend legend,,yes,,6,132  Ipoti | Tm. Ag
+F,133,133,Iddo – Ekiti,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,133  Iddo – Ekiti | Cl
+F,134,134,Orin,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,134 Orin | Cl
+F,135,135,Awo Ekiti,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,135 Awo Ekiti | Cl
+F,136,136,IJERO EKITI,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,,6,136 IJERO EKITI | Cl
+F,137,137,Aramoko,Ta,Ta,Tantalite,rare metals,legend,,yes,,6,137 Aramoko | Ta
+F,138,138,Ire-Ekiti,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,6,138 Ire-Ekiti | Ka
+F,139,139,Ilu-Omoba,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,,6,139 Ilu-Omoba | Ka
+F,140,140,Ikere,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,6,140 Ikere | Ka
+F,141,141,Orin-Ekiti,Bx,Bx,Bauxitic Clay,construction materials,probable,,yes,,6,141 Orin-Ekiti | Bx
+F,142,142,ILLA-ORANGUN,Tc,Tc,Talc,industrial minerals,legend,,yes,,6,142. ILLA-ORANGUN   Tc |
+F,143,143,Orangun,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,6,143. Orangun | Ka
+F,144,144,ORANGUN,Tc,Tc,Talc,industrial minerals,legend,,yes,,6,144 ORANGUN | Tc
+F,145,145,Ilobu,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,145 Ilobu                  Cl |
+F,146,146,Igbona,Au,Au,Gold,precious metals,certain,,no,codes split from name cell,6,146.  Igbona Au |
+F,147,147,Awo,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,no,,6,147.  Awo  Gm |
+F,148,148,Ilesa,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,yes,codes split from name cell,6,148.   Ilesa Gm |
+F,149,149,IPERINDO,Au,Au,Gold,precious metals,certain,,yes,,6,149.   IPERINDO | Au
+F,150,150,IFE,To,To,Topaz,gemstones,probable,,yes,"name printed ""lFE"" (letter glitch corrected)",6,150.   lFE  To |
+F,151,151,Odo-Igbo,Au,Au,Gold,precious metals,certain,,yes,,6,151.   Odo-Igbo | Au
+F,152,152,Osu,Au,Au,Gold,precious metals,certain,,no,codes split from name cell,6,152.   Osu Au |
+F,153,153,Oshogbo,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,,6,153.   Oshogbo | Cl
+F,154,154,Ikire,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,yes,"codes split from name cell; name printed ""lkire"" (letter glitch corrected)",6,154.   lkire Gm |
+F,155,155,Lamu Camp Ondo,,,,,,,no,,6,155.   Lamu Camp Ondo |
+F,156,156,Odeleye,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,156.   Odeleye | Cl
+F,157,157,Okin,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,codes split from name cell,6,157.   Okin Cl |
+F,158,158,Akoya,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,codes split from name cell,6,158.   Akoya Be |
+F,159,159,Akoya,Ta,Ta,Tantalite,rare metals,legend,,yes,codes split from name cell,6,159   Akoya Ta |
+F,160,160,Iganna,Ta,Ta,Tantalite,rare metals,legend,,yes,codes split from name cell,6,160.   Iganna Ta |
+F,161,161,Oniko,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,codes split from name cell,6,161.   Oniko Ka |
+F,162,162,Jobele,Mb,Mb,Marble,construction materials,certain,,yes,codes split from name cell,6,162.   Jobele Mb |
+F,163,163,Monija,ML,Ml,Marl,construction materials,probable,,no,codes split from name cell,6,163.   Monija ML |
+F,164,164,Egbeda,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,no,,6,164.   Egbeda | Be
+F,165,166,Idi-Ayunre,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,"printed number 166 out of sequence - corrected to 165; name printed ""ldi-Ayunre"" (letter glitch corrected)",6,166.   ldi-Ayunre | Be
+F,166,166,Olowa,Sl,Sl,Sillimanite,industrial minerals,legend,,yes,codes split from name cell,6,166.   Olowa Sl |
+F,167,167,Olodo,St,St,Stone? (not in legend),construction materials,uncertain,,yes,codes split from name cell,6,167.   Olodo St |
+F,168,168,Alagbede,Mb,Mb,Marble,construction materials,certain,,yes,"name printed ""Alaqbede"" (letter glitch corrected)",6,168   Alaqbede | Mb
+F,169,169,Meko,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,codes split from name cell,6,169.   Meko Ka |
+F,170,170,Afon,Au,Au,Gold,precious metals,certain,,yes,codes split from name cell,6,170.   Afon Au |
+F,171,171,Safara,Au,Au,Gold,precious metals,certain,,yes,codes split from name cell,6,171.   Safara Au |
+F,172,172,Sha-Orire,Gs,Gs,Glass Sand,construction materials,certain,,yes,,6,172.   Sha-Orire | Gs
+F,173,173,AIYETORO,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,6,173.   AIYETORO | Ka
+F,174,174,Aiyetoro,P,P,Phosphate,industrial minerals,certain,,yes,,6,174.   Aiyetoro | P
+F,175,175,ARE-ABEOKUTA,,,,,,,yes,,6,175.   ARE-ABEOKUTA |
+F,176,176,O.Kajola,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,6,176.   O.Kajola | Ka
+F,177,177,Odeda,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,codes split from name cell,6,177.   Odeda Ka |
+F,178,178,Olowu Akeusi,SI,SI,unknown code (Silica sand?),unknown,unknown,SI,yes,codes split from name cell,6,178   Olowu Akeusi SI |
+F,179,179,Oba,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,codes split from name cell,6,179.   Oba Ka |
+F,180,180,Ishara,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,codes split from name cell,6,180.   Ishara Ka |
+F,181,181,Ile-Igboro,P,P,Phosphate,industrial minerals,certain,,yes,"name printed ""lIe-lqboro"" (letter glitch corrected)",6,181.   lIe-lqboro | P
+F,182,182,Ohumbe,Gy P,Gy P,Gypsum | Phosphate,industrial minerals,certain certain,,yes,,6,182   Ohumbe | Gy P
+F,183,183,Ologiri,Gy,Gy,Gypsum,industrial minerals,certain,,yes,codes split from name cell,6,183   Ologiri Gy |
+F,184,184,Ibese,Ls,Ls,Limestone,construction materials,certain,,yes,"codes split from name cell; name printed ""lbese"" (letter glitch corrected)",6,184   lbese Ls |
+F,185,185,EWEKORO,Ls,Ls,Limestone,construction materials,certain,,yes,,6,185   EWEKORO | Ls
+F,186,186,Oshosun,P,P,Phosphate,industrial minerals,certain,,yes,,6,186   Oshosun | P
+F,187,187,IFO JUNCTION,,,,,,,no,"name printed ""lFO JUNCTION"" (letter glitch corrected)",6,187.   lFO JUNCTION |
+F,188,188,SHAGAMU,Ls,Ls,Limestone,construction materials,certain,,yes,,6,188.  SHAGAMU | Ls
+F,189,189,Tube,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,codes split from name cell,6,189.  Tube Ka |
+F,190,190,Atan,Au,Au,Gold,precious metals,certain,,yes,codes split from name cell,6,190.  Atan Au |
+F,191,191,Ijebu-Ife,Ts,Ts,Tar Sand,energy,legend,,yes,"name printed ""Ijebu-lfe"" (letter glitch corrected)",6,191   Ijebu-lfe | Ts
+F,192,192,Epe,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,codes split from name cell,6,192   Epe Cl |
+F,193,193,lwopin,Ts,Ts,Tar Sand,energy,legend,,yes,codes split from name cell,6,193.   lwopin Ts |
+F,194,194,Imusin,Ts,Ts,Tar Sand,energy,legend,,yes,codes split from name cell,6,194.   Imusin Ts |
+F,195,195,Idowa,Ls,Ls,Limestone,construction materials,certain,,yes,codes split from name cell,6,195.   Idowa Ls |
+F,196,196,Ijebu-Ode,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,"name printed ""ljebu-Ode"" (letter glitch corrected)",6,196.   ljebu-Ode | Ka
+F,197,197,Ajara,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,codes split from name cell,6,197.   Ajara Cl |
+F,198,198,Badagry,Ts,Ts,Tar Sand,energy,legend,,yes,,6,198.   Badagry | Ts
+F,199,199,Ikorodu,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,"codes split from name cell; name printed ""lkorodu"" (letter glitch corrected)",6,199.   lkorodu Cl |
+F,200,200,Ijede,Gs,Gs,Glass Sand,construction materials,certain,,no,"name printed ""ljede"" (letter glitch corrected)",6,200. ljede  Gs |
+F,201,201,Agbowa,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,codes split from name cell,6,201. Agbowa Cl |
+F,202,202,Poka,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,6,202. Poka  Ka |
+F,203,203,Ibeju,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,6,203. Ibeju  Cl |
+G,1,1,Junga,Ls,Ls,Limestone,construction materials,certain,,no,,7,1   Junga | Ls
+G,2,2,Akwugo,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,no,,7,2   Akwugo | Pb. Zn
+G,3,3,AKWANA,Br,Br,Brine,industrial minerals,probable,,yes,,7,3.AKWANA | Br
+G,4,4,Mayo Butale,Gr,Gr,Graphite,industrial minerals,probable,,no,,7,4.Mayo Butale | Gr
+G,5,5,Gayan,Gr,Gr,Graphite,industrial minerals,probable,,no,,7,5.Gayan | Gr
+G,6,6,Wukari,Ba,Ba,Baryte,industrial minerals,certain,,no,,7,6.Wukari | Ba
+G,7,7,Takum,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,no,,7,7.Takum | Be
+G,8,8,Baissa,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,7,8.Baissa | Be
+G,9,9,Galea,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,yes,,7,9.Galea | Gm
+G,10,10,Mai Samari,Bx,Bx,Bauxitic Clay,construction materials,probable,,yes,,7,10.Mai  Samari | Bx
+G,11,11,Guraji,Bx,Bx,Bauxitic Clay,construction materials,probable,,yes,,7,11Guraji | Bx
+G,12,12,Mambila,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,yes,,7,12Mambila | Gm
+G,13,13,Kuar,Ba,Ba,Baryte,industrial minerals,certain,,yes,,7,13.Kuar | Ba
+G,14,14,Dong,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,yes,,7,14.Dong | Be
+G,15,15,NdumYayi,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,7,15NdumYayi | Fe
+G,16,16,Ndum,Ba Fe,Ba Fe,"Baryte | Iron Ore (Magnetite, Ilmenite)",ferrous metals | industrial minerals,certain certain,,yes,codes split from name cell,7,16 Ndum Ba Fe |
+G,17,17,Achebe,Ba,Ba,Baryte,industrial minerals,certain,,yes,codes split from name cell,7,17. Achebe Ba |
+G,18,18,Okaa,Br,Br,Brine,industrial minerals,probable,,yes,codes split from name cell,7,18. Okaa Br |
+G,19,19,Agbadu,Ba,Ba,Baryte,industrial minerals,certain,,yes,,7,19. Agbadu | Ba
+G,20,20,Nyamsando,Ls,Ls,Limestone,construction materials,certain,,yes,,7,20. Nyamsando | Ls
+G,21,21,Gbaiumba,Bn,Bn,Bentonite,industrial minerals,certain,,yes,,7,21. Gbaiumba | Bn
+G,22,22,Gbaiumba,Br,Br,Brine,industrial minerals,probable,,yes,,7,22. Gbaiumba | Br
+G,23,23,ARUFU,Fr,Fr,Flourite,industrial minerals,probable,,yes,,7,23. ARUFU | Fr
+G,24,24,Akwana,Fr,Fr,Flourite,industrial minerals,probable,,yes,codes split from name cell,7,24 Akwana Fr |
+G,25,25,ARUFU,Pb,Pb,Lead - Zinc (lead),base metals,certain,,yes,,7,25. ARUFU | Pb
+G,26,26,Amini,Fr,Fr,Flourite,industrial minerals,probable,,yes,codes split from name cell,7,26. Amini Fr |
+G,27,27,Ugba,Ls,Ls,Limestone,construction materials,certain,,yes,codes split from name cell,7,27. Ugba Ls |
+G,28,28,Tseakaa,Ls,Ls,Limestone,construction materials,certain,,yes,,7,28. Tseakaa | Ls
+G,29,29,Moze,Ls,Ls,Limestone,construction materials,certain,,yes,codes split from name cell,7,29. Moze Ls |
+G,30,30,Ijer,Ls,Ls,Limestone,construction materials,certain,,yes,"codes split from name cell; name printed ""ljer"" (letter glitch corrected)",7,30. ljerLs |
+G,31,31,Mbatiev,Ba,Ba,Baryte,industrial minerals,certain,,no,,7,31. Mbatiev | Ba
+G,32,32,YANDEV,Ls,Ls,Limestone,construction materials,certain,,yes,,7,32 YANDEV | Ls
+G,33,33,Yandev,Ba,Ba,Baryte,industrial minerals,certain,,yes,codes split from name cell,7,33 Yandev Ba |
+G,34,24,Itungwa,Pb,Pb,Lead - Zinc (lead),base metals,certain,,no,codes split from name cell; printed number 24 out of sequence - corrected to 34,7,24 Itungwa Pb |
+G,35,35,Ikpa,Ba,Ba,Baryte,industrial minerals,certain,,yes,codes split from name cell,7,35 IkpaBa |
+G,36,36,Moi-Igbo,Br,Br,Brine,industrial minerals,probable,,no,,7,36 Moi-Igbo | Br
+G,37,37,Moi-Igbo,Ba,Ba,Baryte,industrial minerals,certain,,yes,,7,37. Moi-Igbo | Ba
+G,38,38,Tsetyo,Gy,Gy,Gypsum,industrial minerals,certain,,yes,codes split from name cell,7,38. Tsetyo Gy |
+G,39,39,Ojantelle,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,7,39. Ojantelle | Ka
+G,40,40,Bopo,C,C,Coal,energy,certain,,yes,codes split from name cell,7,40 Bopo C |
+G,41,41,Umogidi,Gy,Gy,Gypsum,industrial minerals,certain,,yes,codes split from name cell,7,41 Umogidi Gy |
+G,42,42,Iga-Okpaya,C,C,Coal,energy,certain,,yes,,7,42 Iga-Okpaya | C
+G,43,43,EDUMOGA AMOD,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,7,43 EDUMOGA AMOD   Gy |
+G,44,44,Aliade,Ls,Ls,Limestone,construction materials,certain,,yes,codes split from name cell,7,44 Aliade Ls |
+G,45,45,Adoka,Gy,Gy,Gypsum,industrial minerals,certain,,yes,codes split from name cell,7,45 Adoka Gy |
+G,46,46,Opar,Gy,Gy,Gypsum,industrial minerals,certain,,yes,codes split from name cell,7,46. Opar Gy |
+G,47,47,Ohuweyi,Ls,Ls,Limestone,construction materials,certain,,no,,7,47 Ohuweyi | Ls
+G,48,48,Taraku,Gy,Gy,Gypsum,industrial minerals,certain,,yes,codes split from name cell,7,48. Taraku Gy |
+G,49,49,Ukpa,Gy,Gy,Gypsum,industrial minerals,certain,,no,codes split from name cell,7,49 Ukpa Gy |
+G,50,50,Orukpa,C,C,Coal,energy,certain,,no,codes split from name cell,7,50 Orukpa C |
+G,51,51,IGUMALE,Ls,Ls,Limestone,construction materials,certain,,yes,,7,51 IGUMALE            Ls |
+G,52,52,Agila,Br.Ka,Br Ka,Brine | Kaolin / kaolinitic clay,industrial minerals,probable certain,,yes,codes split from name cell,7,52 AgilaBr.Ka |
+G,54,54,Egga,Ls,Ls,Limestone,construction materials,certain,,yes,codes split from name cell; out of sequence (previous 52),7,54 Egga Ls |
+G,55,55,Okokukwo,Ls,Ls,Limestone,construction materials,certain,,yes,,7,55 Okokukwo | Ls
+G,56,56,Gabu,Br,Br,Brine,industrial minerals,probable,,yes,codes split from name cell,7,56 Gabu Br |
+G,57,57,Ise-Agberagba,Ls,Ls,Limestone,construction materials,certain,,yes,,7,57 Ise-Agberagba | Ls
+G,58,58,Tyogbonda,Ba,Ba,Baryte,industrial minerals,certain,,yes,,7,58 Tyogbonda | Ba
+G,59,59,Fayun,Ls,Ls,Limestone,construction materials,certain,,no,codes split from name cell,7,59 Fayun Ls |
+G,60,60,Lessel,Ba,Ba,Baryte,industrial minerals,certain,,yes,codes split from name cell,7,60 Lessel Ba |
+G,61,61,Lessel,Pb Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,codes split from name cell,7,61 Lessel Pb Zn |
+G,62,62,Yatier,Br,Br,Brine,industrial minerals,probable,,yes,codes split from name cell,7,62. Yatier Br |
+G,63,63,Vandeikya,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,7,63 Vandeikya | Ka
+G,64,64,Umaisha,Tc,Tc,Talc,industrial minerals,legend,,no,,7,64. Umaisha | Tc
+G,65,65,DEKINA,C,C,Coal,energy,certain,,yes,,7,65. DEKINA | C
+G,66,66,Dekina,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,7,66. Dekina    Fe |
+G,67,67,Ajiala,C,C,Coal,energy,certain,,yes,"name printed ""AjiaIa"" (letter glitch corrected)",7,67. AjiaIa    C |
+G,68,SB,Afogun,C,C,Coal,energy,certain,,yes,"number token ""SB"" unreadable - inferred from sequence; letter-for-digit reading would give 58",7,SB Afogun    C |
+G,69,69,OGBOYOGA,C,C,Coal,energy,certain,,yes,,7,69. OGBOYOGA | C
+G,70,70,Awo-Akpali,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,70 Awo-Akpali | Cl
+G,71,71,Otochi,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,7,71 Otochi    Ka |
+G,72,72,Odaru,Gys,Gys,Gypsum,industrial minerals,probable,,yes,codes split from name cell,7,72. Odaru    (Gys) |
+G,73,73,Igadoba,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,73 Igadoba | Cl
+G,74,74,Enugu-Ezike,C,C,Coal,energy,certain,,yes,,7,74 Enugu-Ezike | C
+G,75,75,Ezimo,C,C,Coal,energy,certain,,yes,,7,75. Ezimo    C |
+G,76,76,Ugnuogo-opi,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,"name printed ""Ugnuoqo-opi"" (letter glitch corrected)",7,76. Ugnuoqo-opi | Cl
+G,77,77,Orba,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,,7,77. Orba    Cl |
+G,78,78,Nsukka,Pb Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,7,78 Nsukka    Pb Zn |
+G,79,79,Okpuje,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,7,79. Okpuje | Fe
+G,80,80,Okpuje,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,80 Okpuje    Cl |
+G,81,81,Nkologwu,Gs,Gs,Glass Sand,construction materials,certain,,yes,"name printed ""Nkoloqwu"" (letter glitch corrected)",7,81. Nkoloqwu | Gs
+G,82,82,Obimo,Fe Cl,Fe Cl,"Iron Ore (Magnetite, Ilmenite) | Clay / Pottery Clay",construction materials | ferrous metals,certain certain,,yes,,7,82 Obimo    Fe |
+G,83,83,Nimbo,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,7,83. Nimbo   Fe |
+G,84,84,Adani,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,7,84 Adani    Gy |
+G,85,65,Nkopologwu,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,printed number 65 out of sequence (one digit misread) - corrected to 85,7,65. Nkopologwu | Cl
+G,87,87,Ugo Ozu,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,no,out of sequence (previous 85),7,87. Ugo Ozu | Fe
+G,88,88,Uguogu,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,88. Uguogu | Cl
+G,89,89,Eha-Emufu,Ls,Ls,Limestone,construction materials,certain,,yes,,7,89 Eha-Emufu | Ls
+G,90,90,Nkalagu Obukpa-Ichi,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,codes split from name cell,7,90. Nkalagu Obukpa-Ichi Fe |
+G,91,91,Emene Enugu,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,7,91. Emene Enugu | Gy
+G,92,92,AWKUNANAW,Fc,Fc,Fire Clay,construction materials,probable,,no,,7,92. AWKUNANAW | Fc
+G,93,93,Ogbede,Gs,Gs,Glass Sand,construction materials,certain,,no,"name printed ""Oqbede"" (letter glitch corrected)",7,93. Oqbede | Gs
+G,94,94,Ibite Olo,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,7,94. Ibite Olo | Fe
+G,95,95,Umuhuokpo,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,95. Umuhuokpo | Cl
+G,96,96,ENUGU,C,C,Coal,energy,certain,,yes,,7,96. ENUGU | C
+G,97,97,Nsude,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,no,,7,97 Nsude | Fe
+G,98,98,Enugu,Gs,Gs,Glass Sand,construction materials,certain,,yes,,7,98 Enugu | Gs
+G,99,99,Almansiodo,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,,7,99. Almansiodo | Cl
+G,100,100,New Heaven,C,C,Coal,energy,certain,,yes,,7,100 New Heaven | C
+G,101,101,Emene,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,7,101. Emene | Gy
+G,102,102,Amaguuze,Ls,Ls,Limestone,construction materials,certain,,yes,,7,102. Amaguuze | Ls
+G,103,103,Nsude,Gs,Gs,Glass Sand,construction materials,certain,,yes,,7,103 Nsude | Gs
+G,104,104,Udi,Ls,Ls,Limestone,construction materials,certain,,yes,,7,104. Udi | Ls
+G,105,105,Ehuhe,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,7,105. Ehuhe | Fe
+G,106,106,Awgu Achi Ogu River,Fe.Pb Zn,Fe Pb Zn,"Iron Ore (Magnetite, Ilmenite) | Lead - Zinc (lead) | Lead - Zinc (zinc)",base metals | ferrous metals,certain certain certain,,yes,,7,106. Awgu Achi Ogu River  Fe.Pb Zn |
+G,107,107,UBURU LAKE,C Br,C Br,Coal | Brine,energy | industrial minerals,certain probable,,no,,7,107 UBURU LAKE | C Br
+G,108,108,Awlaw,Gy Ka,Gy Ka,Gypsum | Kaolin / kaolinitic clay,industrial minerals,certain certain,,yes,,7,108 Awlaw | Gy
+G,109,109,Awgu,Fe Ls,Fe Ls,"Iron Ore (Magnetite, Ilmenite) | Limestone",construction materials | ferrous metals,certain certain,,yes,,7,109 Awgu | Fe Ls
+G,110,110,Umunbom,Bit,Bit,Bitumen,energy,certain,,no,,7,110 Umunbom | Bit
+G,112,112,Ifute Logwana,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,out of sequence (previous 110),7,112 Ifute Logwana | Cl
+G,113,113,Omor,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,113 Omor | Cl
+G,114,114,Igbarium,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,,7,114 Igbarium | Cl
+G,115,115,Awka,C,C,Coal,energy,certain,,yes,,7,115 Awka | C
+G,116,116,Inyi,C,C,Coal,energy,certain,,yes,,7,116 Inyi | C
+G,117,117,Owere.Ezukala,Fe. Cl,Fe Cl,"Iron Ore (Magnetite, Ilmenite) | Clay / Pottery Clay",construction materials | ferrous metals,certain certain,,yes,,7,117 Owere.Ezukala | Fe. Cl
+G,118,118,Orlu,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,"name printed ""OrIu"" (letter glitch corrected)",7,118 OrIu | Fe
+G,119,119,Achina,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,119 Achina | Cl
+G,120,120,Uzo-Loube,Gy,Gy,Gypsum,industrial minerals,certain,,no,,7,120 Uzo-Loube | Gy
+G,121,121,Uzo-Abam,Ls,Ls,Limestone,construction materials,certain,,yes,,7,121 Uzo-Abam | Ls
+G,122,122,Dikenafai,Mc,Mc,Marcasite,industrial minerals,legend,,yes,,7,122 Dikenafai | Mc
+G,123,123,Orlu,Lg,Lg,Lignite,energy,certain,,yes,,7,123 Orlu | Lg
+G,124,124,AGBABA NSU,ka P,Ka P,Kaolin / kaolinitic clay | Phosphate,industrial minerals,certain certain,,yes,,7,124 AGBABA NSU | ka
+G,125,125,Umunamu,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,125 Umunamu | Cl
+G,126,126,Afor-Oru,Lg,Lg,Lignite,energy,certain,,yes,,7,126 Afor-Oru | Lg
+G,127,127,Agbobia,Gs,Gs,Glass Sand,construction materials,certain,,no,,7,127 Agbobia | Gs
+G,128,128,Obinze,Gs,Gs,Glass Sand,construction materials,certain,,yes,,7,128 Obinze | Gs
+G,129,129,Otoko,Ka. Ls,Ka Ls,Kaolin / kaolinitic clay | Limestone,construction materials | industrial minerals,certain certain,,yes,,7,129 Otoko | Ka. Ls
+G,130,130,Umede,Gs,Gs,Glass Sand,construction materials,certain,,yes,,7,130 Umede | Gs
+G,131,131,PORT-HAPCOURT,Gs,Gs,Glass Sand,construction materials,certain,,yes,codes split from name cell,7,131 PORT-HAPCOURT Gs |
+G,132,132,Bomu,Oil,Oil,Oil and Gas,energy,certain,,yes,,7,132 Bomu | Oil
+G,133,133,Ukwa,Gs,Gs,Glass Sand,construction materials,certain,,yes,,7,133 Ukwa | Gs
+G,134,134,Obigbo,Gs,Gs,Glass Sand,construction materials,certain,,yes,,7,134 Obigbo | Gs
+G,135,135,Ajwanu,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,,7,135 Ajwanu | Cl
+G,136,136,Igbere,P,P,Phosphate,industrial minerals,certain,,yes,,7,136 Igbere | P
+G,137,137,Nkwoagu,Pb.Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,7,137 Nkwoagu | Pb.Zn
+G,138,133,Lokauku,Gy,Gy,Gypsum,industrial minerals,certain,,yes,printed number 133 out of sequence - corrected to 138,7,133 Lokauku | Gy
+G,139,139,Nwaogu - Ijouchi,Py Br,Py Br,Pyrite / Pyroclore | Brine,industrial minerals | rare metals,legend probable,,yes,codes split from name cell,7,139.   Nwaogu - Ijouchi Py Br |
+G,140,140,Nbalaonu,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,140   Nbalaonu | Cl
+G,141,141,Amawon,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,141   Amawon | CI
+G,142,142,AGBHARA NSU,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,,7,142.  AGBHARA NSU | Ka
+G,143,143,Bende,P,P,Phosphate,industrial minerals,certain,,yes,,7,143.  Bende | P
+G,144,144,Ajayi,P,P,Phosphate,industrial minerals,certain,,yes,,7,144.  Ajayi | P
+G,145,146,Umuahia,Lg,Lg,Lignite,energy,certain,,no,printed number 146 out of sequence - corrected to 145,7,146.  Umuahia | Lg
+G,146,146,Umuahia,RS,RS,unknown code,unknown,unknown,RS,yes,,7,146.  Umuahia | RS
+G,147,147,Amur,CI,Cl,Clay / Pottery Clay,construction materials,certain,,no,,7,147.  Amur | CI
+G,148,148,Arlam,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,148.  Arlam | Cl
+G,149,149,Iwuo Ukem,GS,Gs,Glass Sand,construction materials,certain,,yes,,7,149   Iwuo Ukem | GS
+G,150,150,Afaka Offiong,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,150.  Afaka Offiong | CI
+G,151,151,Apochukwu,Ls,Ls,Limestone,construction materials,certain,,yes,,7,151.  Apochukwu | Ls
+G,152,152,Idima,Ls,Ls,Limestone,construction materials,certain,,yes,,7,152.  Idima | Ls
+G,153,153,Ndi Okorie,Ls,Ls,Limestone,construction materials,certain,,yes,,7,153.  Ndi Okorie | Ls
+G,154,154,Ebo,Sul,Sul,Sulphur (not in legend),industrial minerals,probable,,yes,,7,154   Ebo | Sul
+G,155,155,Nkari,Lg,Lg,Lignite,energy,certain,,no,,7,155.  Nkari | Lg
+G,156,156,Ikot Nkem,Ls,Ls,Limestone,construction materials,certain,,yes,,7,156   Ikot Nkem | Ls
+G,157,157,Ibiaku Ntak Okpo,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,7,157.  Ibiaku Ntak Okpo  Cl |
+G,158,158,Uguok,Da,Da,unknown code,unknown,unknown,Da,no,,7,158.  Uguok | Da
+G,159,159,Iduk,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,8,159. Iduk | Cl
+G,160,160,Ibiaku Nfok,Bn,Bn,Bentonite,industrial minerals,certain,,yes,,8,160. Ibiaku Nfok | Bn
+G,161,161,Alua Ibion,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,no,"name printed ""Alua lbion"" (letter glitch corrected)",8,161. Alua lbion | Cl
+G,162,162,Uyo,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,8,162. Uyo | Cl
+G,163,163,Andia,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,8,163. Andia | CI
+G,164,164,Etinan,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,8,164. Etinan | Cl
+G,165,165,Azumini,Gs,Gs,Glass Sand,construction materials,certain,,yes,,8,165. Azumini | Gs
+G,166,166,Ikot Okoro,Bcl,Bcl,Ball Clay,construction materials,probable,,no,"name printed ""lkot Okoro"" (letter glitch corrected)",8,166. lkot Okoro | Bcl
+G,167,167,Afaha Offiong,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,8,167. Afaha Offiong  Cl |
+G,168,168,Eket,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,8,168. Eket | Cl
+G,169,169,Ikot Eba,Bcl,Bcl,Ball Clay,construction materials,probable,,yes,,8,169. Ikot Eba | Bcl
+G,170,170,AKATA,Oil,Oil,Oil and Gas,energy,certain,,yes,,8,170 AKATA | Oil
+G,171,171,Akata field,Gy. P,Gy P,Gypsum | Phosphate,industrial minerals,certain certain,,yes,"name printed ""Akata fieId"" (letter glitch corrected)",8,171 Akata fieId | Gy. P
+G,172,172,IGUMALE,Ls,Ls,Limestone,construction materials,certain,,yes,,8,172  IGUMALE | Ls
+G,173,173,NKALAGU,Ls,Ls,Limestone,construction materials,certain,,yes,,8,173  NKALAGU | Ls
+G,174,174,Ngbo,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,8,174  Ngbo | Cl
+G,175,175,Ofaraakpa,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,8,175  Ofaraakpa | Pb. Zn
+G,176,176,IBOKO,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,8,176  IBOKO | Cl
+G,177,177,Abakaliki,ilm,Ilm,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,,8,177  Abakaliki | ilm
+G,178,178,Abakaliki,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,8,178  Abakaliki | Cl
+G,179,179,Ngbo,Ls,Ls,Limestone,construction materials,certain,,yes,,8,179  Ngbo | Ls
+G,180,180,ENYIGBA,Pb Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,no,codes split from name cell,8,180  ENYIGBA Pb Zn |
+G,181,181,Ameri - Ameka,Br,Br,Brine,industrial minerals,probable,,no,,8,181 Ameri - Ameka | Br
+G,182,182,AMERI - AMEKA,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,no,codes split from name cell,8,182.AMERI - AMEKA Pb. Zn |
+G,183,183,Adari Igba,Gy,Gy,Gypsum,industrial minerals,certain,,yes,,8,183.  Adari Igba | Gy
+G,184,184,Amachare,Mc,Mc,Marcasite,industrial minerals,legend,,yes,,8,184.  Amachare | Mc
+G,185,185,Enyigba,Br,Br,Brine,industrial minerals,probable,,yes,,8,185  Enyigba | Br
+G,186,186,Enyigba,Pb.Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,8,186.  Enyigba | Pb.Zn
+G,187,187,Ezeogudu,Ls,Ls,Limestone,construction materials,certain,,yes,,8,187.   Ezeogudu | Ls
+G,188,188,Ugulangu,S,S,Sulphur / salt (not in legend),industrial minerals,uncertain,,yes,,8,188.  Ugulangu | S
+G,189,189,Omega,Cu,Cu,Copper minerals,base metals,certain,,yes,codes split from name cell,8,189.  Omega Cu |
+G,190,190,Omega,Ba,Ba,Baryte,industrial minerals,certain,,no,,8,190.  Omega  Ba |
+G,191,191,Iglagu,F,F,Flourite,industrial minerals,probable,,no,codes split from name cell,8,191  Iglagu F |
+G,192,192,UBURU LAKE,Br,Br,Brine,industrial minerals,probable,,yes,codes split from name cell,8,192.  UBURU LAKE Br |
+G,193,193,Uzarem,S,S,Sulphur / salt (not in legend),industrial minerals,uncertain,,yes,codes split from name cell,8,193  Uzarem S |
+G,194,194,Erei,C,C,Coal,energy,certain,,yes,,8,194  Erei | C
+G,195,196,Akpakua,Br,Br,Brine,industrial minerals,probable,,yes,printed number 196 out of sequence - corrected to 195,8,196  Akpakua | Br
+G,196,196,Egbokoriko,Ls,Ls,Limestone,construction materials,certain,,yes,,8,196  Egbokoriko | Ls
+G,197,197,Gabu(Ogaja),Ba,Ba,Baryte,industrial minerals,certain,,yes,,8,197.  Gabu(Ogaja)  Ba |
+G,198,198,Ogaja,Br,Br,Brine,industrial minerals,probable,,no,,8,198  Ogaja  Br |
+G,199,199,Okpoma,Br,Br,Brine,industrial minerals,probable,,yes,,8,199  Okpoma | Br
+G,200,200,Obudu,CI,Cl,Clay / Pottery Clay,construction materials,certain,,yes,codes split from name cell,8,200  Obudu CI |
+G,201,201,Busangfon,Gr,Gr,Graphite,industrial minerals,probable,,yes,,8,201  Busangfon | Gr
+G,202,202,Katia,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,yes,codes split from name cell,8,202.  Katia Ka |
+G,203,203,Umaji,Br,Br,Brine,industrial minerals,probable,,yes,,8,203  Umaji  Br |
+G,204,204,Ubong,ilm,Ilm,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,certain,,yes,codes split from name cell,8,204  Ubong ilm |
+G,205,205,Ksaja,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,codes split from name cell,8,205.  Ksaja Qa |
+G,206,206,Owakande,Ls,Ls,Limestone,construction materials,certain,,yes,,8,206. Owakande | Ls
+G,207,207,Dongala,Ba,Ba,Baryte,industrial minerals,certain,,yes,,8,207.  Dongala | Ba
+G,208,208,Okon,Qz. Qa,Qz Qa,Quartz (not in legend) | Quartz (not in legend),construction materials,uncertain uncertain,,yes,codes split from name cell,8,208  Okon Qz. Qa |
+G,209,209,Efomi,Br,Br,Brine,industrial minerals,probable,,yes,,8,209.  Efomi  Br |
+G,210,210,Ayamitef,Be,Be,"Beryl, Aquamarine, Emerald",gemstones,certain,,no,,8,210.  Ayamitef | Be
+G,211,211,Agai Ibami,Ba,Ba,Baryte,industrial minerals,certain,,yes,,8,211.  Agai Ibami | Ba
+G,212,212,Ikot Akperem,Gn,Gn,Garnet,gemstones,probable,,yes,"codes split from name cell; name printed ""lkot Akperem"" (letter glitch corrected)",8,212.  lkot Akperem Gn |
+G,213,213,Akpet Central,Ba,Ba,Baryte,industrial minerals,certain,,yes,codes split from name cell,8,213  Akpet Central Ba |
+G,214,214,Ideacha,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,codes split from name cell,8,214.  Ideacha Qa |
+G,215,215,Orua,Gm,Gm,Gemstone (not in legend),gemstones,uncertain,,yes,codes split from name cell,8,215.  Orua Gm |
+G,216,216,Orua,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,codes split from name cell,8,216.  Orua Sn |
+G,217,217,MFAMOSING,Ls,Ls,Limestone,construction materials,certain,,yes,codes split from name cell,8,217.  MFAMOSING Ls |
+G,218,218,ODUKPANI,Ls,Ls,Limestone,construction materials,certain,,yes,,8,218.  ODUKPANI | Ls
+G,219,219,Odukpani,CI. Ls,Cl Ls,Clay / Pottery Clay | Limestone,construction materials,certain certain,,yes,,8,219.  Odukpani | CI. Ls
+G,220,220,Mfamosing,Py,Py,Pyrite / Pyroclore,rare metals,legend,,yes,,8,220.  Mfamosing | Py
+G,221,221,Ndigan,Tm,Tm,Tourmaline,gemstones,legend,,yes,codes split from name cell,8,221.  Ndigan Tm |
+G,222,222,Ndigan,Ru,Ru,"Corundum, Sapphire & Ruby (ruby)",gemstones,certain,,yes,codes split from name cell,8,222.  Ndigan Ru |
+G,223,223,Ndeke,Ta,Ta,Tantalite,rare metals,legend,,yes,codes split from name cell,8,223.  Ndeke Ta |
+G,224,224,Oban,Tm,Tm,Tourmaline,gemstones,legend,,yes,codes split from name cell,8,224.  Oban Tm |
+G,225,225,Ipoula,Mz,Mz,Monazite,rare metals,certain,,yes,codes split from name cell,8,225.  Ipoula Mz |
+G,226,226,Wukari,Ba,Ba,Baryte,industrial minerals,certain,,yes,,8,226.  Wukari  Ba |
+G,227,227,Okarana,Mn,Mn,Manganese,ferrous metals,certain,,yes,,8,227  Okarana | Mn

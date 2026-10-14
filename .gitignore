@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+viewer/build/
+
+# scratch dump of the mineral-map pipeline (MINERAL_DEBUG=1)
+shapefiles_minerals/_debug.pkl
+
+# per-layer split is shipped zipped (shapefiles/by_layer.zip, shapefiles_minerals/by_layer.zip)
+shapefiles/by_layer/
+shapefiles_minerals/by_layer/
+
+# GDAL side-car files written next to the cwd when a GPKG raster is opened for statistics
+GPKG:*.aux.xml

@@ -1,0 +1,685 @@
+{
+  "table": {
+    "entries": 1171,
+    "unparsed_rows": [],
+    "per_zone": {
+      "A": 103,
+      "B": 165,
+      "C": 86,
+      "D": 157,
+      "E": 234,
+      "F": 202,
+      "G": 224
+    },
+    "entries_with_flags": 209,
+    "unknown_codes": [
+      "A",
+      "By",
+      "Cm",
+      "Cs",
+      "Cy",
+      "Cz",
+      "Da",
+      "In",
+      "Ke",
+      "Ma",
+      "Os",
+      "RS",
+      "SI",
+      "Si",
+      "Sp",
+      "Sr",
+      "Tn",
+      "Us",
+      "Wa",
+      "sT"
+    ]
+  },
+  "number_labels": {
+    "labels": 999,
+    "matched": 995,
+    "stray_zero_glyphs_dropped": [
+      [
+        765.8,
+        535.5
+      ],
+      [
+        566.4,
+        664.8
+      ]
+    ],
+    "rezoned_by_numbering_sequence": [
+      [
+        "printed 2 pt from the D/F division line on the D side; assigned to F by numbering sequence",
+        9
+      ],
+      [
+        "printed 12 pt from the D/F division line on the D side; assigned to F by numbering sequence",
+        10
+      ],
+      [
+        "printed 12 pt from the B/E division line on the B side; assigned to E by numbering sequence",
+        15
+      ]
+    ],
+    "match_kinds": {
+      "exact": 995,
+      "number not in table": 4
+    },
+    "numbers_printed_more_than_once": [
+      [
+        "A",
+        30,
+        2
+      ],
+      [
+        "A",
+        33,
+        2
+      ],
+      [
+        "A",
+        83,
+        2
+      ],
+      [
+        "A",
+        97,
+        2
+      ],
+      [
+        "B",
+        4,
+        2
+      ],
+      [
+        "B",
+        23,
+        2
+      ],
+      [
+        "B",
+        88,
+        2
+      ],
+      [
+        "B",
+        138,
+        2
+      ],
+      [
+        "C",
+        48,
+        2
+      ],
+      [
+        "D",
+        33,
+        2
+      ],
+      [
+        "D",
+        83,
+        2
+      ],
+      [
+        "D",
+        115,
+        2
+      ],
+      [
+        "D",
+        119,
+        2
+      ],
+      [
+        "D",
+        121,
+        2
+      ],
+      [
+        "E",
+        23,
+        2
+      ],
+      [
+        "E",
+        65,
+        2
+      ],
+      [
+        "E",
+        69,
+        2
+      ],
+      [
+        "E",
+        110,
+        2
+      ],
+      [
+        "E",
+        128,
+        2
+      ],
+      [
+        "E",
+        167,
+        2
+      ],
+      [
+        "E",
+        226,
+        2
+      ],
+      [
+        "F",
+        36,
+        2
+      ],
+      [
+        "F",
+        40,
+        2
+      ],
+      [
+        "F",
+        55,
+        2
+      ],
+      [
+        "F",
+        64,
+        2
+      ],
+      [
+        "F",
+        83,
+        2
+      ],
+      [
+        "F",
+        183,
+        2
+      ],
+      [
+        "F",
+        196,
+        2
+      ],
+      [
+        "G",
+        30,
+        2
+      ],
+      [
+        "G",
+        67,
+        2
+      ],
+      [
+        "G",
+        73,
+        2
+      ],
+      [
+        "G",
+        94,
+        2
+      ],
+      [
+        "G",
+        104,
+        2
+      ],
+      [
+        "G",
+        122,
+        2
+      ],
+      [
+        "G",
+        133,
+        2
+      ],
+      [
+        "G",
+        179,
+        2
+      ],
+      [
+        "G",
+        196,
+        2
+      ],
+      [
+        "G",
+        223,
+        2
+      ]
+    ],
+    "per_zone": {
+      "G": 195,
+      "F": 168,
+      "D": 123,
+      "E": 206,
+      "C": 72,
+      "B": 148,
+      "A": 87
+    },
+    "unmatched": [
+      [
+        "D",
+        256
+      ],
+      [
+        "F",
+        110
+      ],
+      [
+        "G",
+        53
+      ],
+      [
+        "G",
+        86
+      ]
+    ],
+    "table_entries_without_label": 213
+  },
+  "raster_symbols": {
+    "blobs": 1593,
+    "water_line_fragments_excluded": 54,
+    "by_colour": {
+      "green": 183,
+      "red": 194,
+      "yellow": 422,
+      "khaki": 116,
+      "orange": 26,
+      "purple": 81,
+      "blue grey": 19,
+      "light green": 27,
+      "green 2": 7,
+      "bright green": 11,
+      "dark grey": 50,
+      "tan": 8,
+      "grey": 31,
+      "purple 2": 2,
+      "magenta": 3,
+      "dark tan": 8,
+      "brown": 40,
+      "violet": 5,
+      "dark blue": 9,
+      "outline": 351
+    },
+    "with_candidate_rule": 1350,
+    "labels_total": 999,
+    "labels_with_table_entry": 995,
+    "labels_whose_minerals_have_a_legend_symbol": 919,
+    "labels_snapped_to_colour_consistent_symbol_within_25pt": 675,
+    "symbols_linked_to_a_label": 630,
+    "symbols_claimed_by_several_labels": 43,
+    "symbols_without_any_label_within_14pt": 516,
+    "snap_distance_pt_quartiles": [
+      9.911641131543984,
+      12.832816734074532,
+      15.475305767906436
+    ],
+    "snapped_by_colour": {
+      "yellow": 229,
+      "green": 61,
+      "outline": 152,
+      "khaki": 49,
+      "red": 73,
+      "purple": 39,
+      "dark tan": 4,
+      "blue grey": 10,
+      "dark grey": 38,
+      "orange": 7,
+      "light green": 11,
+      "tan": 2
+    }
+  },
+  "commodity_groups": {
+    "industrial minerals": 304,
+    "construction materials": 287,
+    "rare metals": 130,
+    "precious metals": 77,
+    "gemstones": 76,
+    "ferrous metals": 48,
+    "energy": 47,
+    "base metals": 36,
+    "unknown": 17,
+    "no code printed": 4,
+    "not in table": 4
+  },
+  "capital_check_km": {
+    "n": 33,
+    "per_capital": [
+      {
+        "name": "JOS",
+        "map_lon": 8.8081,
+        "map_lat": 9.8038,
+        "ref_lon": 8.892,
+        "ref_lat": 9.918,
+        "dx_km": -9.2,
+        "dy_km": -12.7
+      },
+      {
+        "name": "UYO",
+        "map_lon": 7.9024,
+        "map_lat": 4.9587,
+        "ref_lon": 7.927,
+        "ref_lat": 5.038,
+        "dx_km": -2.7,
+        "dy_km": -8.8
+      },
+      {
+        "name": "YOLA",
+        "map_lon": 12.4398,
+        "map_lat": 9.2403,
+        "ref_lon": 12.481,
+        "ref_lat": 9.209,
+        "dx_km": -4.5,
+        "dy_km": 3.5
+      },
+      {
+        "name": "KANO",
+        "map_lon": 8.4385,
+        "map_lat": 11.94,
+        "ref_lon": 8.516,
+        "ref_lat": 12.002,
+        "dx_km": -8.5,
+        "dy_km": -6.9
+      },
+      {
+        "name": "IKEJA",
+        "map_lon": 3.237,
+        "map_lat": 6.5081,
+        "ref_lon": 3.349,
+        "ref_lat": 6.605,
+        "dx_km": -12.3,
+        "dy_km": -10.8
+      },
+      {
+        "name": "AWKA",
+        "map_lon": 7.082,
+        "map_lat": 6.0979,
+        "ref_lon": 7.072,
+        "ref_lat": 6.212,
+        "dx_km": 1.1,
+        "dy_km": -12.7
+      },
+      {
+        "name": "LAFIA",
+        "map_lon": 8.4872,
+        "map_lat": 8.4412,
+        "ref_lon": 8.515,
+        "ref_lat": 8.493,
+        "dx_km": -3.1,
+        "dy_km": -5.8
+      },
+      {
+        "name": "DUTSE",
+        "map_lon": 9.2721,
+        "map_lat": 11.7592,
+        "ref_lon": 9.338,
+        "ref_lat": 11.756,
+        "dx_km": -7.3,
+        "dy_km": 0.4
+      },
+      {
+        "name": "ASABA",
+        "map_lon": 6.6911,
+        "map_lat": 6.0796,
+        "ref_lon": 6.73,
+        "ref_lat": 6.198,
+        "dx_km": -4.3,
+        "dy_km": -13.2
+      },
+      {
+        "name": "MINNA",
+        "map_lon": 6.4485,
+        "map_lat": 9.553,
+        "ref_lon": 6.557,
+        "ref_lat": 9.614,
+        "dx_km": -11.9,
+        "dy_km": -6.8
+      },
+      {
+        "name": "GUSAU",
+        "map_lon": 6.5805,
+        "map_lat": 12.1065,
+        "ref_lon": 6.662,
+        "ref_lat": 12.163,
+        "dx_km": -9.0,
+        "dy_km": -6.3
+      },
+      {
+        "name": "AKURE",
+        "map_lon": 5.0717,
+        "map_lat": 7.2188,
+        "ref_lon": 5.195,
+        "ref_lat": 7.251,
+        "dx_km": -13.6,
+        "dy_km": -3.6
+      },
+      {
+        "name": "ENUGU",
+        "map_lon": 7.4689,
+        "map_lat": 6.4045,
+        "ref_lon": 7.495,
+        "ref_lat": 6.441,
+        "dx_km": -2.9,
+        "dy_km": -4.1
+      },
+      {
+        "name": "ILORIN",
+        "map_lon": 4.494,
+        "map_lat": 8.4331,
+        "ref_lon": 4.542,
+        "ref_lat": 8.496,
+        "dx_km": -5.3,
+        "dy_km": -7.0
+      },
+      {
+        "name": "GOMBE",
+        "map_lon": 11.0935,
+        "map_lat": 10.2221,
+        "ref_lon": 11.167,
+        "ref_lat": 10.29,
+        "dx_km": -8.1,
+        "dy_km": -7.6
+      },
+      {
+        "name": "IBADAN",
+        "map_lon": 3.9041,
+        "map_lat": 7.3386,
+        "ref_lon": 3.896,
+        "ref_lat": 7.378,
+        "dx_km": 0.9,
+        "dy_km": -4.4
+      },
+      {
+        "name": "BAUCHI",
+        "map_lon": 9.7868,
+        "map_lat": 10.287,
+        "ref_lon": 9.844,
+        "ref_lat": 10.314,
+        "dx_km": -6.3,
+        "dy_km": -3.0
+      },
+      {
+        "name": "LOKOJA",
+        "map_lon": 6.618,
+        "map_lat": 7.7366,
+        "ref_lon": 6.74,
+        "ref_lat": 7.802,
+        "dx_km": -13.4,
+        "dy_km": -7.3
+      },
+      {
+        "name": "SOKOTO",
+        "map_lon": 5.1022,
+        "map_lat": 13.0345,
+        "ref_lon": 5.243,
+        "ref_lat": 13.062,
+        "dx_km": -15.5,
+        "dy_km": -3.1
+      },
+      {
+        "name": "KADUNA",
+        "map_lon": 7.346,
+        "map_lat": 10.4698,
+        "ref_lon": 7.438,
+        "ref_lat": 10.523,
+        "dx_km": -10.1,
+        "dy_km": -5.9
+      },
+      {
+        "name": "KATSINA",
+        "map_lon": 7.5389,
+        "map_lat": 12.9451,
+        "ref_lon": 7.601,
+        "ref_lat": 12.99,
+        "dx_km": -6.8,
+        "dy_km": -5.0
+      },
+      {
+        "name": "JALINGO",
+        "map_lon": 11.3118,
+        "map_lat": 8.8443,
+        "ref_lon": 11.366,
+        "ref_lat": 8.893,
+        "dx_km": -6.0,
+        "dy_km": -5.4
+      },
+      {
+        "name": "CALABAR",
+        "map_lon": 8.2923,
+        "map_lat": 4.8876,
+        "ref_lon": 8.327,
+        "ref_lat": 4.958,
+        "dx_km": -3.8,
+        "dy_km": -7.8
+      },
+      {
+        "name": "UMUAHIA",
+        "map_lon": 7.4445,
+        "map_lat": 5.4014,
+        "ref_lon": 7.491,
+        "ref_lat": 5.532,
+        "dx_km": -5.1,
+        "dy_km": -14.5
+      },
+      {
+        "name": "MAKURDI",
+        "map_lon": 8.4953,
+        "map_lat": 7.6919,
+        "ref_lon": 8.533,
+        "ref_lat": 7.733,
+        "dx_km": -4.1,
+        "dy_km": -4.6
+      },
+      {
+        "name": "ABAKILIKI",
+        "map_lon": 8.0841,
+        "map_lat": 6.2096,
+        "ref_lon": 8.113,
+        "ref_lat": 6.325,
+        "dx_km": -3.2,
+        "dy_km": -12.9
+      },
+      {
+        "name": "ABEOKUTA",
+        "map_lon": 3.2178,
+        "map_lat": 7.0807,
+        "ref_lon": 3.345,
+        "ref_lat": 7.15,
+        "dx_km": -14.0,
+        "dy_km": -7.7
+      },
+      {
+        "name": "DAMATURU",
+        "map_lon": 11.8987,
+        "map_lat": 11.7268,
+        "ref_lon": 11.961,
+        "ref_lat": 11.747,
+        "dx_km": -6.9,
+        "dy_km": -2.3
+      },
+      {
+        "name": "ADO - EKITI",
+        "map_lon": 5.1519,
+        "map_lat": 7.5518,
+        "ref_lon": 5.221,
+        "ref_lat": 7.623,
+        "dx_km": -7.6,
+        "dy_km": -7.9
+      },
+      {
+        "name": "MAIDUGURI",
+        "map_lon": 13.113,
+        "map_lat": 11.8364,
+        "ref_lon": 13.151,
+        "ref_lat": 11.846,
+        "dx_km": -4.2,
+        "dy_km": -1.1
+      },
+      {
+        "name": "BENIN - CITY",
+        "map_lon": 5.5184,
+        "map_lat": 6.242,
+        "ref_lon": 5.627,
+        "ref_lat": 6.335,
+        "dx_km": -11.9,
+        "dy_km": -10.3
+      },
+      {
+        "name": "BIRNIN KEBBI",
+        "map_lon": 4.16,
+        "map_lat": 12.4273,
+        "ref_lon": 4.197,
+        "ref_lat": 12.453,
+        "dx_km": -4.1,
+        "dy_km": -2.9
+      },
+      {
+        "name": "PORT HARCOURT",
+        "map_lon": 6.9622,
+        "map_lat": 4.6988,
+        "ref_lon": 7.013,
+        "ref_lat": 4.815,
+        "dx_km": -5.6,
+        "dy_km": -12.9
+      }
+    ],
+    "VP_affine": {
+      "mean_dx_km": -6.9,
+      "mean_dy_km": -6.7,
+      "sd_dx_km": 4.1,
+      "sd_dy_km": 4.2,
+      "rms_km": 11.3
+    },
+    "if_meridian_labels_were_right": {
+      "mean_dx_km": -25.9,
+      "mean_dy_km": -6.7,
+      "rms_km": 27.4
+    }
+  },
+  "georef": {
+    "points_per_degree": {
+      "x": 157.58642714857245,
+      "y": 157.58883522674404
+    },
+    "parallel_max_residual_deg": 0.0009094048758129247,
+    "meridian_label_offset_deg": -0.17216993998024824
+  },
+  "raster": {
+    "width": 2060,
+    "height": 1677,
+    "px_per_pt": 1.0416710543688728,
+    "x0_pt": 74.23969,
+    "y_top_pt": 1801.27615
+  }
+}

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1b2a41">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Nigeria geology &amp; minerals · PDF vs extracted</title>
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="title-row">
+    <div class="titles">
+      <div class="title">Nigeria: Geological Map 2011 + Mineral Resources Map 2023</div>
+      <div class="subtitle">original PDFs <span class="vs">vs</span> extracted shapefiles · every layer has a switch under Layers</div>
+    </div>
+    <button id="btn-about" class="icon-btn" aria-label="About this comparison">i</button>
+  </div>
+  <div class="segmented" id="mode" role="tablist" aria-label="Comparison mode">
+    <button data-mode="swipe" class="active" role="tab">Swipe</button>
+    <button data-mode="overlay" role="tab">Overlay</button>
+    <button data-mode="pdf" role="tab">PDF only</button>
+    <button data-mode="vector" role="tab">Extracted</button>
+  </div>
+</header>
+
+<main id="map-wrap">
+  <div id="map" aria-label="Map"></div>
+
+  <div class="chips" id="chips" aria-label="Zoom to">
+    <button data-view="face">Whole map</button>
+    <button data-view="jos">Jos Plateau</button>
+    <button data-view="delta">Niger Delta</button>
+    <button data-view="chad">Lake Chad</button>
+    <button data-view="sokoto">Sokoto</button>
+    <button data-view="legend">PDF legend panel</button>
+  </div>
+
+  <div class="badge badge-left" id="badge-left">PDF</div>
+  <div class="badge badge-right" id="badge-right">Extracted</div>
+
+  <div id="swipe" class="swipe" aria-hidden="true">
+    <div class="swipe-line"></div>
+    <div class="swipe-handle" id="swipe-handle" role="slider" aria-label="Swipe divider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+      <span>&#9664;</span><span>&#9654;</span>
+    </div>
+  </div>
+
+  <div class="opacity hidden" id="opacity">
+    <label for="opacity-range">Extracted layers opacity <output id="opacity-val">70%</output></label>
+    <input id="opacity-range" type="range" min="0" max="100" value="70">
+  </div>
+
+  <div class="fabs">
+    <button id="btn-layers" class="fab" aria-label="Layers">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 3 2 8.5 12 14l10-5.5L12 3zm0 13.2L4.6 12 2 13.5 12 19l10-5.5-2.6-1.5L12 16.2z"/></svg>
+      <span>Layers</span>
+    </button>
+    <button id="btn-legend" class="fab" aria-label="Legend">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3 4h6v6H3zm8 1h10v2H11zm0 3h7v2h-7zM3 14h6v6H3zm8 1h10v2H11zm0 3h7v2h-7z"/></svg>
+      <span>Legend</span>
+    </button>
+  </div>
+
+  <div id="loading" class="loading"><div class="spinner"></div><div id="loading-text">Loading extracted layers…</div></div>
+</main>
+
+<section id="sheet" class="sheet" aria-hidden="true">
+  <div class="sheet-grip" id="sheet-grip"><span></span></div>
+  <nav class="tabs" id="tabs">
+    <button data-tab="feature">Feature</button>
+    <button data-tab="layers">Layers</button>
+    <button data-tab="legend">Legend</button>
+    <button data-tab="compare">Compare</button>
+    <button data-tab="about">About</button>
+  </nav>
+  <button id="sheet-close" class="icon-btn dark" aria-label="Close">&times;</button>
+  <div class="sheet-body">
+    <div class="panel" data-panel="feature"><p class="muted">Tap a polygon, line or point on the extracted side to see its attributes (mineral localities show their EXPLANATIONS-table row and the 2011 geology unit beneath).</p></div>
+    <div class="panel" data-panel="layers"></div>
+    <div class="panel" data-panel="legend"></div>
+    <div class="panel" data-panel="compare"></div>
+    <div class="panel" data-panel="about"></div>
+  </div>
+</section>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

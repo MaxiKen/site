@@ -1,0 +1,102 @@
+legend_row,code,description,formation,rock_class,era,period,epoch,age_ma_min,age_ma_max,age_source,polygons,area_km2,pct_of_mapped_area,perimeter_km,largest_polygon_km2
+1,Al,Alluvium,Sediments,sedimentary,Cenozoic,Quaternary,Holocene,0.0,0.0117,legend row label,32,60882.1,6.67,11619.3,21960.2
+2,MWS,"Sands,Gravels and Clay","Meader belt, back swamps, fresh water swamps",sedimentary,Cenozoic,Quaternary,Holocene,0.0,0.0117,sub-age bracket,1,12402.4,1.36,778.6,12402.4
+3,AB,Sands and Pebbles,,sedimentary,Cenozoic,Quaternary,Holocene,0.0,0.0117,sub-age bracket,1,4242.0,0.46,720.5,4242.0
+4,MS,"Sand, Clay and Mangrove Swamps",Mangroves swamps,sedimentary,Cenozoic,Quaternary,Holocene,0.0,0.0117,legend swatch colours of the two MS rows are swapped; row 4 assigned by position; sub-age bracket,2,8551.9,0.94,838.1,5366.7
+5,SDsm,"Sand,Clay and Swamp",Sombreiro Deltaic Formation,sedimentary,Cenozoic,Quaternary,Holocene,0.0,0.0117,sub-age bracket,3,5296.4,0.58,798.8,3896.4
+6,Cst,"Sands, Clays, siltstones and limestones",Chad Formation,sedimentary,Cenozoic,Neogene-Quaternary,Pliocene-Pleistocene,0.0117,5.333,sub-age bracket,3,97780.2,10.71,3651.5,89743.6
+7,Bnst,Sand and Clay,Benin Formation (chart key),sedimentary,Cenozoic,Neogene-Quaternary,Pliocene-Pleistocene,0.0117,5.333,sub-age bracket,11,26097.7,2.86,2300.6,11233.3
+8,b,Coarse porphyritic biotite and biotite hornblende granite,,volcanic,Cenozoic,Paleogene-Quaternary (Tertiary-Recent),,0.0,66.0,,1,130.7,0.01,43.4,800.8
+8,b,Younger Basalt,,volcanic,Cenozoic,Paleogene-Quaternary (Tertiary-Recent),,0.0,66.0,,67,4774.1,0.52,2002.5,800.8
+9,bb,Basalt,Newer Basalt,volcanic,Cenozoic,Paleogene-Quaternary (Tertiary-Recent),,0.0,66.0,,9,6452.7,0.71,1283.4,5114.8
+10,OAlgs,"Lignite,Claystone and shale",Ogwashi - Asaba Formation,sedimentary,Cenozoic,Paleogene-Neogene,Oligocene-Miocene,5.333,33.9,"sub-age bracket (stacked label, one line per row)",3,4763.9,0.52,995.2,2619.9
+11,Issh,Clay clayey sands and shale,Ilaro Formation,sedimentary,Cenozoic,Paleogene,Eocene (Late / Priabonian),33.9,37.71,"sub-age bracket (stacked label, one line per row)",3,6747.0,0.74,935.7,3167.2
+11,Issh,Sands and Clayey Sands with Subordinate Shale,Ilaro Formation,sedimentary,Cenozoic,Paleogene,Eocene (Late / Priabonian),33.9,37.71,"sub-age bracket (stacked label, one line per row)",3,886.4,0.1,251.2,3167.2
+12,Gwss,Sandstone and Clay,Gwandu Formation (chart key),sedimentary,Cenozoic,Paleogene,Eocene (Middle / Lutetian-Bartonian),37.71,47.8,sub-age bracket,19,22030.6,2.41,3119.7,11711.7
+13,Glcl,Sandstones and Clays,Gwandu Formation,sedimentary,Cenozoic,Paleogene,Eocene (Middle / Lutetian-Bartonian),37.71,47.8,sub-age bracket,5,390.5,0.04,173.7,263.9
+14,Wss,Sandstone and Clay,,sedimentary,Cenozoic,Paleogene,Eocene (Middle / Lutetian-Bartonian),37.71,47.8,sub-age bracket,4,1688.8,0.18,488.6,791.7
+15,Esh,Shale and limestone,Ewekoro Formation (chart key),sedimentary,Cenozoic,Paleogene,Eocene (Middle / Lutetian-Bartonian),37.71,47.8,sub-age bracket,18,14032.7,1.54,3021.0,6398.0
+16,Imsh,Clay and Shale with Limestone Intercalations,Imo group,sedimentary,Cenozoic,Paleogene,Eocene (Early / Ypresian),47.8,56.0,legend row label,4,5327.1,0.58,1283.9,2490.1
+17,Kss,"Sandstone,shale and Clay",Kerri - Kerri Formation,sedimentary,Cenozoic,Paleogene,Paleocene,56.0,66.0,sub-age bracket,5,24686.0,2.7,2432.6,12756.8
+18,Dsh,Shale,Dange Formation,sedimentary,Cenozoic,Paleogene,Paleocene,56.0,66.0,sub-age bracket,4,807.3,0.09,436.3,397.5
+20,Gss,"Sandstone,Siltstone,Shale and ironstone",Gombe Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Senonian (Coniacian-Maastrichtian),66.0,89.8,fall-back: correlation chart (Gombe Formation drawn in the Senonian band),8,4563.5,0.5,1615.0,2404.3
+21,Ajst,False - bedded sandstone,Ajali Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Coniacian-Maastrichtian,66.0,89.8,fall-back: legend position between Gombe Fm and Nsukka Fm; Ajali Formation is Maastrichtian,5,11076.9,1.21,2102.0,7746.8
+22,Ncsh,"Coal, shale and sandstone",Nsukka Formation (chart key),sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Coniacian-Maastrichtian,66.0,89.8,sub-age bracket,5,1752.1,0.19,598.9,1630.2
+23,Ncsh,"Sandstone, limestone, Coal",Nsukka Formation (chart key),sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Coniacian-Maastrichtian,66.0,89.8,sub-age bracket,1,1646.6,0.18,630.5,1646.6
+24,Asl,Sandstone and Limestone,Abeokuta Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Coniacian-Maastrichtian,66.0,89.8,sub-age bracket,4,3458.2,0.38,717.4,1840.9
+25,LCM,Mamu Formation,Mamu Formation (chart key),sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Coniacian-Maastrichtian,66.0,89.8,"not in printed legend; layer name ""Mamu Formation"" = formation of legend row 25 (Mcst); sub-age bracket",2,1045.7,0.11,585.1,955.1
+25,Mcst,"Coal,Sandstone and Shale",Mamu Formation (chart key),sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Coniacian-Maastrichtian,66.0,89.8,sub-age bracket,1,330.5,0.04,292.3,330.5
+26,Bssf,Sandstone and Ironstone,Bassange Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Coniacian-Maastrichtian,66.0,89.8,sub-age bracket,2,1179.1,0.13,373.6,960.4
+27,Nsh,Shale and mudstone,Nkporo Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Coniacian-Maastrichtian,66.0,89.8,sub-age bracket,9,6040.7,0.66,2214.3,2707.1
+28,ANsh,Shale and Limestone,Awgu - Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Coniacian,86.3,89.8,legend row label,6,1508.5,0.17,610.7,735.6
+29,Tst,"Sandstone, siltstone and shale",Taloka Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Senonian (Coniacian-Maastrichtian),66.0,89.8,sub-age bracket,9,6830.4,0.75,1681.0,1825.0
+30,Glls,Limestone,Dukamaje Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Senonian (Coniacian-Maastrichtian),66.0,89.8,legend row matched by code with I/l confusion (Glls = GIls); sub-age bracket,1,91.4,0.01,88.3,91.4
+31,Wss,"Sandstone, clays and shale",,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Senonian (Coniacian-Maastrichtian),66.0,89.8,sub-age bracket,2,1765.8,0.19,493.0,1019.1
+32,Wcs,Clays and loose sandstone,,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Senonian (Coniacian-Maastrichtian),66.0,89.8,sub-age bracket,2,2446.5,0.27,442.7,1542.5
+33,Wsh,Shale (Phosphate nodules),,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Senonian (Coniacian-Maastrichtian),66.0,89.8,sub-age bracket,5,3077.3,0.34,970.1,839.0
+34,Ts,Siltstone and Sandstone,,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Senonian (Coniacian-Maastrichtian),66.0,89.8,"fall-back: correlation chart key: ts, Tst, Tss, Tcs = Rima Group (Senonian band)",1,21.7,0.0,43.4,21.7
+35,Psh,"Shale,limestone and sandstone",Pindiga Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Turonian-Campanian,72.1,93.9,sub-age bracket,21,7972.2,0.87,2197.9,2429.5
+36,Lass,"Sandstone,shale and sandyshale",Lafia - Wukari Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Turonian-Campanian,72.1,93.9,sub-age bracket,2,3507.2,0.38,652.7,1773.6
+37,NPss,Feldspathic sandstone and siltstone,Nupe Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Turonian-Campanian,72.1,93.9,sub-age bracket,10,37298.6,4.09,2741.9,33618.4
+38,GIpg,Pebbles and grit,Illo Formation (chart key),sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Turonian-Campanian,72.1,93.9,sub-age bracket,1,191.8,0.02,111.0,191.8
+39,GIss,Clay grit and pebbles,Gundumi Formation (chart key),sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Turonian-Campanian,72.1,93.9,sub-age bracket,17,10917.6,1.2,2896.6,2648.4
+40,GIgss,Gravel and sand,Gundumi Formation (chart key),sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Turonian-Campanian,72.1,93.9,sub-age bracket,3,4010.8,0.44,588.8,1779.8
+41,Fsh,"Blackshale, siltstone and sandstone",Fika Formation,sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Turonian-Campanian,72.1,93.9,sub-age bracket,1,100.3,0.01,62.3,100.3
+42,Ess,Sandstone,Ezeaku group (chart key),sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Turonian-Campanian,72.1,93.9,sub-age bracket,26,11234.6,1.23,2624.7,3729.2
+43,Esh,"Blackshale, siltstone and sandstone",Ezeaku group (chart key),sedimentary,Mesozoic,Cretaceous,Late Cretaceous: Turonian-Campanian,72.1,93.9,sub-age bracket,13,8739.5,0.96,2854.7,2690.0
+44,Mlst,Limestone and Siltstone,,sedimentary,Mesozoic,Cretaceous,Albian-Cenomanian,93.9,113.0,sub-age bracket,1,264.4,0.03,163.3,264.4
+45,Awst,Sandstone,Awi - Odukpani  Formation (chart key),sedimentary,Mesozoic,Cretaceous,Albian-Cenomanian,93.9,113.0,sub-age bracket,1,101.5,0.01,73.1,101.5
+46,Yls,"Shale, sandyclay, calcerous sandstones",Yola - Bima - Yolde Formation,sedimentary,Mesozoic,Cretaceous,Albian-Cenomanian,93.9,113.0,sub-age bracket,14,9318.1,1.02,2694.9,2751.0
+47,Bss,Feldspathic sandstone calcerous sandstone and shelly limestone,Bima Formation,sedimentary,Mesozoic,Cretaceous,Albian-Cenomanian,93.9,113.0,sub-age bracket,21,18088.8,1.98,3872.1,7902.0
+48,Arlsh,Shale and limestone with sandstone intercalations,Asu River group,sedimentary,Mesozoic,Cretaceous,Early Cretaceous: Albian,100.5,113.0,extra bracket,27,11825.1,1.3,2719.6,4068.8
+49,MyP,Quartz porphyry,,plutonic,Mesozoic,Jurassic,,145.0,201.4,fall-back: code family My- (Younger Granite series); row sits 2 pt above the JURASSIC bracket,4,378.4,0.04,197.7,182.7
+50,MyG,Granite and granite porphery,,plutonic,Mesozoic,Jurassic,,145.0,201.4,sub-age bracket,17,1704.7,0.19,824.6,770.8
+51,Myl,Ignimbrite,,volcanic,Mesozoic,Jurassic,,145.0,201.4,sub-age bracket,6,887.3,0.1,364.8,490.0
+52,Mys,"Syenite, quartz-syenite and gabbro",,plutonic,Mesozoic,Jurassic,,145.0,201.4,sub-age bracket,2,759.2,0.08,316.4,668.9
+53,MGp,Granites and granite porphyry,,plutonic,Mesozoic,Jurassic,,145.0,201.4,sub-age bracket,1,14.3,0.0,15.2,14.3
+54,MyP,Porphyry / quartz porphyry,,plutonic,Mesozoic,Jurassic,,145.0,201.4,sub-age bracket,2,365.5,0.04,157.6,197.2
+55,r,Rhyolite,,volcanic,Mesozoic,Jurassic,,145.0,201.4,sub-age bracket,7,632.5,0.07,332.4,165.5
+56,Jyr,Rhyolite,,volcanic,Mesozoic,Jurassic,,145.0,201.4,sub-age bracket,1,156.7,0.02,87.7,156.7
+57,JyG,Biotite granite,,plutonic,Mesozoic,Jurassic,,145.0,201.4,sub-age bracket,30,6097.1,0.67,2110.5,815.6
+58,JyA,Trachy- andesine,,volcanic,Mesozoic,Jurassic,,145.0,201.4,sub-age bracket,2,319.5,0.03,158.8,211.6
+59,P,Pegmatite,,minor intrusive,,,,,,fall-back: no age printed; basement pegmatites of Nigeria are late Pan-African (c. 560-530 Ma),2,313.3,0.03,149.2,207.5
+60,D,Dolerite,,minor intrusive,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,4,418.7,0.05,218.6,188.4
+61,ODh,Bauchite quartz- diorite,,plutonic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,3,324.8,0.04,133.5,245.5
+62,OGd,Biotite and biotite hornblende granodiorite,,plutonic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,19,3991.5,0.44,1315.3,1545.3
+63,OGS,"Syenite,mainly of pyroxene diorite composition",,plutonic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,5,796.1,0.09,290.4,299.5
+64,OSq,Coarse biotite and biotite muscovite granite,,plutonic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,1,422.1,0.05,129.9,422.1
+65,OGh,Coarse hornblende granite,,plutonic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,7,1549.4,0.17,451.3,1007.8
+66,OGf,Fine-grained biotite granite,,plutonic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,22,3754.0,0.41,1416.0,668.7
+67,OGm,Medium-to coarse-grained biotite granite,,plutonic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,108,26808.4,2.94,7930.4,5556.2
+68,OGu,"Undifferentiated granite,migmatite and granite Gneiss",,metamorphic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,26,7679.1,0.84,2220.8,1994.5
+69,OGCh,Charnockitic rocks,,metamorphic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,25,1616.1,0.18,861.5,308.9
+70,OGr,Gabbro and quartz gabbro,,plutonic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,4,369.9,0.04,227.6,192.8
+71,MV,Meta Volcanic Meta Sedimentary including pebbly schist,,metamorphic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,6,752.6,0.08,424.8,185.3
+72,Sa,"Amphibole Schist,Amphibolite",,metamorphic,Neoproterozoic (Pan-African deformed),,,538.8,1000.0,nearest series bracket (1.1 pt away),13,2417.4,0.26,1231.7,580.6
+73,BIF,Banded Iron Formation,,metamorphic,Neoproterozoic (Pan-African deformed),,,538.8,1000.0,sub-age bracket,3,26.4,0.0,51.4,12.6
+74,Sp,"Slate phylite and meta siltstone, locally hornfelstic / carbonaceous",,metamorphic,Neoproterozoic (Pan-African deformed),,,538.8,1000.0,sub-age bracket,7,4844.0,0.53,1702.6,2084.2
+75,m,Marble,,metamorphic,Neoproterozoic (Pan-African deformed),,,538.8,1000.0,sub-age bracket,6,305.7,0.03,237.9,163.3
+76,Sf,Fine-grained flaggy quartzite and Quartz Schist.,,metamorphic,Neoproterozoic (Pan-African deformed),,,538.8,1000.0,sub-age bracket,7,5145.2,0.56,1340.6,2723.3
+77,Qs,"Quartzite, massive and schistose, also occuring as ridges",,metamorphic,Neoproterozoic (Pan-African deformed),,,538.8,1000.0,sub-age bracket,132,7103.3,0.78,5532.4,1173.7
+78,MS,Pelitic Schist / Muscovite Schist,,metamorphic,Neoproterozoic (Pan-African deformed),,,538.8,1000.0,legend swatch colours of the two MS rows are swapped; row 78 assigned by position; sub-age bracket,11,8640.8,0.95,2385.1,4219.6
+79,Su,Coarse porphyritic biotite and biotite hornblende granite,,metamorphic,Neoproterozoic (Pan-African deformed),,,538.8,1000.0,sub-age bracket,1,125.8,0.01,54.5,4361.0
+79,Su,"Undifferentiated schists,including phyllities.",,metamorphic,Neoproterozoic (Pan-African deformed),,,538.8,1000.0,sub-age bracket,63,27902.3,3.06,9983.9,4361.0
+80,Mc,Meta-conglomerate,,metamorphic,Neoproterozoic (Pan-African deformed),,,538.8,1000.0,sub-age bracket,2,79.6,0.01,63.8,68.5
+81,bS,Biotite Garnet Gneiss Schist,,metamorphic,"Archaean-Palaeoproterozoic, reworked in the Neoproterozoic",,,538.8,4000.0,nearest series bracket (1.4 pt away),3,1918.8,0.21,490.4,1115.2
+82,bG-h,Biotite hornblende gneiss,,metamorphic,"Archaean-Palaeoproterozoic, reworked in the Neoproterozoic",,,538.8,4000.0,sub-age bracket,2,1535.4,0.17,448.3,1350.4
+83,OPg,Porphroblastic Gneiss,,metamorphic,"Archaean-Palaeoproterozoic, reworked in the Neoproterozoic",,,538.8,4000.0,sub-age bracket,13,4923.9,0.54,1167.7,1703.8
+84,GG,Granite Gneiss,,metamorphic,"Archaean-Palaeoproterozoic, reworked in the Neoproterozoic",,,538.8,4000.0,sub-age bracket,97,52903.5,5.8,12582.9,6608.1
+85,Ge,Granulite and gneiss,,metamorphic,"Archaean-Palaeoproterozoic, reworked in the Neoproterozoic",,,538.8,4000.0,sub-age bracket,1,332.8,0.04,80.8,332.8
+86,bG,Banded gneiss / biotite gneiss,,metamorphic,"Archaean-Palaeoproterozoic, reworked in the Neoproterozoic",,,538.8,4000.0,sub-age bracket,39,21029.2,2.3,4883.1,6436.7
+87,MaG,Migmatitic augen gneiss,,metamorphic,"Archaean-Palaeoproterozoic, reworked in the Neoproterozoic",,,538.8,4000.0,sub-age bracket,2,152.9,0.02,77.0,81.1
+88,MG,Migmatitic gneiss,,metamorphic,"Archaean-Palaeoproterozoic, reworked in the Neoproterozoic",,,538.8,4000.0,sub-age bracket,29,40734.5,4.46,6137.8,28885.8
+89,M,Migmatite,,metamorphic,"Archaean-Palaeoproterozoic, reworked in the Neoproterozoic",,,538.8,4000.0,sub-age bracket,63,101044.9,11.07,21224.5,28135.3
+90,qs,"Silicified, sheared rocks, large quartz veins",,fault rock,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,55,2009.3,0.22,1909.1,231.4
+91,My,Mylonites,,fault rock,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,2,1438.6,0.16,415.0,1427.7
+92,aMy,Mylonites interlayered with amphibolites,,fault rock,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,sub-age bracket,3,699.5,0.08,357.1,356.1
+,,BCT,,,,,,,,not in printed legend; no age inferred,1,4.5,0.0,16.1,4.5
+,Gdss,"Sandstone, siltstone and clay",,sedimentary,,,,,,not in printed legend; no age inferred,2,4183.6,0.46,526.5,4148.2
+,Gmsh,Shale with Limestone intercalation,,sedimentary,,,,,,not in printed legend; no age inferred,1,114.7,0.01,81.9,114.7
+,OGe,Coarse porphyritic biotite and biotite hornblende granite,,plutonic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,fall-back: unit not in printed legend; code family OG- = Pan-African Older Granite rows 62-70,1,91.8,0.01,35.2,91.8
+,OGp,Coarse porphyritic biotite and biotite hornblende granite,,plutonic,Neoproterozoic-Palaeozoic,Ediacaran-Cambrian,,485.4,1000.0,fall-back: unit not in printed legend; code family OG- = Pan-African Older Granite rows 62-70,241,84029.6,9.2,19059.3,11753.2
+,s,s,,,,,,,,not in printed legend; no age inferred,3,670.7,0.07,273.1,322.1
