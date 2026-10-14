@@ -153,13 +153,31 @@
   const metas = {};                        // dataset key -> meta.json
   let map, pdfLayer, pdfSource = 'geology';
   let mode = 'swipe', swipeFrac = 0.5, highlighted = null, outlineUnits = false, highlightMineral = null;
+  let unitScheme = 'fill';                 // 'fill' (printed colour) | 'era' | 'period' | 'rock_cls'
+  const SCHEME_COLOURS = {
+    era: { 'Cenozoic': '#f9f97f', 'Mesozoic': '#67c5ca', 'Neoproterozoic-Palaeozoic': '#f9b4c0',
+      'Neoproterozoic (Pan-African deformed)': '#b8e986', 'Archaean-Palaeoproterozoic, reworked in the Neoproterozoic': '#f0a06a',
+      'Archaean-Proterozoic (to Cambrian)': '#d9a0d9' },
+    period: { 'Quaternary': '#f9f97f', 'Neogene-Quaternary': '#ffe619', 'Paleogene-Neogene': '#fdb462', 'Paleogene': '#fd9a52',
+      'Paleogene-Quaternary (Tertiary-Recent)': '#e76f51', 'Cretaceous': '#7fc64e', 'Jurassic': '#34b2c9',
+      'Ediacaran-Cambrian': '#fed96a', '(Precambrian) - Cambrian': '#f74370' },
+    rock_cls: { 'sedimentary': '#f6e27f', 'volcanic': '#c0392b', 'plutonic': '#e67e9a', 'metamorphic': '#5dade2',
+      'fault rock': '#7f8c8d', 'minor intrusive': '#8e44ad' } };
+  const SCHEME_TITLES = { fill: 'printed legend colour', era: 'era (from the legend brackets)', period: 'period (ICS)', rock_cls: 'rock class' };
+  const UNDATED = '#e5e5e5';
+  function schemeColour(p) {
+    if (unitScheme === 'fill') return p.fill || '#cccccc';
+    let v = p[unitScheme];
+    if (unitScheme === 'period' && !v && p.era) v = p.era.indexOf('Archaean') === 0 ? '(Precambrian) - Cambrian' : (p.era.indexOf('Neoproterozoic') === 0 ? 'Ediacaran-Cambrian' : '');
+    return (v && SCHEME_COLOURS[unitScheme][v]) || UNDATED;
+  }
   const data = {}, groups = {}, visible = {};
   let unitsIndex = [];     // [{bbox:[minx,miny,maxx,maxy], feature}]
 
   function unitStyle(f) {
     const p = f.properties;
     const dim = highlighted && p.code !== highlighted;
-    return { fillColor: p.fill || '#cccccc', fillOpacity: dim ? 0.10 : 1,
+    return { fillColor: schemeColour(p), fillOpacity: dim ? 0.10 : 1,
       stroke: outlineUnits, color: '#333', weight: 0.6, opacity: 1 };
   }
   function localityColour(p) {
@@ -462,8 +480,38 @@
     colour: 'colour class', w_px: 'width (px)', h_px: 'height (px)', body_w: 'body width (px)', body_h: 'body height (px)', candidates: 'candidate minerals',
     link: 'link to a number', near_num: 'nearest number', near_dist: 'distance (pt)', near_loc: 'its locality', near_mins: 'its minerals',
     tbl_rows: 'table rows', labels: 'numbers on the map', src: 'position source', vp_value: 'GeoPDF value (°)', printed: 'printed label (°)',
-    n_glyphs: 'glyphs', meaning: 'meaning', symbol: 'symbol' };
+    n_glyphs: 'glyphs', meaning: 'meaning', symbol: 'symbol',
+    // stratigraphy / sizes / joins added in the attribute pass
+    perim_km: 'perimeter (km)', cen_lon: 'centroid lon', cen_lat: 'centroid lat', leg_row: 'legend row', formation: 'formation (legend / chart)',
+    strat_grp: 'group', age_print: 'age as printed', series: 'series / complex (printed)', period_prt: 'period bracket (printed)',
+    eon: 'eon', era: 'era', period: 'period', epoch: 'epoch / stage', age_ma_min: 'youngest (Ma)', age_ma_max: 'oldest (Ma)',
+    age_src: 'how the age was read', rock_cls: 'rock class', basins: 'basins (correlation chart)', lon: 'lon', lat: 'lat',
+    unit_code: 'unit code here', unit_era: 'unit era', unit_per: 'unit period', n_chars: 'characters', page_x: 'page x (pt)', page_y: 'page y (pt)',
+    label: 'label', page_pt: 'page position (pt)', n_lines: 'lines of this axis', name_src: 'name source', labels_in: 'water names inside',
+    min_lon: 'west', max_lon: 'east', min_lat: 'south', max_lat: 'north', n_minerals: 'minerals listed', mineral_1: 'first mineral',
+    group_1: 'commodity group (first)', groups: 'commodity groups', n_unknown: 'unknown codes', geo_code: 'host unit code (2011 map)',
+    geo_unit: 'host unit', geo_form: 'host formation', geo_era: 'host era', geo_period: 'host period', geo_epoch: 'host epoch / stage',
+    geo_src: 'host geology source', w_pt: 'width (pt)', h_pt: 'height (pt)', w_mm: 'width on paper (mm)', h_mm: 'height on paper (mm)',
+    w_km: 'width on the ground (km)', h_km: 'height on the ground (km)', n_cands: 'candidate count', near_grps: 'its commodity groups',
+    n_local: 'localities', n_symbols: 'raster symbols', top_grps: 'main commodity groups', zones: 'zones separated', n_vert: 'vertices',
+    len_pt: 'length on page (pt)', offset_deg: 'VP minus printed (°)', width_deg: 'width (°)', height_deg: 'height (°)', width_pt: 'width (pt)',
+    height_pt: 'height (pt)', scale: 'scale', near_km: 'distance (km)', ref_lon: 'reference lon', ref_lat: 'reference lat',
+    ref_dx_km: 'offset E (km)', ref_dy_km: 'offset N (km)', capital: 'state capital', in_frame: 'inside map frame', mid_lon: 'midpoint lon',
+    mid_lat: 'midpoint lat', start_lon: 'start lon', start_lat: 'start lat', end_lon: 'end lon', end_lat: 'end lat', closed: 'closed ring' };
   const SKIP = { layer: 1 };
+  function stratStrip(p) {
+    if (!p.era && !p.period_prt && !p.age_print) return '';
+    const parts = [];
+    if (p.era) parts.push('<span class="pill strat">' + esc(p.era) + '</span>');
+    if (p.period) parts.push('<span class="pill strat">' + esc(p.period) + '</span>');
+    if (p.epoch) parts.push('<span class="pill strat">' + esc(p.epoch) + '</span>');
+    if (p.age_ma_max != null && p.age_ma_min != null) parts.push('<span class="pill">' + esc(p.age_ma_min) + '–' + esc(p.age_ma_max) + ' Ma</span>');
+    if (p.age_print) parts.push('<span class="pill">printed: ' + esc(p.age_print) + '</span>');
+    else if (p.series) parts.push('<span class="pill">printed: ' + esc(p.series) + '</span>');
+    else if (p.period_prt) parts.push('<span class="pill">printed: ' + esc(p.period_prt) + '</span>');
+    if (p.age_src && /fall-back|nearest|swapped|not in printed/.test(p.age_src)) parts.push('<span class="pill warn">inferred – see "how the age was read"</span>');
+    return '<p class="strat-strip">' + parts.join(' ') + '</p>';
+  }
 
   function propsTable(p) {
     let h = '<table class="kv">';
@@ -503,9 +551,14 @@
     }
     if (def.id === 'minerals:state_capitals') flags += '<span class="pill">' + esc(p.src) + '</span>';
     if (def.id === 'minerals:towns' && p.kind !== 'town marker') flags += '<span class="pill warn">' + esc(p.kind) + '</span>';
+    let strip = '';
+    if (def.id === 'geology:geology_units') strip = stratStrip(p);
+    if (def.id === 'minerals:mineral_localities' && p.groups) strip = '<p class="strat-strip">' + String(p.groups).split(' | ').map(g => '<span class="pill strat">' + esc(g) + '</span>').join(' ') +
+      (p.geo_unit ? ' <span class="pill">on ' + esc(p.geo_code) + ' · ' + esc(p.geo_era || '') + '</span>' : '') + '</p>';
+    if (/^geology:(towns|state_capitals|volcanic_plugs)$/.test(def.id) && p.unit_code) strip = '<p class="strat-strip"><span class="pill strat">on ' + esc(p.unit_code) + ' · ' + esc(p.unit_era || '') + '</span></p>';
     return '<div class="feature-head"><div class="sw" style="background:' + esc(colour) + '"></div><div>' +
       '<div class="name">' + esc(def.name(p)) + '</div><div class="sub">' + esc(def.title) + ' · ' + esc(DATASETS[def.ds].short) + '</div></div></div>' +
-      (flags ? '<p>' + flags + '</p>' : '') + propsTable(p);
+      (flags ? '<p>' + flags + '</p>' : '') + strip + propsTable(p);
   }
 
   function showFeature(def, f, latlng) {
@@ -559,6 +612,10 @@
       if (ds.key === 'geology') {
         h += '<label class="layer-row"><span class="sw" style="background:#fff;border:1.5px solid #333"></span><span class="lbl">Outline unit polygons</span>' +
           '<span class="switch"><input type="checkbox" id="outline-toggle"><i></i></span></label>';
+        h += '<div class="layer-row scheme-row"><span class="sw" style="background:linear-gradient(90deg,#f9f97f,#67c5ca,#f9b4c0,#f0a06a)"></span>' +
+          '<span class="lbl">Colour rock units by<br><select id="unit-scheme">' +
+          Object.keys(SCHEME_TITLES).map(k => '<option value="' + k + '"' + (unitScheme === k ? ' selected' : '') + '>' + esc(SCHEME_TITLES[k]) + '</option>').join('') +
+          '</select></span></div><div id="scheme-key" class="scheme-key"></div>';
       }
       h += '</div>';
     }
@@ -581,6 +638,22 @@
     });
     const ot = $('#outline-toggle', el);
     if (ot) ot.addEventListener('change', e => { outlineUnits = e.target.checked; groups['geology:geology_units'].setStyle(unitStyle); });
+    const sel = $('#unit-scheme', el);
+    if (sel) {
+      const renderKey = () => {
+        const key = $('#scheme-key', el);
+        if (!key) return;
+        if (unitScheme === 'fill') { key.innerHTML = ''; return; }
+        const n = {}; let undated = 0;
+        data['geology:geology_units'].features.forEach(f => { const c = schemeColour(f.properties); if (c === UNDATED) undated++; else { n[c] = (n[c] || 0) + 1; } });
+        let k = '';
+        Object.entries(SCHEME_COLOURS[unitScheme]).forEach(([name, col]) => { if (n[col]) k += '<div class="legend-row"><span class="sw" style="background:' + col + '"></span><span class="desc">' + esc(name) + '</span><span class="n">' + fmt(n[col]) + ' pol.</span></div>'; });
+        if (undated) k += '<div class="legend-row"><span class="sw" style="background:' + UNDATED + '"></span><span class="desc">no age in the printed legend</span><span class="n">' + fmt(undated) + ' pol.</span></div>';
+        key.innerHTML = k;
+      };
+      sel.addEventListener('change', () => { unitScheme = sel.value; groups['geology:geology_units'].setStyle(unitStyle); renderKey(); toast('Units coloured by ' + SCHEME_TITLES[unitScheme]); });
+      renderKey();
+    }
   }
 
   // ------------------------------------------------------------------ legend panel
@@ -592,8 +665,11 @@
       h += '<h3>Geological Map (2011) – rock units</h3><p class="muted" style="margin:2px 0 6px">From the EXPLANATIONS panel of the PDF (legend.csv). Tap a row to highlight those polygons.</p>' +
         '<div id="legend-rows" class="legend-list">';
       metas.geology.legend.forEach((e, i) => {
+        const age = e.age_print || e.series || e.period_prt || '';
+        const ageTxt = age ? esc(age) + (e.era && e.era !== age ? ' · ' + esc(e.era) : '') + (e.age_ma_max ? ' · ' + esc(e.age_ma_min) + '–' + esc(e.age_ma_max) + ' Ma' : '') : 'no age printed';
         h += '<div class="legend-row" data-code="' + esc(e.code) + '" data-i="' + i + '"><span class="sw" style="background:' + esc(e.fill) + '"></span>' +
-          '<span class="code">' + esc(e.code) + '</span><span class="desc">' + esc(e.description) + '</span>' +
+          '<span class="code">' + esc(e.code) + '</span><span class="desc">' + esc(e.description) + (e.formation ? ' <i>(' + esc(e.formation) + ')</i>' : '') +
+          '<br><span class="age">' + ageTxt + '</span></span>' +
           '<span class="n">' + (n[e.code] ? fmt(n[e.code]) + ' pol.' : '<span class="pill warn">0</span>') + '</span></div>';
       });
       h += '</div>';

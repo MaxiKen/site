@@ -232,3 +232,12 @@ button { font: inherit; cursor: pointer; }
   .chips button { padding: 6px 10px; font-size: 11px; }
   .fab { width: 50px; height: 50px; }
 }
+
+/* stratigraphy strip + unit colour scheme */
+.strat-strip { margin: 4px 0 6px; line-height: 1.9; }
+.pill.strat { background: #e0f2fe; border-color: #7dd3fc; color: #0c4a6e; }
+.scheme-row select { margin-top: 3px; font: inherit; font-size: 13px; padding: 3px 6px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; max-width: 100%; }
+.scheme-key { margin: 0 0 6px 34px; }
+.scheme-key .legend-row { padding: 2px 0; }
+.legend-row .age { font-size: 11px; color: #475569; font-weight: 400; }
+.legend-row .desc i { color: #64748b; font-style: italic; }
