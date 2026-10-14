@@ -102,7 +102,7 @@ A,100,100,Wasagu,M,M,Mica,legend,,yes,,1,100.Wasagu | M
 A,101,101,Kwawai,Bx. Cl,Bx Cl,Bauxitic Clay | Clay / Pottery Clay,probable certain,,yes,,1,101 Kwawai | Bx. Cl
 A,102,102,Dutsin Koko,Ka,Ka,Kaolin / kaolinitic clay,certain,,yes,,1,102 Dutsin Koko | Ka
 A,103,103,Bunza,E,E,"Beryl, Aquamarine, Emerald",probable,,no,,1,103 Bunza | E
-B,1,1,Jibiya,Cl,Cl,Clay / Pottery Clay,certain,,no,,1,1. Jibiya | Cl
+B,1,1,Jibiya,Cl,Cl,Clay / Pottery Clay,certain,,yes,,1,1. Jibiya | Cl
 B,2,2,Jibiya,Ni,Ni,Nickel,legend,,yes,,1,2. Jibiya | Ni
 B,3,3,Jibiya,Cr,Cr,Chromite,certain,,yes,,1,3. Jibiya | Cr
 B,4,4,Kadoji,Cl,Cl,Clay / Pottery Clay,certain,,yes,,1,4. Kadoji | Cl
@@ -111,7 +111,7 @@ B,6,6,Jibiya,Py,Py,Pyrite / Pyroclore,legend,,yes,,1,6 Jibiya | Py
 B,7,7,Ruma (Mahuta),Ka,Ka,Kaolin / kaolinitic clay,certain,,yes,,1,7 Ruma (Mahuta)  Ka |
 B,8,8,Ruma,Au,Au,Gold,certain,,no,,1,8. Ruma | Au
 B,9,9,Ruma,Sn,Sn,Tin / cassiterite (no legend symbol),certain,,yes,,1,9. Ruma | Sn
-B,10,10,Ruma,Cr,Cr,Chromite,certain,,no,,1,10. Ruma | Cr
+B,10,10,Ruma,Cr,Cr,Chromite,certain,,yes,,1,10. Ruma | Cr
 B,11,11,Bassari,Au,Au,Gold,certain,,no,,1,11. Bassari | Au
 B,12,12,Bassari,Cu,Cu,Copper minerals,certain,,yes,,1,12. Bassari | Cu
 B,13,13,Wajini,Py,Py,Pyrite / Pyroclore,legend,,yes,,1,13. Wajini | Py
@@ -212,7 +212,7 @@ B,106,106,Karaye,Qz Qa,Qz Qa,Quartz (not in legend) | Quartz (not in legend),unc
 B,107,107,Kafin-chiri,Gm,Gm,Gemstone (not in legend),uncertain,,yes,,2,107.Kafin-chiri | Gm
 B,108,109,Kafin-chiri,m,m,Mica,legend,,yes,printed number 109 out of sequence - corrected to 108,2,109.Kafin-chiri | m
 B,109,109,Kofin-chini,,,,,,yes,,2,109 Kofin-chini |
-B,110,110,Burum,Qz. Qa,Qz Qa,Quartz (not in legend) | Quartz (not in legend),uncertain uncertain,,yes,,2,110 Burum | Qz. Qa
+B,110,110,Burum,Qz. Qa,Qz Qa,Quartz (not in legend) | Quartz (not in legend),uncertain uncertain,,no,,2,110 Burum | Qz. Qa
 B,111,111,Banda,Sn,Sn,Tin / cassiterite (no legend symbol),certain,,yes,,2,111 Banda | Sn
 B,112,112,Dando,Sn.Nb,Sn Nb,Tin / cassiterite (no legend symbol) | Columbite,certain certain,,yes,,2,112.Dando | Sn.Nb
 B,113,113,Rimi,Au,Au,Gold,certain,,yes,,2,113.Rimi | Au
@@ -361,8 +361,8 @@ D,5,5,Kakangi,Tm,Tm,Tourmaline,legend,,no,,3,5. Kakangi | Tm
 D,6,6,kakangi,Be,Be,"Beryl, Aquamarine, Emerald",certain,,yes,,3,6. kakangi | Be
 D,7,7,Randeji,Ru,Ru,"Corundum, Sapphire & Ruby (ruby)",certain,,yes,,3,7. Randeji | Ru
 D,8,8,Sabon Birnin Gwari,Ky,Ky,Kyanite,certain,,yes,codes split from name cell,3,8. Sabon Birnin Gwari Ky |
-D,9,9,Sabon Birnin Gwari,Ta,Ta,Tantalite,legend,,yes,codes split from name cell,3,9. Sabon Birnin Gwari Ta |
-D,10,10,Kumuna,Si,Si,unknown code (Silica sand?),unknown,Si,yes,,3,10. Kumuna | Si
+D,9,9,Sabon Birnin Gwari,Ta,Ta,Tantalite,legend,,no,codes split from name cell,3,9. Sabon Birnin Gwari Ta |
+D,10,10,Kumuna,Si,Si,unknown code (Silica sand?),unknown,Si,no,,3,10. Kumuna | Si
 D,11,11,Manda,Au,Au,Gold,certain,,yes,,3,11. Manda | Au
 D,12,12,MADADA,Au,Au,Gold,certain,,yes,,3,12. MADADA | Au
 D,13,13,Sabon Birnin Gwari,Au,Au,Gold,certain,,no,codes split from name cell,3,13. Sabon Birnin Gwari Au |
@@ -524,7 +524,7 @@ E,11,11,Mayo Butale,Gr,Gr,Graphite,probable,,yes,,4,11. Mayo Butale | Gr
 E,12,12,Beti,Gr,Gr,Graphite,probable,,yes,,4,12 Beti | Gr
 E,13,13,Beti,Sn,Sn,Tin / cassiterite (no legend symbol),certain,,yes,,4,13 Beti | Sn
 E,14,14,Gomoti,Ds,Ds,Dimension Stone,certain,,yes,,4,14 Gomoti | Ds
-E,15,15,Lara,P,P,Phosphate,certain,,no,,4,15 Lara | P
+E,15,15,Lara,P,P,Phosphate,certain,,yes,,4,15 Lara | P
 E,16,16,Pindiga,Gy,Gy,Gypsum,certain,,yes,,4,16 Pindiga | Gy
 E,17,17,Kaltunqo,Pb Zn. Bn,Pb Zn Bn,Lead - Zinc (lead) | Lead - Zinc (zinc) | Bentonite,certain certain certain,,yes,,4,17 Kaltunqo | Pb Zn. Bn
 E,18,18,Kaltungo,Tr,Tr,Trona,legend,,yes,,4,18 Kaltungo | Tr
@@ -752,8 +752,8 @@ F,5,5,Aiyetoro,Au. Ca,Au Ca,Gold | Calcite,certain probable,,no,,5,5. Aiyetoro |
 F,6,6,Egbede,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",certain,,no,,5,6. Egbede | Fe
 F,7,7,CHOKO-CHOKO,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",certain,,yes,codes split from name cell,5,7. CHOKO-CHOKO Fe |
 F,8,8,Obajana,M,M,Mica,legend,,yes,,5,8. Obajana | M
-F,9,9,Obajana,Mb,Mb,Marble,certain,,no,,5,9. Obajana | Mb
-F,10,10,OBAJANA,Fp,Fp,Feldspar,certain,,no,,5,10. OBAJANA            Fp |
+F,9,9,Obajana,Mb,Mb,Marble,certain,,yes,,5,9. Obajana | Mb
+F,10,10,OBAJANA,Fp,Fp,Feldspar,certain,,yes,,5,10. OBAJANA            Fp |
 F,11,11,Emoa,Cl,Cl,Clay / Pottery Clay,certain,,yes,,5,11 Emoa | Cl
 F,12,12,Emoa,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",certain,,yes,,5,12 Emoa | Fe
 F,13,13,lyara,Mb,Mb,Marble,certain,,yes,,5,13. lyara | Mb
@@ -789,7 +789,7 @@ F,42,42,Nnegi - Umuleri,Fe,Fe,"Iron Ore (Magnetite, Ilmenite)",certain,,yes,code
 F,43,43,Onitsha,Gs,Gs,Glass Sand,certain,,no,,5,43. Onitsha | Gs
 F,44,44,Omuoji,Cl,Cl,Clay / Pottery Clay,certain,,no,,5,44. Omuoji | Cl
 F,45,45,Nnewi,Lg,Lg,Lignite,certain,,yes,,5,45 Nnewi | Lg
-F,46,46,Ozubulu-Ukpo,Ka,Ka,Kaolin / kaolinitic clay,certain,,no,codes split from name cell,5,46 Ozubulu-Ukpo Ka |
+F,46,46,Ozubulu-Ukpo,Ka,Ka,Kaolin / kaolinitic clay,certain,,yes,codes split from name cell,5,46 Ozubulu-Ukpo Ka |
 F,47,47,Ukpor,Lg,Lg,Lignite,certain,,no,,5,47. Ukpor | Lg
 F,48,48,okija,Ka,Ka,Kaolin / kaolinitic clay,certain,,no,,5,48. okija | Ka
 F,49,49,Awomama,Ka,Ka,Kaolin / kaolinitic clay,certain,,yes,,5,49. Awomama | Ka
@@ -857,7 +857,7 @@ F,111,111,Oja-Odan,Ka,Ka,Kaolin / kaolinitic clay,certain,,yes,out of sequence (
 F,112,112,Ugbolan,Ks,Ks,Kaolinitic sand/clay (not in legend),uncertain,,yes,,6,112. Ugbolan | Ks
 F,113,113,Ifon,Cl,Cl,Clay / Pottery Clay,certain,,yes,,6,113 Ifon | Cl
 F,114,114,Ijagba,Cl,Cl,Clay / Pottery Clay,certain,,yes,,6,114 Ijagba | Cl
-F,115,115,Ute,Mb,Mb,Marble,certain,,no,,6,115. Ute | Mb
+F,115,115,Ute,Mb,Mb,Marble,certain,,yes,,6,115. Ute | Mb
 F,116,116,Okoluke,Cr,Cr,Chromite,certain,,yes,,6,116 Okoluke | Cr
 F,117,117,Ute,C,C,Coal,certain,,no,,6,117 Ute | C
 F,118,116,Ode-Aiye,Ts,Ts,Tar Sand,legend,,yes,printed number 116 out of sequence - corrected to 118,6,116. Ode-Aiye | Ts

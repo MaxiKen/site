@@ -35,17 +35,41 @@
     ]
   },
   "number_labels": {
-    "labels": 998,
-    "matched": 992,
+    "labels": 999,
+    "matched": 995,
+    "stray_zero_glyphs_dropped": [
+      [
+        765.8,
+        535.5
+      ],
+      [
+        566.4,
+        664.8
+      ]
+    ],
+    "rezoned_by_numbering_sequence": [
+      [
+        "printed 2 pt from the D/F division line on the D side; assigned to F by numbering sequence",
+        9
+      ],
+      [
+        "printed 12 pt from the D/F division line on the D side; assigned to F by numbering sequence",
+        10
+      ],
+      [
+        "printed 12 pt from the B/E division line on the B side; assigned to E by numbering sequence",
+        15
+      ]
+    ],
     "match_kinds": {
-      "exact": 992,
-      "number not in table": 6
+      "exact": 995,
+      "number not in table": 4
     },
     "per_zone": {
       "G": 195,
-      "F": 166,
-      "D": 125,
-      "E": 205,
+      "F": 168,
+      "D": 123,
+      "E": 206,
       "C": 72,
       "B": 148,
       "A": 87
@@ -60,14 +84,6 @@
         110
       ],
       [
-        "F",
-        460
-      ],
-      [
-        "F",
-        1150
-      ],
-      [
         "G",
         53
       ],
@@ -76,7 +92,7 @@
         86
       ]
     ],
-    "table_entries_without_label": 217
+    "table_entries_without_label": 213
   },
   "raster_symbols": {
     "blobs": 1642,
@@ -104,24 +120,24 @@
       "outline": 350
     },
     "with_candidate_rule": 1377,
-    "labels_total": 998,
-    "labels_with_table_entry": 992,
-    "labels_whose_minerals_have_a_legend_symbol": 908,
-    "labels_snapped_to_colour_consistent_symbol_within_25pt": 667,
-    "symbols_linked_to_a_label": 625,
-    "symbols_claimed_by_several_labels": 40,
+    "labels_total": 999,
+    "labels_with_table_entry": 995,
+    "labels_whose_minerals_have_a_legend_symbol": 913,
+    "labels_snapped_to_colour_consistent_symbol_within_25pt": 672,
+    "symbols_linked_to_a_label": 628,
+    "symbols_claimed_by_several_labels": 42,
     "symbols_without_any_label_within_14pt": 559,
     "snap_distance_pt_quartiles": [
-      9.874332243601613,
-      12.827675969251027,
-      15.451406694126753
+      9.906744753317572,
+      12.837835916713772,
+      15.497938292460816
     ],
     "snapped_by_colour": {
-      "yellow": 228,
+      "yellow": 229,
       "green": 60,
-      "outline": 149,
-      "khaki": 48,
-      "red": 71,
+      "outline": 150,
+      "khaki": 49,
+      "red": 73,
       "purple": 39,
       "dark tan": 4,
       "blue grey": 10,

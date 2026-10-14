@@ -222,13 +222,15 @@ def fix_type0(s):
 
 
 def group_glyphs_by_geometry(runs, max_dy=0.3, min_adv=0.3, max_adv=0.7):
-    """Assemble one-character text runs into labels purely by geometry
-    (same baseline, same size, next glyph starts 0.3-0.7 em to the right; the
-    digit advance is 0.57 em (0.48 em after a '1') and the smallest gap seen
-    between two neighbouring labels on one baseline is 0.81 em).
-    Needed for the mineral numbers: the '0' glyphs are emitted in a separate
-    pass of the content stream, so sequence-based assembly splits '460' into
-    '46' + '0'."""
+    """Assemble one-character text runs into labels by geometry AND drawing
+    order: same baseline, same size, next glyph starts 0.3-0.7 em to the right
+    (the digit advance is 0.57 em, 0.48 em after a '1'; the smallest gap seen
+    between two neighbouring labels on one baseline is 0.81 em) and the glyph
+    is the next one in the content stream.  The sequence test matters for the
+    mineral numbers: the single-digit labels (1-9 of every zone) and two stray
+    '0' glyphs are drawn in a separate early pass, and two of those sit exactly
+    one advance to the right of another label ('46' + stray '0' would read as
+    '460', '1' + '10' as '110')."""
     runs = sorted(runs, key=lambda r: (round(r['y'], 1), r['x']))
     labels, cur = [], None
     for r in runs:
@@ -236,7 +238,7 @@ def group_glyphs_by_geometry(runs, max_dy=0.3, min_adv=0.3, max_adv=0.7):
             p = cur[-1]
             dx = r['x'] - p['x']
             if abs(r['y'] - p['y']) <= max_dy * p['size'] and min_adv * p['size'] <= dx <= max_adv * p['size'] \
-                    and abs(r['size'] - p['size']) < 0.05:
+                    and abs(r['size'] - p['size']) < 0.05 and r['seq'] == p['seq'] + 1:
                 cur.append(r)
                 continue
             labels.append(cur)
@@ -699,29 +701,75 @@ def main(pdf_path, out_dir):
 
     # ---- number labels on the map (geometry-based assembly)
     num_runs = [t for t in texts if t['layer'] == 'mineral numbers - Default' and t['x'] < FR['x1']]
-    num_labels = [l for l in group_glyphs_by_geometry(num_runs) if l['text'].isdigit()]
+    all_labels = [l for l in group_glyphs_by_geometry(num_runs) if l['text'].isdigit()]
+    stray = [l for l in all_labels if int(l['text']) == 0]      # lone '0' glyphs: no locality is numbered 0
+    num_labels = [l for l in all_labels if int(l['text']) != 0]
     for l in num_labels:
         cx, cy = label_centre(l)
         l['cx'], l['cy'] = cx, cy
         l['zone'] = zone_of(cx, cy)
+        l['zone_note'] = ''
         l['number'] = int(l['text'])
+
+    # Labels printed on or across a division line can fall in the wrong zone (the number is placed beside the
+    # symbol, which may be on the other side).  The numbering of every zone is spatially coherent (consecutive
+    # numbers are usually close together), so for labels within DIV_BAND of a division line the zone is chosen
+    # by the distance to the nearest labels numbered n-3..n+3 of each candidate zone; a label moves only when the
+    # other zone's neighbours are less than half as far away (and < 80 pt) and that zone's list has the number.
+    # A few passes let a chain of misplaced labels (e.g. F 8, 9, 10 printed just above the D/F line) resolve.
+    DIV_BAND = 20.0
+    div_geoms = [LineString(sp) for p in paths if p['layer'] == 'division line' for sp, _ in p['subpaths']]
+    for l in num_labels:
+        l['div_dist'] = min(g.distance(Point(l['cx'], l['cy'])) for g in div_geoms) if div_geoms else 1e9
+
+    def seq_neighbour_dist(zone, n, lab):
+        best = None
+        for o in num_labels:
+            if o is lab or o['zone'] != zone or not (1 <= abs(o['number'] - n) <= 3):
+                continue
+            dd = math.hypot(o['cx'] - lab['cx'], o['cy'] - lab['cy'])
+            if best is None or dd < best:
+                best = dd
+        return best
+    n_rezoned = 0
+    for _pass in range(5):
+        moved = 0
+        for l in num_labels:
+            if l['div_dist'] >= DIV_BAND or l['zone_note']:
+                continue
+            own = seq_neighbour_dist(l['zone'], l['number'], l)
+            best = (own if own is not None else 1e9, l['zone'])
+            for z, pg in zones.items():
+                if z == l['zone'] or pg.distance(Point(l['cx'], l['cy'])) > DIV_BAND or not idx.get((z, l['number'])):
+                    continue
+                dz = seq_neighbour_dist(z, l['number'], l)
+                if dz is not None and dz < 80 and dz < 0.5 * best[0]:
+                    best = (dz, z)
+            if best[1] != l['zone']:
+                l['zone_note'] = 'printed %.0f pt from the %s/%s division line on the %s side; assigned to %s by numbering sequence' % (
+                    l['div_dist'], min(l['zone'], best[1]), max(l['zone'], best[1]), l['zone'], best[1])
+                l['zone'] = best[1]
+                moved += 1
+        n_rezoned += moved
+        if not moved:
+            break
+
+    for l in num_labels:
         hits = idx.get((l['zone'], l['number']), [])
         l['entry'], l['match'] = None, 'number not in table'
         if hits:
             l['entry'] = hits[0]
             l['match'] = 'exact' if len(hits) == 1 else 'exact (%d table rows share this number)' % len(hits)
-        else:
-            near = [z for z, pg in zones.items() if z != l['zone'] and pg.distance(Point(cx, cy)) < 20 and idx.get((z, l['number']))]
-            if near:
-                l['entry'] = idx[(near[0], l['number'])][0]
-                l['match'] = 'matched in adjacent zone %s (label straddles a division line)' % near[0]
     qa['number_labels'] = {'labels': len(num_labels), 'matched': sum(1 for l in num_labels if l['entry']),
+                           'stray_zero_glyphs_dropped': [(round(l['x0'], 1), round(l['y0'], 1)) for l in stray],
+                           'rezoned_by_numbering_sequence': [(l['zone_note'], l['number']) for l in num_labels if l['zone_note']],
                            'match_kinds': dict(collections.Counter(l['match'].split(' (')[0] for l in num_labels)),
                            'per_zone': dict(collections.Counter(l['zone'] for l in num_labels)),
                            'unmatched': sorted((l['zone'] or '?', l['number']) for l in num_labels if not l['entry'])}
     lab_keys = set((l['zone'], l['number']) for l in num_labels)
     qa['number_labels']['table_entries_without_label'] = len([e for e in table if (e['zone'], e['number']) not in lab_keys])
-    print('number labels: %d, matched to table: %d' % (len(num_labels), qa['number_labels']['matched']))
+    print('number labels: %d (%d stray zero glyphs dropped, %d re-zoned by numbering sequence), matched to table: %d' % (
+        len(num_labels), len(stray), n_rezoned, qa['number_labels']['matched']))
 
     # ---- raster base map (7 strips) + legend symbol sheet
     placements = image_placements(data)

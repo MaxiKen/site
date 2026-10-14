@@ -86,6 +86,7 @@ A,99,A99,Kweillo,Au,Gold,certain,exact,,raster symbol (colour-consistent),11.7,y
 A,100,A100,Wasagu,M,Mica,legend,exact,,label centre,,nearest: green,nearest symbol 14 pt away (unverified): Fire Clay,5.741402,11.498706,5.741402,11.498706
 A,101,A101,Kwawai,Bx. Cl,Bauxitic Clay | Clay / Pottery Clay,probable certain,exact,,raster symbol (colour-consistent),18.2,dark tan,Bauxitic Clay | Granite | Silica Sand,4.161577,11.817514,4.07226,11.743988
 A,102,A102,Dutsin Koko,Ka,Kaolin / kaolinitic clay,certain,exact,,label centre,,nearest: purple,"nearest symbol 13 pt away (unverified): Iron Ore (Magnetite, Ilmenite)",3.928056,11.829697,3.928056,11.829697
+B,1,B1,Jibiya,Cl,Clay / Pottery Clay,certain,exact,,raster symbol (colour-consistent),24.5,yellow,Clay / Pottery Clay | Dimension Stone,7.120195,12.968877,7.032908,12.840508
 B,2,B2,Jibiya,Ni,Nickel,legend,exact,,label centre,,,,7.347625,13.074469,7.347625,13.074469
 B,3,B3,Jibiya,Cr,Chromite,certain,exact,,label centre,,,,7.246093,13.119143,7.246093,13.119143
 B,4,B4,Kadoji,Cl,Clay / Pottery Clay,certain,exact,,raster symbol (colour-consistent),4.5,yellow,Clay / Pottery Clay | Dimension Stone,7.028817,12.812519,7.032908,12.840508
@@ -94,10 +95,10 @@ B,5,B5,Kadoji,Fp,Feldspar,certain,exact,,label centre,,,,7.347625,13.017611,7.34
 B,6,B6,Jibiya,Py,Pyrite / Pyroclore,legend,exact,,label centre,,nearest: yellow,nearest symbol 13 pt away (unverified): no rule,7.022725,12.997305,7.022725,12.997305
 B,7,B7,Ruma (Mahuta),Ka,Kaolin / kaolinitic clay,certain,exact,,raster symbol (colour-consistent),11.4,khaki,Kaolin / kaolinitic clay,7.296859,12.944509,7.258308,12.883151
 B,9,B9,Ruma,Sn,Tin / cassiterite (no legend symbol),certain,exact,,label centre,,nearest: yellow,nearest symbol 5 pt away (unverified): no rule,7.081613,12.991213,7.081613,12.991213
+B,10,B10,Ruma,Cr,Chromite,certain,exact,,label centre,,nearest: yellow,nearest symbol 11 pt away (unverified): no rule,7.158777,12.972938,7.158777,12.972938
 B,12,B12,Bassari,Cu,Copper minerals,certain,exact,,label centre,,nearest: yellow,nearest symbol 7 pt away (unverified): Gold,7.315135,12.753631,7.315135,12.753631
 B,13,B13,Wajini,Py,Pyrite / Pyroclore,legend,exact,,label centre,,nearest: yellow,nearest symbol 8 pt away (unverified): Gold,7.091766,12.731294,7.091766,12.731294
 B,14,B14,Wajini,Au,Gold,certain,exact,,raster symbol (colour-consistent),14.0,yellow,Gold,7.189236,12.826733,7.13647,12.755223
-B,15,B15,kurfi,Qs,Quartz sand (not in legend),uncertain,exact,,label centre,,nearest: outline,nearest symbol 13 pt away (unverified): Gypsum | Baryte | Phosphate | Phosphate Rock | Trona | Bitumen,10.856542,10.07727,10.856542,10.07727
 B,15,B15,kurfi,Qs,Quartz sand (not in legend),uncertain,exact,,label centre,,,,7.471493,12.767845,7.471493,12.767845
 B,16,B16,Dutsin- Ma,Sn.Ta,Tin / cassiterite (no legend symbol) | Tantalite,certain legend,exact,,raster symbol (colour-consistent),14.2,outline,Tantalite | Oil and Gas,7.467432,12.615548,7.401467,12.554195
 B,17,B17,Dutsin-Ma,Au,Gold,certain,exact (2 table rows share this number),,raster symbol (colour-consistent),8.3,yellow,Gold,7.367931,12.505895,7.410604,12.475002
@@ -183,7 +184,6 @@ B,106,B106,Karaye,Qz Qa,Quartz (not in legend) | Quartz (not in legend),uncertai
 B,107,B107,Kafin-chiri,Gm,Gemstone (not in legend),uncertain,exact,,label centre,,,,8.860439,11.634758,8.860439,11.634758
 B,108,B108,Kafin-chiri,m,Mica,legend,exact,printed number 109 out of sequence - corrected to 108,label centre,,,,8.856378,11.500736,8.856378,11.500736
 B,109,B109,Kofin-chini,,,,exact,,label centre,,nearest: outline,"nearest symbol 9 pt away (unverified): Beryl, Aquamarine, Emerald",8.710173,11.630696,8.710173,11.630696
-B,110,B110,Burum,Qz. Qa,Quartz (not in legend) | Quartz (not in legend),uncertain uncertain,exact,,label centre,,nearest: yellow,nearest symbol 9 pt away (unverified): no rule,7.145578,12.968877,7.145578,12.968877
 B,111,B111,Banda,Sn,Tin / cassiterite (no legend symbol),certain,exact,,label centre,,,,8.122246,11.573839,8.122246,11.573839
 B,112,B112,Dando,Sn.Nb,Tin / cassiterite (no legend symbol) | Columbite,certain certain,exact,,raster symbol (colour-consistent),16.9,dark grey,Columbite,8.27962,11.492614,8.257374,11.38762
 B,113,B113,Rimi,Au,Gold,certain,exact,,raster symbol (colour-consistent),14.9,yellow,Gold,8.752755,11.326103,8.695989,11.250555
@@ -311,8 +311,6 @@ D,4,D4,Dodo,Ky,Kyanite,certain,exact,,raster symbol (colour-consistent),16.5,out
 D,6,D6,kakangi,Be,"Beryl, Aquamarine, Emerald",certain,exact,,raster symbol (colour-consistent),12.8,outline,"Beryl, Aquamarine, Emerald",6.149557,10.704732,6.076485,10.66879
 D,7,D7,Randeji,Ru,"Corundum, Sapphire & Ruby (ruby)",certain,exact,,label centre,,,,6.133312,10.544313,6.133312,10.544313
 D,8,D8,Sabon Birnin Gwari,Ky,Kyanite,certain,exact,codes split from name cell,label centre,,nearest: green,nearest symbol 9 pt away (unverified): no rule,6.415568,10.674273,6.415568,10.674273
-D,9,D9,Sabon Birnin Gwari,Ta,Tantalite,legend,exact,codes split from name cell,label centre,,,,6.409477,8.040556,6.409477,8.040556
-D,10,D10,Kumuna,Si,unknown code (Silica sand?),unknown,exact,,label centre,,,,6.604417,8.103505,6.604417,8.103505
 D,11,D11,Manda,Au,Gold,certain,exact,,raster symbol (colour-consistent),13.5,yellow,Gold,6.500824,10.85906,6.454181,10.78758
 D,12,D12,MADADA,Au,Gold,certain,exact,,raster symbol (colour-consistent),11.3,yellow,Gold,6.395262,10.8286,6.454181,10.78758
 D,14,D14,Kajuru,Au,Gold,certain,exact,,raster symbol (colour-consistent),9.8,yellow,Gold,6.900888,10.609293,6.959806,10.629193
@@ -441,6 +439,7 @@ E,11,E11,Mayo Butale,Gr,Graphite,probable,exact,,raster symbol (colour-consisten
 E,12,E12,Beti,Gr,Graphite,probable,exact,,raster symbol (colour-consistent),13.5,outline,Gypsum | Baryte | Phosphate | Phosphate Rock | Trona | Bitumen | Graphite | River Gravel | Sillimanite | Lignite | Tar Sand | Kyanite,12.633337,9.289389,12.600877,9.209809
 E,13,E13,Beti,Sn,Tin / cassiterite (no legend symbol),certain,exact,,label centre,,,,12.753144,9.189888,12.753144,9.189888
 E,14,E14,Gomoti,Ds,Dimension Stone,certain,exact,,raster symbol (colour-consistent),4.5,yellow,Clay / Pottery Clay | Dimension Stone,11.723618,9.675207,11.705372,9.697152
+E,15,E15,Lara,P,Phosphate,certain,exact,,raster symbol (colour-consistent),13.3,outline,Gypsum | Baryte | Phosphate | Phosphate Rock | Trona | Bitumen,10.856542,10.07727,10.834235,9.995649
 E,16,E16,Pindiga,Gy,Gypsum,certain,exact,,raster symbol (colour-consistent),7.8,outline,Gypsum | Baryte | Phosphate | Phosphate Rock | Trona | Bitumen,10.994624,9.941218,10.968256,9.983465
 E,17,E17,Kaltunqo,Pb Zn. Bn,Lead - Zinc (lead) | Lead - Zinc (zinc) | Bentonite,certain certain certain,exact,,raster symbol (colour-consistent),7.9,red,Lead - Zinc,11.016961,9.88233,11.044405,9.840308
 E,18,E18,Kaltungo,Tr,Trona,legend,exact,,label centre,,nearest: red,nearest symbol 12 pt away (unverified): Lead - Zinc,11.025083,9.764554,11.025083,9.764554
@@ -638,6 +637,8 @@ E,233,E233,Kein-Yaku,Tc,Talc,legend,exact,printed number 232 out of sequence - c
 E,234,E234,Wana,Tpz,Topaz,legend,exact,,label centre,,nearest: red,nearest symbol 14 pt away (unverified): Marble | Rose Quartz,7.024756,8.716753,7.024756,8.716753
 F,7,F7,CHOKO-CHOKO,Fe,"Iron Ore (Magnetite, Ilmenite)",certain,exact,codes split from name cell,raster symbol (colour-consistent),9.2,purple,"Iron Ore (Magnetite, Ilmenite)",6.247027,7.916688,6.271425,7.863527
 F,8,F8,Obajana,M,Mica,legend,exact,,label centre,,nearest: red,nearest symbol 14 pt away (unverified): Feldspar,6.340435,8.020249,6.340435,8.020249
+F,9,F9,Obajana,Mb,Marble,certain,exact,,raster symbol (colour-consistent),16.6,red,Marble | Rose Quartz,6.409477,8.040556,6.393262,7.936628
+F,10,F10,OBAJANA,Fp,Feldspar,certain,exact,,label centre,,,,6.604417,8.103505,6.604417,8.103505
 F,11,F11,Emoa,Cl,Clay / Pottery Clay,certain,exact,,raster symbol (colour-consistent),12.6,yellow,Clay / Pottery Clay | Dimension Stone,6.496763,8.006035,6.576018,8.015821
 F,12,F12,Emoa,Fe,"Iron Ore (Magnetite, Ilmenite)",certain,exact,,raster symbol (colour-consistent),23.3,purple,"Iron Ore (Magnetite, Ilmenite)",6.675489,7.98776,6.69481,8.134611
 F,13,F13,lyara,Mb,Marble,certain,exact,,label centre,,nearest: red,nearest symbol 9 pt away (unverified): Lead - Zinc,6.803418,7.991821,6.803418,7.991821
@@ -669,6 +670,7 @@ F,40,F40,Aguleri,CI,Clay / Pottery Clay,certain,exact,,raster symbol (colour-con
 F,41,F41,lgbarian,Gs,Glass Sand,certain,exact,,label centre,,nearest: yellow,nearest symbol 8 pt away (unverified): Clay / Pottery Clay | Dimension Stone,6.819663,6.436364,6.819663,6.436364
 F,42,F42,Nnegi - Umuleri,Fe,"Iron Ore (Magnetite, Ilmenite)",certain,exact,codes split from name cell,label centre,,nearest: yellow,nearest symbol 7 pt away (unverified): Gold | Psammite | Glass Sand,6.854183,6.212995,6.854183,6.212995
 F,45,F45,Nnewi,Lg,Lignite,certain,exact,,label centre,,nearest: yellow,nearest symbol 11 pt away (unverified): Clay / Pottery Clay | Dimension Stone,6.917133,5.985566,6.917133,5.985566
+F,46,F46,Ozubulu-Ukpo,Ka,Kaolin / kaolinitic clay,certain,exact,codes split from name cell,raster symbol (colour-consistent),17.5,khaki,Kaolin / kaolinitic clay,6.839969,6.026178,6.807509,5.92025
 F,49,F49,Awomama,Ka,Kaolin / kaolinitic clay,certain,exact,,raster symbol (colour-consistent),24.1,khaki,Kaolin / kaolinitic clay,6.803418,5.670819,6.850152,5.81669
 F,50,F50,Assa,Oil,Oil and Gas,certain,exact,,label centre,,,,6.797326,5.496186,6.797326,5.496186
 F,51,F51,Akabuna,Cl,Clay / Pottery Clay,certain,exact,,raster symbol (colour-consistent),13.5,yellow,Clay / Pottery Clay | Dimension Stone,6.707979,5.155041,6.624753,5.134411
@@ -724,6 +726,7 @@ F,111,F111,Oja-Odan,Ka,Kaolin / kaolinitic clay,certain,exact,out of sequence (p
 F,112,F112,Ugbolan,Ks,Kaolinitic sand/clay (not in legend),uncertain,exact,,label centre,,,,5.743371,6.986663,5.743371,6.986663
 F,113,F113,Ifon,Cl,Clay / Pottery Clay,certain,exact,,raster symbol (colour-consistent),10.2,yellow,Clay / Pottery Clay | Dimension Stone,5.623565,6.905438,5.66833,6.858384
 F,114,F114,Ijagba,Cl,Clay / Pottery Clay,certain,exact,,raster symbol (colour-consistent),7.2,yellow,Clay / Pottery Clay | Dimension Stone,5.678391,6.81406,5.66833,6.858384
+F,115,F115,Ute,Mb,Marble,certain,exact,,raster symbol (colour-consistent),11.8,red,Marble | Rose Quartz,5.566707,6.84655,5.534309,6.779191
 F,116,F116,Okoluke,Cr,Chromite,certain,exact,,label centre,,nearest: yellow,nearest symbol 6 pt away (unverified): Clay / Pottery Clay | Dimension Stone,5.617473,6.712529,5.617473,6.712529
 F,118,F118,Ode-Aiye,Ts,Tar Sand,legend,exact,printed number 116 out of sequence - corrected to 118,label centre,,,,4.520936,6.730804,4.520936,6.730804
 F,119,F119,IFON,Ka,Kaolin / kaolinitic clay,certain,exact,,label centre,,nearest: khaki,nearest symbol 7 pt away (unverified): no rule,4.464079,6.592722,4.464079,6.592722
@@ -800,8 +803,6 @@ F,199,F199,lkorodu,Cl,Clay / Pottery Clay,certain,exact,codes split from name ce
 F,201,F201,Agbowa,Cl,Clay / Pottery Clay,certain,exact,codes split from name cell,raster symbol (colour-consistent),19.0,yellow,Clay / Pottery Clay | Dimension Stone,3.696565,6.592722,3.578818,6.565979
 F,202,F202,Poka,Ka,Kaolin / kaolinitic clay,certain,exact,,raster symbol (colour-consistent),5.0,khaki,Kaolin / kaolinitic clay,3.842769,6.535864,3.822493,6.559887
 F,203,F203,Ibeju,Cl,Clay / Pottery Clay,certain,exact,,raster symbol (colour-consistent),19.0,yellow,Clay / Pottery Clay | Dimension Stone,3.852923,6.460731,3.737207,6.425868
-F,460,F460,,,,,number not in table,,label centre,,nearest: yellow,nearest symbol 6 pt away (unverified): Clay / Pottery Clay | Dimension Stone,6.852153,6.026178,6.852153,6.026178
-F,1150,F1150,,,,,number not in table,,label centre,,nearest: red,nearest symbol 13 pt away (unverified): Marble | Rose Quartz,5.57886,6.84655,5.57886,6.84655
 G,3,G3,AKWANA,Br,Brine,probable,exact,,label centre,,,,9.270625,7.865922,9.270625,7.865922
 G,8,G8,Baissa,Be,"Beryl, Aquamarine, Emerald",certain,exact,,raster symbol (colour-consistent),18.1,outline,"Beryl, Aquamarine, Emerald",10.480876,7.409032,10.480907,7.293946
 G,9,G9,Galea,Gm,Gemstone (not in legend),uncertain,exact,,label centre,,nearest: outline,"nearest symbol 13 pt away (unverified): Beryl, Aquamarine, Emerald",10.702214,7.398879,10.702214,7.398879
