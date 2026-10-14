@@ -110,7 +110,7 @@ Unlike the geological map, only part of this map is vector. The **background geo
 |---|---|---|
 | `mineral_localities.shp` / `.csv` | 999 points | One point per mineral number printed on the map. `zone`, `number`, `zone_num` (e.g. `E109`); from the table join: `locality`, `codes_raw` (as printed), `minerals` (expanded names), `min_conf` (certain / legend / probable / uncertain / unknown per code), `match` (995 `exact`, 4 `number not in table`), `tbl_flags`. Position: `pos_src` = `raster symbol (colour-consistent)` for the 672 numbers whose legend symbol (right colour, size and fill class for the listed mineral) was found within 25 pt – the point is the symbol centre, `snap_pt` the distance – otherwise `label centre` (327; the number itself, ~5–15 pt ≈ 3–10 km from the symbol). `label_lon/lat` always hold the number's own position. |
 | `explanations_table.csv` | 1 171 rows | The complete EXPLANATIONS list (A 103, B 165, C 86, D 157, E 234, F 202, G 224 rows), parsed from the eight text columns: `zone`, `number` (sequential, see caveats), `number_printed`, `locality`, `codes_raw`, `codes`, `minerals`, `code_confidence`, `unknown_codes`, `on_map` (958 rows have their number on the map, 213 do not), `flags`, `table_column`, `raw_text`. |
-| `mineral_symbols_raster.shp` | 1 642 points | Every coloured symbol blob detected in the raster: `colour` class, size, `fill` (solid / round / sparse – distinguishes e.g. the solid gold square from the lettered brine circle), `candidates` (legend minerals consistent with colour+size+fill; 1 377 blobs have a rule), `link` + `near_*` (the number label it serves, if any). 559 blobs have no number within 14 pt – unnumbered symbols, geology‑pattern fragments and water bodies (`blue`). |
+| `mineral_symbols_raster.shp` | 1593 points | Every coloured symbol blob detected in the raster: `colour` class, size, `fill` (solid / round / sparse – distinguishes e.g. the solid gold square from the lettered brine circle), `candidates` (legend minerals consistent with colour+size+fill; 1350 blobs have a rule), `link` + `near_*` (the number label it serves, if any). 516 blobs have no number within 14 pt – unnumbered symbols and geology‑pattern fragments. The 54 fragments in the raster's water‑line blue are excluded (no legend symbol has that colour). |
 | `mineral_legend.csv`, `legend_symbols/` | 67 rows, 66 PNGs | Legend order, mineral name, the code printed in the legend (only 19 entries have one), the table codes mapped to that mineral, cut‑outs of each legend symbol. |
 | `mineral_code_dictionary.csv` | 120 codes | Every code used in the table → mineral, with confidence (36 certain, 20 from the legend, 30 probable, 15 uncertain, 19 unknown – e.g. `Us`, `Ke`, `Cy`, each used once or twice). |
 | `map_zones.shp`, `division_lines.shp` | 7 / 5 | The A–G numbering zones polygonised from the division lines + frame (`tbl_rows`, `labels` per zone). |
@@ -122,9 +122,9 @@ Unlike the geological map, only part of this map is vector. The **background geo
 | `towns.shp` | 483 points | 478 vector circles (`town marker`), 411 named from the label beside them (`name_dist` = marker‑to‑label distance), 67 without a legible name; plus 5 names whose circle is shared with/hidden by a neighbour (`name only (no marker)`, placed at the label). |
 | `state_capitals.shp` | 33 points | Capitals have no vector marker – the grey square is in the raster, centred under the bold label. 14 were located on that square (`src = raster capital square`), the rest sit at the label centre (within ≈1 pt of the square where both exist). |
 | `state_name_labels.shp` | 37 | the 36 states + FCT labels |
-| `river_labels.shp` | 119 | italic water names as placed (curved names come in pieces) |
+| `river_labels.shp` | 93 | water names; the italic names follow the river curves with one rotation per glyph, so the 532 glyphs are re‑assembled along the drawing order (`RIVER BENUE`, `Yedseram`, `Karkin Pawa` …), `n_glyphs` per name |
 | `pegmatite_marks.shp` | 23 | the "P" pegmatite marks of the geology legend |
-| `map_labels.shp` | 683 | every text string on the map face except the mineral numbers, with layer, font, size, angle |
+| `map_labels.shp` | 657 | every text string on the map face except the mineral numbers, with layer, font, size, angle (river names as assembled above) |
 | `geology_legend.csv` | 9 | the background‑geology legend order – the geology itself is raster only |
 | `map_raster/` | PNG + `.pgw` | the untouched 75 dpi raster strips reassembled and world‑filed (`mineral_map_base_75dpi.png`, the actual symbol source) and a 150 dpi render of the full map face |
 | `qa_report.json` | | all counts above, the unmatched numbers, snap statistics, the capital check |
@@ -137,11 +137,25 @@ Unlike the geological map, only part of this map is vector. The **background geo
 * Zone B's rows 156–164 are typeset at the foot of the D column; they are assigned to B by position (`TABLE_ZONE_OVERRIDES`). 113 rows had the mineral codes typed into the locality cell; they are split off only when every token is a known code.
 * Symbol detection was calibrated on localities with a single mineral (gold = solid yellow 8 × 8 px square, clay = yellow 14 × 10 rectangle, kaolin = khaki rectangle, limestone = hatched green, tantalite = white bowl, barytes/gypsum = white ring arcs, lead‑zinc = red triangle …) and is applied as colour + size + fill‑class rules; a number is only snapped to a symbol whose rule contains one of its minerals. Tin (`Sn`, 73 rows) and quartz/monazite/ruby codes have no legend symbol by design and stay at the label.
 
+### Layer audit – how each layer was checked
+
+| Check | Result |
+|---|---|
+| Every digit glyph of the `mineral numbers` layer ends up in exactly one label | 2 393 glyphs → 999 labels + 2 stray `0` glyphs (dropped) – no glyph lost or double‑used |
+| Table completeness | every zone's numbering is contiguous after parsing; the only numbers absent from the print are F 110, G 53, G 86, G 111; 30 misprinted numbers were corrected from neighbours and each was checked against the rendered table |
+| Zone of labels near a division line | 229 labels lie within 20 pt of a line; the numbering‑sequence test moved 3 (F 9, F 10, E 15) – listed in `qa_report.json` |
+| Join sanity against the map's own gazetteer | 105 localities are also named towns on the map; median label‑to‑town distance 22 km (the far outliers are towns that share a name, e.g. two Bidas, two Wawas) |
+| Symbol snapping | rules calibrated on single‑mineral localities, then checked on rendered overlays (Zamfara gold belt, Jos Plateau) |
+| State capitals | located on the raster capital square under the label (within ≈1 pt where the square is isolated); 33 capitals vs reference coordinates: rms 11 km, which is the accuracy of the map's own georeference |
+| Towns | names matched by distance to the label box (median 1.2 pt, max 10.7 pt); checked on overlays in three regions |
+| Roads / rivers / railway / boundary | overlays on the faded PDF in two regions – centrelines sit inside the double‑line road symbol, railway and boundary follow their bands, rivers coincide |
+| Georeference | parallels on whole degrees to < 0.001°; meridian labels vs `/VP` discrepancy 0.172° resolved with the capital check (see §1) |
+
 ### Caveats
 
 * **Positions**: 1 pt ≈ 0.7 km; a snapped point is the symbol centre (±1–2 px), an unsnapped one is the number's centre, which is typically 3–10 km from the deposit symbol. The `/VP` georeference itself is ≈7 km off true positions in both axes (capital check), consistent with a 1:2 M compilation.
 * **Minerals come from codes typed by the map compiler**, with inconsistent spelling (`CI`/`Cl`, `MI`/`mi`, `PbS`/`Pbs`); confidence is recorded per code and 19 codes could not be resolved at all.
-* Mineral symbols without a number (559 blobs) are delivered as raw raster blobs with candidate minerals only – the map gives no other way to identify them.
+* Mineral symbols without a number (516 blobs) are delivered as raw raster blobs with candidate minerals only – the map gives no other way to identify them.
 * Background geology, lakes and the large rivers exist only as raster.
 
 ## 3. Reproducing

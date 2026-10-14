@@ -95,7 +95,8 @@
     "table_entries_without_label": 213
   },
   "raster_symbols": {
-    "blobs": 1642,
+    "blobs": 1593,
+    "water_line_fragments_excluded": 54,
     "by_colour": {
       "green": 183,
       "red": 194,
@@ -109,7 +110,6 @@
       "bright green": 11,
       "dark grey": 50,
       "tan": 8,
-      "blue": 50,
       "grey": 31,
       "purple 2": 2,
       "magenta": 3,
@@ -117,16 +117,16 @@
       "brown": 40,
       "violet": 5,
       "dark blue": 9,
-      "outline": 350
+      "outline": 351
     },
-    "with_candidate_rule": 1377,
+    "with_candidate_rule": 1350,
     "labels_total": 999,
     "labels_with_table_entry": 995,
     "labels_whose_minerals_have_a_legend_symbol": 913,
     "labels_snapped_to_colour_consistent_symbol_within_25pt": 672,
     "symbols_linked_to_a_label": 628,
     "symbols_claimed_by_several_labels": 42,
-    "symbols_without_any_label_within_14pt": 559,
+    "symbols_without_any_label_within_14pt": 516,
     "snap_distance_pt_quartiles": [
       9.906744753317572,
       12.837835916713772,

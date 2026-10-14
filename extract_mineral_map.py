@@ -139,8 +139,9 @@ SYMBOL_PALETTE = {
     'purple': (151, 69, 120), 'light green': (132, 194, 37), 'grey': (130, 130, 130), 'dark grey': (96, 93, 92),
     'blue grey': (102, 122, 179), 'brown': (192, 128, 64), 'bright green': (0, 255, 0), 'orange': (231, 120, 23),
     'tan': (187, 130, 91), 'green 2': (0, 160, 64), 'dark tan': (149, 127, 102), 'violet': (132, 0, 168),
-    'dark blue': (0, 77, 168), 'purple 2': (169, 0, 230), 'magenta': (224, 32, 128), 'blue': (80, 100, 235),
+    'dark blue': (0, 77, 168), 'purple 2': (169, 0, 230), 'magenta': (224, 32, 128),
 }
+WATER_LINE_RGB = (80, 100, 235)          # river / lake outlines drawn in the raster - excluded from symbol detection
 SYMBOL_OUTLINE_RGB = (31, 26, 23)        # outline / letter colour of the symbols (line-work is pure black)
 
 # (colour class, size, fill) -> candidate legend symbols.  Derived from the
@@ -184,8 +185,7 @@ SYMBOL_RULES = [
     ('dark grey',     11, 13, 7,  9, ANY, ['Columbite']),
     ('grey',          10, 12, 10, 12, ANY, ['Silver', 'Bismuth']),
     ('blue grey',      8, 11, 8, 11, ANY, ['Mica', 'Uranium']),
-    ('blue',           4, 12, 4, 12, ANY, ['Nickel', 'Copper minerals']),
-    ('dark blue',      4, 13, 3, 12, ANY, ['Copper minerals']),
+    # 'dark blue' (0,77,168) occurs as 9 small bars; no legend symbol has that colour -> no candidates
     ('brown',          3,  8, 3,  9, ANY, ['Granite', 'Bauxitic Clay']),
     ('tan',            7, 12, 7, 12, ANY, ['Silica Sand', 'Bauxitic Clay']),
     ('dark tan',       7, 12, 3, 12, ANY, ['Bauxitic Clay', 'Granite', 'Silica Sand']),
@@ -263,6 +263,42 @@ def label_box(w):
 def label_centre(w):
     b = label_box(w)
     return ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2)
+
+
+def assemble_curved_labels(runs, letter_gap=1.25, word_gap=2.6):
+    """Re-assemble one-glyph text runs that follow a curve (river names: every
+    glyph has its own rotation, so baseline/angle-based assembly breaks them
+    into fragments).  Consecutive runs (drawing order) of the same font/size
+    are chained while the distance between successive glyph origins is at most
+    word_gap em; a gap above letter_gap em becomes a space ('RIVER BENUE').
+    Returns dicts with text, mean position, mean angle and glyph count."""
+    runs = sorted(runs, key=lambda r: r['seq'])
+    out, cur = [], None
+    for r in runs:
+        if cur is not None:
+            p = cur['glyphs'][-1]
+            dd = math.hypot(r['x'] - p['x'], r['y'] - p['y'])
+            if r['seq'] == p['seq'] + 1 and abs(r['size'] - p['size']) < 0.05 and r['font'] == p['font'] \
+                    and (r['text'] == ' ' or dd <= word_gap * p['size']):
+                if r['text'] != ' ' and dd > letter_gap * p['size'] * max(1, len(p['text'].strip())):
+                    cur['text'] += ' '
+                cur['text'] += r['text']
+                cur['glyphs'].append(r)
+                continue
+            out.append(cur)
+        cur = {'text': r['text'], 'glyphs': [r]}
+    if cur is not None:
+        out.append(cur)
+    res = []
+    for w in out:
+        g = w['glyphs']
+        text = ' '.join(w['text'].split())
+        if not text:
+            continue
+        res.append({'text': text, 'x': sum(t['x'] for t in g) / len(g), 'y': sum(t['y'] for t in g) / len(g),
+                    'angle': sum(t['angle'] for t in g) / len(g), 'size': g[0]['size'], 'font': g[0]['font'],
+                    'layer': g[0]['layer'], 'seq': g[0]['seq'], 'nglyph': len(g)})
+    return res
 
 
 def extend_line(coords, d):
@@ -887,6 +923,9 @@ def main(pdf_path, out_dir):
             if w > 30 or h > 30:
                 continue                     # water bodies / fills, not symbols
             symbol_blobs.append({'colour': cname, 'x0': x0, 'y0': y0, 'x1': x1, 'y1': y1, 'npx': npx})
+    r, g, bb = WATER_LINE_RGB
+    m = (abs(R - r) <= 8) & (abs(G - g) <= 8) & (abs(B - bb) <= 8)
+    qa_water_fragments = len([1 for x0, y0, x1, y1, npx in components(m, 6) if x1 - x0 <= 30 and y1 - y0 <= 30])
     r, g, bb = SYMBOL_OUTLINE_RGB
     m = (abs(R - r) <= 8) & (abs(G - g) <= 8) & (abs(B - bb) <= 8)
     for x0, y0, x1, y1, npx in components(m, 12):
@@ -939,7 +978,7 @@ def main(pdf_path, out_dir):
         s['labels'] = []
         if frame.contains(Point(*s['pt'])):
             symbols.append(s)
-    qa['raster_symbols'] = {'blobs': len(symbols), 'by_colour': dict(collections.Counter(s['colour'] for s in symbols)),
+    qa['raster_symbols'] = {'blobs': len(symbols), 'water_line_fragments_excluded': qa_water_fragments, 'by_colour': dict(collections.Counter(s['colour'] for s in symbols)),
                             'with_candidate_rule': sum(1 for s in symbols if s['candidates'])}
     print('raster symbol blobs: %d' % len(symbols))
 
@@ -1271,12 +1310,12 @@ def main(pdf_path, out_dir):
             o.add(Point(*map(deg, ll(cx, cy))), [w['text'].strip()])
     print('state_name_labels:', o.close())
 
-    o = ShpOut(os.path.join(out_dir, 'river_labels'), shapefile.POINT, [('name', 'C', 60, 0), ('angle', 'N', 6, 1), ('note', 'C', 60, 0)])
-    for w in words:
-        if w['layer'] == 'Rivers - Default' and w['text'].strip():
-            cx, cy = label_centre(w)
-            o.add(Point(*map(deg, ll(cx, cy))), [w['text'].strip(), round(w['angle'], 1), 'curved labels may be split into fragments'])
-    print('river_labels:', o.close())
+    # river names follow the river curves (one rotation per glyph) -> assemble along the drawing order
+    river_words = assemble_curved_labels([t for t in texts if t['layer'] == 'Rivers - Default'])
+    o = ShpOut(os.path.join(out_dir, 'river_labels'), shapefile.POINT, [('name', 'C', 60, 0), ('angle', 'N', 6, 1), ('n_glyphs', 'N', 3, 0)])
+    for w in river_words:
+        o.add(Point(*map(deg, ll(w['x'] + 0.3 * w['size'], w['y'] + 0.3 * w['size']))), [w['text'][:60], round(w['angle'], 1), w['nglyph']])
+    print('river_labels: %d names (from %d glyph runs)' % (o.close(), sum(w['nglyph'] for w in river_words)))
 
     o = ShpOut(os.path.join(out_dir, 'pegmatite_marks'), shapefile.POINT, [('symbol', 'C', 2, 0), ('meaning', 'C', 40, 0)])
     for w in words:
@@ -1291,12 +1330,16 @@ def main(pdf_path, out_dir):
     for w in words:
         if not w['text'].strip() or not frame.contains(Point(w['x0'], w['y0'])):
             continue
-        if w['layer'] == 'mineral numbers - Default':
-            continue   # see mineral_localities
+        if w['layer'] in ('mineral numbers - Default', 'Rivers - Default'):
+            continue   # see mineral_localities / river_labels (added below)
         if 'ESRI' in w['font']:
             continue   # pattern fills of the geology legend swatches
         cx, cy = label_centre(w)
         o.add(Point(*map(deg, ll(cx, cy))), [w['text'].strip()[:100], w['layer'], w['font'][:32], round(w['size'], 2), round(w['angle'], 1)])
+    for w in river_words:
+        if frame.contains(Point(w['x'], w['y'])):
+            o.add(Point(*map(deg, ll(w['x'] + 0.3 * w['size'], w['y'] + 0.3 * w['size']))),
+                  [w['text'][:100], w['layer'], w['font'][:32], round(w['size'], 2), round(w['angle'], 1)])
     print('map_labels:', o.close())
 
     # geology legend (text + swatch colours) of the inset legend inside the frame

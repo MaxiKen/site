@@ -366,7 +366,7 @@ D,78,D78,Gbanara,Au,Gold,certain,exact,,raster symbol (colour-consistent),8.7,ye
 D,80,D80,Bacita,Sn. Nb,Tin / cassiterite (no legend symbol) | Columbite,certain certain,exact,,raster symbol (colour-consistent),7.9,dark grey,Columbite,5.020531,9.051806,4.98604,9.087974
 D,82,D82,Latiagi,Sn. Nb. Ta,Tin / cassiterite (no legend symbol) | Columbite | Tantalite,certain certain legend,exact,,raster symbol (colour-consistent),17.4,dark grey,Columbite,5.335277,8.93606,5.430747,8.880854
 D,83,D83,Lade,Gm,Gemstone (not in legend),uncertain,exact,,label centre,,nearest: outline,"nearest symbol 12 pt away (unverified): Beryl, Aquamarine, Emerald",4.947428,8.649742,4.947428,8.649742
-D,83,D83,Lade,Gm,Gemstone (not in legend),uncertain,exact,,label centre,,nearest: blue,nearest symbol 4 pt away (unverified): Nickel | Copper minerals,5.453053,8.814223,5.453053,8.814223
+D,83,D83,Lade,Gm,Gemstone (not in legend),uncertain,exact,,label centre,,nearest: outline,"nearest symbol 11 pt away (unverified): Beryl, Aquamarine, Emerald",5.453053,8.814223,5.453053,8.814223
 D,84,D84,Maga,Ka,Kaolin / kaolinitic clay,certain,exact,,raster symbol (colour-consistent),16.1,khaki,Kaolin / kaolinitic clay,5.631748,8.781733,5.625687,8.679825
 D,85,D85,Kosoti,Ka,Kaolin / kaolinitic clay,certain,exact,,raster symbol (colour-consistent),4.7,khaki,Kaolin / kaolinitic clay,6.070363,8.678171,6.046026,8.695054
 D,86,D86,Erufu — Erufu,Au,Gold,certain,exact,,label centre,,nearest: yellow,nearest symbol 11 pt away (unverified): Brine | Evaporite | Saltlake/ Potash | Marcasite | Pyrite / Pyroclore,5.511941,8.645681,5.511941,8.645681
@@ -755,7 +755,7 @@ F,144,F144,ORANGUN,Tc,Talc,legend,exact,,raster symbol (colour-consistent),11.6,
 F,145,F145,Ilobu,Cl,Clay / Pottery Clay,certain,exact,,raster symbol (colour-consistent),17.4,yellow,Clay / Pottery Clay | Dimension Stone,4.42962,7.841555,4.376853,7.744737
 F,148,F148,Ilesa,Gm,Gemstone (not in legend),uncertain,exact,codes split from name cell,label centre,,nearest: yellow,nearest symbol 12 pt away (unverified): no rule,4.575824,7.654737,4.575824,7.654737
 F,149,F149,IPERINDO,Au,Gold,certain,exact,,raster symbol (colour-consistent),23.4,yellow,Gold,4.760611,7.640523,4.836789,7.51325
-F,150,F150,lFE,To,Topaz,probable,exact,,label centre,,nearest: dark blue,nearest symbol 7 pt away (unverified): Copper minerals,4.356517,7.559298,4.356517,7.559298
+F,150,F150,lFE,To,Topaz,probable,exact,,label centre,,nearest: dark blue,nearest symbol 7 pt away (unverified): no rule,4.356517,7.559298,4.356517,7.559298
 F,151,F151,Odo-Igbo,Au,Gold,certain,exact,,raster symbol (colour-consistent),12.5,yellow,Gold,4.754519,7.514624,4.690585,7.467561
 F,154,F154,lkire,Gm,Gemstone (not in legend),uncertain,exact,codes split from name cell,label centre,,nearest: brown,nearest symbol 9 pt away (unverified): Granite | Bauxitic Clay,4.131118,7.195817,4.131118,7.195817
 F,156,F156,Odeleye,Cl,Clay / Pottery Clay,certain,exact,,label centre,,,,3.599095,8.014158,3.599095,8.014158
