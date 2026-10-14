@@ -63,3 +63,25 @@ python extract_shapefiles.py ilide.info-geological-map-of-nigeria-pr_a0987e407d1
 ```
 
 The script parses the PDF content stream itself (paths, text and Optional‑Content tags), fits the graticule, rebuilds polygons/lines/points and writes the shapefiles; it runs in ~10 s.
+
+## 4. Live comparison viewer (mobile-first)
+
+```bash
+python viewer/serve.py          # then open http://localhost:8080  (bind: 0.0.0.0, flags: --port, --rebuild)
+```
+
+The first start runs `viewer/build_data.py` (~30 s): it renders the original PDF page to Leaflet
+EPSG:4326 tiles (zoom 4–9 ≈ 330 dpi) placed with the graticule georeference, converts the
+shapefiles to GeoJSON and computes PDF-vs-output statistics. Generated data lives in
+`viewer/build/` (git-ignored). Extra dependencies: `pymupdf pillow pyogrio` (plus the extraction
+dependencies above for the statistics).
+
+What the viewer offers (designed for a phone screen, works on desktop too):
+
+* **Swipe** – original PDF on the left of a draggable divider, extracted layers (drawn with a
+  matching symbology) on the right; **Overlay** – extracted layers over the PDF with an opacity
+  slider; **PDF only** / **Extracted** – one at a time.
+* Tap any extracted feature for its attributes (plus the geology unit under the point).
+* Layer switches, legend from `legend.csv` with “highlight this unit” and the units missing from
+  the printed legend, a “Compare” tab with the GeoPDF verdict and PDF-primitive vs feature counts,
+  quick zooms (Jos Plateau, Niger Delta, Lake Chad, Sokoto, the PDF legend panel).
