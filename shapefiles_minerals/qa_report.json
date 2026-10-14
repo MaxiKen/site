@@ -147,6 +147,17 @@
       "tan": 2
     }
   },
+  "commodity_groups": {
+    "industrial minerals": 300,
+    "construction materials": 285,
+    "rare metals": 133,
+    "precious metals": 77,
+    "gemstones": 76,
+    "ferrous metals": 48,
+    "energy": 47,
+    "base metals": 36,
+    "unknown": 16
+  },
   "capital_check_km": {
     "n": 33,
     "per_capital": [

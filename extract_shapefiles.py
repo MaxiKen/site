@@ -1181,13 +1181,17 @@ def main(pdf_path, out_dir):
         uniq_words.append(w)
     lab = ShpOut(os.path.join(out_dir, 'labels'), shapefile.POINT, [
         ('text', 'C', 100, 0), ('kind', 'C', 16, 0), ('font', 'C', 32, 0),
-        ('size_pt', 'N', 8, 2), ('angle', 'N', 8, 2), ('layer', 'C', 32, 0), ('src_seq', 'N', 10, 0)])
+        ('size_pt', 'N', 8, 2), ('angle', 'N', 8, 2), ('layer', 'C', 32, 0), ('src_seq', 'N', 10, 0),
+        ('lon', 'N', 11, 6), ('lat', 'N', 11, 6), ('n_chars', 'N', 4, 0), ('width_pt', 'N', 7, 2),
+        ('page_x', 'N', 9, 2), ('page_y', 'N', 9, 2)])
     for w in uniq_words:
         if not w['text'].strip():
             continue
         x, y = ll(w['x0'], w['y0'])
         lab.add(Point(x, y), [w['text'], label_kind(w), w['font'], round(w['size'], 2),
-                              round(w['angle'], 2), w['layer'], w['seq']])
+                              round(w['angle'], 2), w['layer'], w['seq'], round(x, 6), round(y, 6),
+                              len(w['text'].strip()), round(0.6 * w['size'] * w['nchar'], 2),
+                              round(w['x0'], 2), round(w['y0'], 2)])
     print('labels:', lab.close())
 
     unit_code_pts = [(Point(*ll(w['x0'] + 0.3 * w['size'] * w['nchar'], w['y0'] + 0.35 * w['size'])), w['text'].strip())
@@ -1200,7 +1204,7 @@ def main(pdf_path, out_dir):
         if p['layer'] not in NON_UNIT_LAYERS and p['op'] in ('f', 'f*', 'B', 'B*', 'b', 'b*'):
             unit_paths[(p['ocg_id'], p['layer'])].append(p)
     poly_fields = [('ocg_id', 'N', 6, 0), ('layer_no', 'N', 4, 0), ('unit', 'C', 120, 0),
-                   ('fill', 'C', 7, 0), ('code', 'C', 12, 0), ('code_src', 'C', 6, 0),
+                   ('fill', 'C', 7, 0), ('code', 'C', 12, 0), ('code_src', 'C', 36, 0),
                    ('leg_code', 'C', 12, 0), ('leg_desc', 'C', 120, 0), ('lbl_code', 'C', 12, 0),
                    ('n_lbl', 'N', 5, 0), ('area_km2', 'N', 14, 3), ('perim_km', 'N', 12, 2),
                    ('cen_lon', 'N', 11, 6), ('cen_lat', 'N', 11, 6), ('n_rings', 'N', 5, 0),
@@ -1311,12 +1315,25 @@ def main(pdf_path, out_dir):
         return None
 
     seen_geoms = {}
+    legend_by_row = {e['row']: e for e in legend}
+    n_swap = 0
     for key, p, geom, lbl_code, n_lbl in polys_tmp:
         leg = legend_lookup(p['fill'], key[1])
+        swap_note = ''
+        if leg and leg['code'] == 'MS' and {4, 78} <= set(legend_by_row):
+            # The legend uses the code MS twice (row 4 'Sand, Clay and Mangrove Swamps', row 78 'Pelitic Schist /
+            # Muscovite Schist') and the two swatch colours are swapped relative to the map face: the coastal
+            # polygons of the Niger Delta fringe are drawn in the row-78 colour and the inland schist-belt polygons
+            # (map label 'Sm') in the row-4 colour.  Geography decides: south of 7 N = mangrove swamp, else schist.
+            want = legend_by_row[4] if geom.representative_point().y < 7.0 else legend_by_row[78]
+            if want is not leg:
+                swap_note = f'legend swatch colours of the two MS rows are swapped; row {want["row"]} assigned by position'
+                leg = want
+                n_swap += 1
         leg_code = leg['code'] if leg else ''
         leg_desc = leg['description'] if leg else ''
         if leg_code:
-            code, src = leg_code, 'legend'
+            code, src = leg_code, 'legend' if not swap_note else 'legend (MS colour swap corrected)'
         elif lbl_code:
             code, src = lbl_code, 'label'
         elif layer_codes[key]:
@@ -1331,10 +1348,13 @@ def main(pdf_path, out_dir):
                round(cen.x, 6), round(cen.y, 6),
                len(geom.geoms) if geom.geom_type == 'MultiPolygon' else 1, p['seq'], dup_of] + \
             strat_record(leg, code, p['fill'], key[1])
+        if swap_note:
+            k_src = len(rec) - len(STRAT_KEYS) + STRAT_KEYS.index('age_src')
+            rec[k_src] = (swap_note + '; ' + (rec[k_src] or '')).strip('; ')[:120]
         units_out.add(shapely_to_shp_geom(geom), rec)
         per_layer_records[key].append((geom, rec))
         unit_records_all.append((geom, rec))
-    print('geology polygons:', units_out.close(), f'({n_invalid} needed make_valid)')
+    print('geology polygons:', units_out.close(), f'({n_invalid} needed make_valid, {n_swap} MS polygons re-assigned by position)')
     # one shapefile per original PDF layer
     for key, recs in per_layer_records.items():
         fn = os.path.join(out_dir, 'by_layer', f'{layer_index[key]:03d}_{safe_name(key[1])}')
@@ -1414,8 +1434,10 @@ def main(pdf_path, out_dir):
     # major rivers: filled polygons (+ their outlines are the strokes)
     mr = [p for p in paths if p['layer'] == 'Major River']
     o = ShpOut(os.path.join(out_dir, 'major_rivers_poly'), shapefile.POLYGON, [
-        ('ocg_id', 'N', 6, 0), ('layer', 'C', 32, 0), ('name', 'C', 254, 0), ('fill', 'C', 7, 0),
-        ('area_km2', 'N', 14, 3), ('perim_km', 'N', 12, 2), ('n_rings', 'N', 5, 0), ('src_seq', 'N', 10, 0)])
+        ('ocg_id', 'N', 6, 0), ('layer', 'C', 32, 0), ('name', 'C', 80, 0), ('kind', 'C', 24, 0), ('name_src', 'C', 48, 0),
+        ('labels_in', 'C', 254, 0), ('fill', 'C', 7, 0), ('area_km2', 'N', 14, 3), ('perim_km', 'N', 12, 2),
+        ('cen_lon', 'N', 11, 6), ('cen_lat', 'N', 11, 6), ('min_lon', 'N', 10, 5), ('max_lon', 'N', 10, 5),
+        ('min_lat', 'N', 10, 5), ('max_lat', 'N', 10, 5), ('n_rings', 'N', 5, 0), ('src_seq', 'N', 10, 0)])
     water_names = [(Point(*ll(w['x0'] + 0.3 * w['size'] * w['nchar'], w['y0'] + 0.35 * w['size'])),
                     re.sub(r'\s+', ' ', w['text']).strip()) for w in uniq_words if label_kind(w) == 'water name']
     for p in mr:
@@ -1423,12 +1445,31 @@ def main(pdf_path, out_dir):
             geom = build_polygon(p['subpaths'], affine)
             if geom is not None and not geom.is_empty:
                 pg = prep(geom)
-                inside = []
+                inside, near = [], []
                 for pt, name in water_names:
                     if pg.contains(pt) and name not in inside:
                         inside.append(name)
-                o.add(shapely_to_shp_geom(geom), [p['ocg_id'], 'Major River', '; '.join(inside), p['fill'] or '',
-                                                  round(geo_area_km2(geom), 3), round(geo_perimeter_km(geom), 2),
+                    elif geom.distance(pt) < 0.12 and name not in near:      # label alongside the water body (< ~13 km)
+                        near.append(name)
+                b = geom.bounds
+                w_deg, h_deg = b[2] - b[0], b[3] - b[1]
+                lakes = [n for n in inside + near if 'LAKE' in n.upper()]
+                rivers = [n for n in inside + near if 'LAKE' not in n.upper()]
+                if b[1] < 4.0 and w_deg > 5:
+                    kind, name, src = 'sea', 'Gulf of Guinea (Atlantic Ocean)', 'geography (distributary names inside)'
+                elif lakes:
+                    kind, name, src = 'lake', lakes[0].title(), 'label inside' if lakes[0] in inside else 'label alongside'
+                elif rivers:
+                    kind, name, src = 'river', ' / '.join(r.title() for r in rivers[:4]), 'label inside' if rivers[0] in inside else 'label alongside'
+                elif w_deg > 8 and h_deg > 5:
+                    kind, name, src = 'river', 'River Niger / River Benue (main channels)', 'geography (river labels run alongside)'
+                else:
+                    kind, name, src = 'lake / reservoir', '', 'no water name on the map'
+                cen = geom.representative_point()
+                o.add(shapely_to_shp_geom(geom), [p['ocg_id'], 'Major River', name, kind, src, '; '.join(inside)[:254],
+                                                  p['fill'] or '', round(geo_area_km2(geom), 3), round(geo_perimeter_km(geom), 2),
+                                                  round(cen.x, 6), round(cen.y, 6), round(b[0], 5), round(b[2], 5),
+                                                  round(b[1], 5), round(b[3], 5),
                                                   len(geom.geoms) if geom.geom_type == 'MultiPolygon' else 1, p['seq']])
     print('major_rivers_poly:', o.close())
     o = ShpOut(os.path.join(out_dir, 'major_rivers_outline'), shapefile.POLYLINE, line_fields)
@@ -1521,11 +1562,17 @@ def main(pdf_path, out_dir):
     print('volcanic_plugs:', o.close())
 
     # ---- graticule + frame (QA)
-    o = ShpOut(os.path.join(out_dir, 'graticule'), shapefile.POLYLINE, [('axis', 'C', 3, 0), ('value', 'N', 8, 3)])
+    o = ShpOut(os.path.join(out_dir, 'graticule'), shapefile.POLYLINE, [
+        ('axis', 'C', 3, 0), ('value', 'N', 8, 3), ('label', 'C', 12, 0), ('page_pt', 'N', 9, 2), ('length_km', 'N', 10, 2),
+        ('n_lines', 'N', 3, 0)])
     for x, lon in ginfo['graticule_x']:
-        o.add(LineString([ll(x, min(gy)), ll(x, max(gy))]), ['lon', lon])
+        coords = [ll(x, min(gy)), ll(x, max(gy))]
+        o.add(LineString(coords), ['lon', lon, '%g\u00b0%s' % (abs(lon), 'E' if lon >= 0 else 'W'), round(x, 2),
+                                   round(geo_length_km(coords), 2), len(ginfo['graticule_x'])])
     for y, lat in ginfo['graticule_y']:
-        o.add(LineString([ll(min(gx), y), ll(max(gx), y)]), ['lat', lat])
+        coords = [ll(min(gx), y), ll(max(gx), y)]
+        o.add(LineString(coords), ['lat', lat, '%g\u00b0%s' % (abs(lat), 'N' if lat >= 0 else 'S'), round(y, 2),
+                                   round(geo_length_km(coords), 2), len(ginfo['graticule_y'])])
     o.close()
 
     # ---- georeferenced raster of the map face (for overlay QA)

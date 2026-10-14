@@ -63,8 +63,8 @@ from PIL import Image, ImageOps
 from shapely.geometry import LineString, Point, Polygon, box
 from shapely.ops import polygonize
 
-from extract_shapefiles import (ShpOut, WGS84_PRJ, assemble_words, chain_fragments, geo_length_km,
-                                merge_double_lines, parse_content, shapely_to_shp_geom)
+from extract_shapefiles import (ShpOut, WGS84_PRJ, assemble_words, chain_fragments, geo_area_km2, geo_length_km,
+                                geo_perimeter_km, merge_double_lines, parse_content, shapely_to_shp_geom)
 
 # --------------------------------------------------------------------------
 # constants
@@ -132,6 +132,65 @@ CODE_DICT = {
 CODE_ALIASES = {'CI': 'Cl', 'Ci': 'Cl', 'cl': 'Cl', 'ka': 'Ka', 'GS': 'Gs', 'SS': 'Ss', 'ML': 'Ml', 'ilm': 'Ilm',
                 'OIL': 'Oil', 'au': 'Au', 'AU': 'Au', 'PB': 'Pb', 'ZN': 'Zn', 'sn': 'Sn', 'TA': 'Ta', 'NB': 'Nb',
                 'Pbs': 'Pbs', 'Bcl': 'Bcl', 'bc': 'Bc', 'Tpz': 'Tpz', 'tpz': 'Tpz', 'Zr': 'Zr', 'zr': 'Zr'}
+
+# commodity group of every legend mineral name (first matching rule wins)
+COMMODITY_GROUPS = [
+    ('energy',               r'coal|lignite|bitumen|tar sand|oil and gas|uranium'),
+    ('precious metals',      r'gold|silver'),
+    ('ferrous metals',       r'iron ore|manganese|chromite|nickel|molybden'),
+    ('base metals',          r'copper|lead|zinc|galena|bismuth'),
+    ('rare metals',          r'tin|cassiterite|columbite|tantalite|lithium|lepidolite|wolfram|monazite|zircon|pyroclore'),
+    ('gemstones',            r'beryl|aquamarine|emerald|corundum|sapphire|ruby|garnet|tourmaline|topaz|rose quartz|gemstone'),
+    ('industrial minerals',  r'baryte|bentonite|feldspar|flourite|fluorite|gypsum|kaolin|kyanite|sillimanite|talc|mica|magnesite|'
+                             r'diatomite|phosphate|graphite|asbestos|serpentine|calcite|trona|evaporite|brine|salt|potash|pyrite|'
+                             r'marcasite|sulphur|ochre'),
+    ('construction materials', r'limestone|marble|dolomite|dimension stone|clay|glass sand|silica sand|gravel|sand|laterite|marl|'
+                               r'psammite|quartz|stone'),
+]
+
+
+def commodity_group(name):
+    n = name.lower()
+    if n.startswith('unknown code'):
+        return 'unknown'
+    for grp, rx in COMMODITY_GROUPS:
+        if re.search(rx, n):
+            return grp
+    return 'unknown'
+
+
+def load_host_geology(script_dir):
+    """Geology units of the geological-map extraction (shapefiles/geology_units.shp) as an STRtree, if present.
+    Used to tag mineral points with the rock unit they fall in (both maps are ~1:2 M, so this is a +-10 km statement)."""
+    fn = os.path.join(script_dir, 'shapefiles', 'geology_units.shp')
+    if not os.path.exists(fn):
+        return None
+    from shapely.strtree import STRtree
+    from shapely.geometry import shape
+    r = shapefile.Reader(fn)
+    names = [f[0] for f in r.fields[1:]]
+    geoms, recs = [], []
+    for sr in r.iterShapeRecords():
+        rec = dict(zip(names, sr.record))
+        if rec.get('dup_of'):
+            continue
+        g = shape(sr.shape.__geo_interface__)
+        if g.is_empty:
+            continue
+        geoms.append(g)
+        recs.append(rec)
+    tree = STRtree(geoms)
+
+    def lookup(lon, lat):
+        pt = Point(lon, lat)
+        hits = tree.query(pt, predicate='within')
+        if len(hits) == 0:
+            return None
+        # the smallest unit containing the point (islands / inliers are drawn on top of the host)
+        i = min(hits, key=lambda k: geoms[k].area)
+        return recs[i]
+    return lookup
+
 
 # raster symbol palette (RGB as rendered in the base strips) -> colour class
 SYMBOL_PALETTE = {
@@ -1055,12 +1114,28 @@ def main(pdf_path, out_dir):
         return round(v, 6)
 
     # ---- mineral_localities (one per number printed on the map)
+    host = load_host_geology(os.path.dirname(os.path.abspath(__file__)))
+    GEO_SRC = 'geological map extraction (1:2 M), +-10 km' if host else 'shapefiles/geology_units.shp not found'
+
+    def host_fields(lon, lat):
+        rec = host(lon, lat) if host else None
+        if not rec:
+            return ['', '', '', '', '', '', 'outside mapped units' if host else GEO_SRC]
+        return [rec.get('code') or '', (rec.get('unit') or '')[:64], (rec.get('formation') or '')[:48],
+                (rec.get('era') or '')[:48], (rec.get('period') or '')[:40], (rec.get('epoch') or '')[:48], GEO_SRC]
+
     o = ShpOut(os.path.join(out_dir, 'mineral_localities'), shapefile.POINT, [
         ('zone', 'C', 1, 0), ('number', 'N', 5, 0), ('zone_num', 'C', 6, 0), ('locality', 'C', 80, 0),
         ('codes_raw', 'C', 40, 0), ('minerals', 'C', 254, 0), ('min_conf', 'C', 40, 0), ('match', 'C', 80, 0),
         ('tbl_flags', 'C', 200, 0), ('pos_src', 'C', 36, 0), ('snap_pt', 'N', 6, 1), ('sym_colour', 'C', 24, 0),
-        ('sym_cands', 'C', 254, 0), ('label_lon', 'N', 12, 6), ('label_lat', 'N', 12, 6)])
+        ('sym_cands', 'C', 254, 0), ('label_lon', 'N', 12, 6), ('label_lat', 'N', 12, 6),
+        # added attributes: coordinates, commodity summary, host rock unit from the geological map
+        ('lon', 'N', 12, 6), ('lat', 'N', 12, 6), ('n_minerals', 'N', 3, 0), ('mineral_1', 'C', 60, 0),
+        ('group_1', 'C', 24, 0), ('groups', 'C', 120, 0), ('n_unknown', 'N', 3, 0),
+        ('geo_code', 'C', 8, 0), ('geo_unit', 'C', 64, 0), ('geo_form', 'C', 48, 0), ('geo_era', 'C', 48, 0),
+        ('geo_period', 'C', 40, 0), ('geo_epoch', 'C', 48, 0), ('geo_src', 'C', 60, 0)])
     loc_rows = []
+    group_count = collections.Counter()
     for l in sorted(num_labels, key=lambda l: (l['zone'] or 'Z', l['number'])):
         e = l['entry']
         if l['sym'] is not None:
@@ -1075,15 +1150,25 @@ def main(pdf_path, out_dir):
                 scand = 'nearest symbol %.0f pt away (unverified): ' % l['hint_dist'] + (' | '.join(symbols[l['hint']]['candidates']) or 'no rule')
         lon, lat = ll(px_, py_)
         llon, llat = ll(l['cx'], l['cy'])
+        mins = e['minerals'] if e else []
+        groups = sorted({commodity_group(m) for m in mins})
+        group_count.update(groups)
         rec = [l['zone'] or '', l['number'], '%s%d' % (l['zone'] or '?', l['number']),
-               e['locality'] if e else '', e['minerals_raw'] if e else '', ' | '.join(e['minerals']) if e else '',
+               e['locality'] if e else '', e['minerals_raw'] if e else '', ' | '.join(mins),
                ' '.join(e['code_conf']) if e else '', l['match'], '; '.join(e['flags'])[:200] if e else '',
-               pos_src, snap_d, scol, scand[:254], deg(llon), deg(llat)]
+               pos_src, snap_d, scol, scand[:254], deg(llon), deg(llat),
+               deg(lon), deg(lat), len(mins), (mins[0] if mins else '')[:60],
+               commodity_group(mins[0]) if mins else '', ' | '.join(groups)[:120],
+               len(e['unknown_codes']) if e else 0] + host_fields(lon, lat)
         o.add(Point(deg(lon), deg(lat)), rec)
         loc_rows.append(dict(zip(['zone', 'number', 'zone_num', 'locality', 'codes_raw', 'minerals', 'code_conf', 'match',
                                   'table_flags', 'position_source', 'snap_dist_pt', 'symbol_colour', 'symbol_candidates',
-                                  'label_lon', 'label_lat'], rec), lon=deg(lon), lat=deg(lat)))
-    print('mineral_localities:', o.close())
+                                  'label_lon', 'label_lat', 'lon', 'lat', 'n_minerals', 'mineral_1', 'group_1', 'groups',
+                                  'n_unknown_codes', 'geo_code', 'geo_unit', 'geo_formation', 'geo_era', 'geo_period',
+                                  'geo_epoch', 'geo_source'], rec)))
+    print('mineral_localities:', o.close(), '| commodity groups:', dict(group_count.most_common()),
+          '| host geology:', 'joined' if host else 'not available')
+    qa['commodity_groups'] = dict(group_count.most_common())
     with open(os.path.join(out_dir, 'mineral_localities.csv'), 'w', newline='') as f:
         wr = csv.DictWriter(f, fieldnames=list(loc_rows[0].keys()))
         wr.writeheader()
@@ -1092,37 +1177,63 @@ def main(pdf_path, out_dir):
     # ---- explanations table CSV (all entries, incl. the ones without a label on the map)
     with open(os.path.join(out_dir, 'explanations_table.csv'), 'w', newline='') as f:
         wr = csv.writer(f)
-        wr.writerow(['zone', 'number', 'number_printed', 'locality', 'codes_raw', 'codes', 'minerals', 'code_confidence',
-                     'unknown_codes', 'on_map', 'flags', 'table_column', 'raw_text'])
+        wr.writerow(['zone', 'number', 'number_printed', 'locality', 'codes_raw', 'codes', 'minerals', 'commodity_groups',
+                     'code_confidence', 'unknown_codes', 'on_map', 'flags', 'table_column', 'raw_text'])
         for e in sorted(table, key=lambda e: (e['zone'], e['number'], -e['y'])):
             wr.writerow([e['zone'], e['number'], e['number_printed'], e['locality'], e['minerals_raw'], ' '.join(e['codes']),
-                         ' | '.join(e['minerals']), ' '.join(e['code_conf']), ' '.join(e['unknown_codes']),
+                         ' | '.join(e['minerals']), ' | '.join(sorted({commodity_group(m) for m in e['minerals']})),
+                         ' '.join(e['code_conf']), ' '.join(e['unknown_codes']),
                          'yes' if (e['zone'], e['number']) in lab_keys else 'no', '; '.join(e['flags']), e['block'], e['raw']])
 
     # ---- raster symbol blobs
     o = ShpOut(os.path.join(out_dir, 'mineral_symbols_raster'), shapefile.POINT, [
         ('colour', 'C', 16, 0), ('w_px', 'N', 4, 0), ('h_px', 'N', 4, 0), ('body_w', 'N', 4, 0), ('body_h', 'N', 4, 0),
         ('fill', 'C', 8, 0), ('candidates', 'C', 254, 0), ('link', 'C', 40, 0), ('near_num', 'C', 8, 0), ('near_dist', 'N', 6, 1),
-        ('near_loc', 'C', 80, 0), ('near_mins', 'C', 200, 0)])
+        ('near_loc', 'C', 80, 0), ('near_mins', 'C', 200, 0),
+        ('lon', 'N', 12, 6), ('lat', 'N', 12, 6), ('w_pt', 'N', 6, 2), ('h_pt', 'N', 6, 2), ('w_mm', 'N', 6, 2),
+        ('h_mm', 'N', 6, 2), ('w_km', 'N', 7, 2), ('h_km', 'N', 7, 2), ('n_cands', 'N', 3, 0), ('group_1', 'C', 24, 0),
+        ('near_grps', 'C', 120, 0)])
+    km_per_pt_x = a * 111.32 * math.cos(math.radians(9.0))     # at the map's mid-latitude
+    km_per_pt_y = c * 110.57
     for j, s in enumerate(symbols):
         lon, lat = ll(*s['pt'])
         nl = num_labels[s['near_label']] if s['near_label'] is not None else None
         e = nl['entry'] if nl else None
-        o.add(Point(deg(lon), deg(lat)), [s['colour'], s['x1'] - s['x0'], s['y1'] - s['y0'], s['bw'], s['bh'],
+        wpx, hpx = s['x1'] - s['x0'], s['y1'] - s['y0']
+        wpt, hpt = wpx / sx, hpx / sx
+        o.add(Point(deg(lon), deg(lat)), [s['colour'], wpx, hpx, s['bw'], s['bh'],
                                          s['fill'], ' | '.join(s['candidates'])[:254], s['link'][:40],
                                          ('%s%d' % (nl['zone'] or '?', nl['number'])) if nl else '',
                                          round(s['near_dist'], 1) if nl else None, e['locality'] if e else '',
-                                         e['minerals_raw'] if e else ''])
+                                         e['minerals_raw'] if e else '',
+                                         deg(lon), deg(lat), round(wpt, 2), round(hpt, 2), round(wpt * 25.4 / 72, 2),
+                                         round(hpt * 25.4 / 72, 2), round(wpt * km_per_pt_x, 2), round(hpt * km_per_pt_y, 2),
+                                         len(s['candidates']), commodity_group(s['candidates'][0]) if s['candidates'] else '',
+                                         ' | '.join(sorted({commodity_group(m) for m in e['minerals']}))[:120] if e else ''])
     print('mineral_symbols_raster:', o.close())
 
     # ---- zones (A-G) polygons + division lines
-    o = ShpOut(os.path.join(out_dir, 'map_zones'), shapefile.POLYGON, [('zone', 'C', 1, 0), ('tbl_rows', 'N', 5, 0), ('labels', 'N', 5, 0)])
+    o = ShpOut(os.path.join(out_dir, 'map_zones'), shapefile.POLYGON, [
+        ('zone', 'C', 1, 0), ('tbl_rows', 'N', 5, 0), ('labels', 'N', 5, 0), ('n_local', 'N', 5, 0), ('n_symbols', 'N', 5, 0),
+        ('area_km2', 'N', 12, 1), ('perim_km', 'N', 10, 1), ('cen_lon', 'N', 10, 5), ('cen_lat', 'N', 10, 5),
+        ('min_lon', 'N', 10, 5), ('max_lon', 'N', 10, 5), ('min_lat', 'N', 10, 5), ('max_lat', 'N', 10, 5),
+        ('top_grps', 'C', 120, 0)])
     for z in 'ABCDEFG':
         pg = zones[z]
         geo = Polygon([ll(x, y) for x, y in pg.exterior.coords])
-        o.add(shapely_to_shp_geom(geo), [z, len([e for e in table if e['zone'] == z]), len([l for l in num_labels if l['zone'] == z])])
+        zl = [l for l in num_labels if l['zone'] == z]
+        zg = collections.Counter(g for l in zl if l['entry'] for g in {commodity_group(m) for m in l['entry']['minerals']})
+        cen = geo.representative_point()
+        zb = geo.bounds
+        o.add(shapely_to_shp_geom(geo), [z, len([e for e in table if e['zone'] == z]), len(zl),
+                                        len({(l['zone'], l['number']) for l in zl}),
+                                        sum(1 for s_ in symbols if pg.contains(Point(*s_['pt']))),
+                                        round(geo_area_km2(geo), 1), round(geo_perimeter_km(geo), 1),
+                                        round(cen.x, 5), round(cen.y, 5), round(zb[0], 5), round(zb[2], 5), round(zb[1], 5), round(zb[3], 5),
+                                        '; '.join('%s %d' % (g, n) for g, n in zg.most_common(3))[:120]])
     print('map_zones:', o.close())
-    o = ShpOut(os.path.join(out_dir, 'division_lines'), shapefile.POLYLINE, [('layer', 'C', 20, 0), ('len_pt', 'N', 8, 1)])
+    o = ShpOut(os.path.join(out_dir, 'division_lines'), shapefile.POLYLINE, [
+        ('layer', 'C', 20, 0), ('len_pt', 'N', 8, 1), ('length_km', 'N', 10, 2), ('zones', 'C', 8, 0), ('n_vert', 'N', 5, 0)])
     for p in paths:
         if p['layer'] == 'division line':
             for pts, _ in p['subpaths']:
@@ -1131,40 +1242,52 @@ def main(pdf_path, out_dir):
                     continue
                 geoms = [L] if L.geom_type == 'LineString' else list(L.geoms)
                 for gm in geoms:
-                    o.add(LineString([ll(x, y) for x, y in gm.coords]), ['division line', round(gm.length, 1)])
+                    coords = [ll(x, y) for x, y in gm.coords]
+                    touching = ''.join(z for z in 'ABCDEFG' if zones[z].buffer(1.5).intersects(gm))
+                    o.add(LineString(coords), ['division line', round(gm.length, 1), round(geo_length_km(coords), 2),
+                                               touching, len(coords)])
     print('division_lines:', o.close())
 
     # ---- line layers
-    def write_lines(fname, items, fields, extra):
-        o = ShpOut(os.path.join(out_dir, fname), shapefile.POLYLINE, fields)
+    LINE_EXTRA = [('length_km', 'N', 10, 2), ('n_vert', 'N', 6, 0), ('mid_lon', 'N', 11, 6), ('mid_lat', 'N', 11, 6),
+                  ('zone', 'C', 1, 0), ('start_lon', 'N', 11, 6), ('start_lat', 'N', 11, 6), ('end_lon', 'N', 11, 6),
+                  ('end_lat', 'N', 11, 6), ('closed', 'C', 3, 0)]
+
+    def write_lines(fname, items, fields, extra=None):
+        o = ShpOut(os.path.join(out_dir, fname), shapefile.POLYLINE, fields + LINE_EXTRA)
         for pts, rec in items:
             coords = [ll(x, y) for x, y in pts]
             if len(coords) >= 2:
-                o.add(LineString(coords), rec + extra(coords))
+                L = LineString(coords)
+                mid = L.interpolate(0.5, normalized=True)
+                mx_, my_ = pts[len(pts) // 2]
+                o.add(L, rec + [round(geo_length_km(coords), 2), len(coords), round(mid.x, 6), round(mid.y, 6),
+                                next((z for z in 'ABCDEFG' if zones[z].contains(Point(mx_, my_))), ''),
+                                round(coords[0][0], 6), round(coords[0][1], 6), round(coords[-1][0], 6), round(coords[-1][1], 6),
+                                'yes' if L.is_ring or Point(coords[0]).distance(Point(coords[-1])) < 1e-6 else 'no'])
         return o.close()
-    lenf = lambda coords: [round(geo_length_km(coords), 2)]
 
     # roads: double-line symbol -> centrelines
     road_paths = [p for p in paths if p['layer'] == 'Roads' and p['op'] == 'S']
     chains = chain_fragments(road_paths, 0.5)
     chains = merge_double_lines(chains, 2.5)
-    n = write_lines('roads', [(pts, ['road', nfr]) for pts, nfr, _ in chains], [('class', 'C', 10, 0), ('n_frag', 'N', 6, 0), ('length_km', 'N', 10, 2)], lenf)
+    n = write_lines('roads', [(pts, ['road', nfr]) for pts, nfr, _ in chains], [('class', 'C', 10, 0), ('n_frag', 'N', 6, 0)])
     print('roads:', n, '(from %d stroked paths)' % len(road_paths))
 
     river_paths = [p for p in paths if p['layer'] == 'Rivers' and p['op'] == 'S']
     chains = chain_fragments(river_paths, 0.0)
-    n = write_lines('rivers', [(pts, ['river']) for pts, _, _ in chains], [('class', 'C', 10, 0), ('length_km', 'N', 10, 2)], lenf)
+    n = write_lines('rivers', [(pts, ['river', nfr]) for pts, nfr, _ in chains], [('class', 'C', 10, 0), ('n_frag', 'N', 6, 0)])
     print('rivers:', n)
 
     rail_paths = [p for p in paths if p['layer'] == 'Railway' and p['op'] == 'S' and p['stroke'] not in ('#ffffff',) and p['lw'] > 1.0]
     chains = chain_fragments(rail_paths, 0.5)
-    n = write_lines('railway', [(pts, ['railway']) for pts, _, _ in chains], [('class', 'C', 10, 0), ('length_km', 'N', 10, 2)], lenf)
+    n = write_lines('railway', [(pts, ['railway', nfr]) for pts, nfr, _ in chains], [('class', 'C', 10, 0), ('n_frag', 'N', 6, 0)])
     print('railway:', n, '(dropped %d white dash overprints)' % len([p for p in paths if p['layer'] == 'Railway' and p['stroke'] == '#ffffff']))
 
     ib_paths = [p for p in paths if p['layer'] == 'International_Boundary' and p['op'] == 'S' and p['lw'] > 2]
     chains = chain_fragments(ib_paths, 1.0)
-    n = write_lines('international_boundary', [(pts, ['international boundary']) for pts, _, _ in chains],
-                    [('class', 'C', 24, 0), ('length_km', 'N', 10, 2)], lenf)
+    n = write_lines('international_boundary', [(pts, ['international boundary', 'Nigeria', nfr]) for pts, nfr, _ in chains],
+                    [('class', 'C', 24, 0), ('name', 'C', 24, 0), ('n_frag', 'N', 6, 0)])
     print('international_boundary:', n, '(dropped %d black 0.3-pt dashes = symbol decoration)' % len(
         [p for p in paths if p['layer'] == 'International_Boundary' and p['lw'] <= 1]))
 
@@ -1180,12 +1303,29 @@ def main(pdf_path, out_dir):
             axis = 'lon' if abs(x1 - x0) < 1 else ('lat' if abs(y1 - y0) < 1 else 'frame')
             val = (a * x0 + b) if axis == 'lon' else ((c * y0 + d) if axis == 'lat' else 0)
             grat_items.append((pts, [axis, round(val, 3), int(round(val)) if axis != 'frame' else None]))
-    o = ShpOut(os.path.join(out_dir, 'graticule'), shapefile.POLYLINE, [('axis', 'C', 5, 0), ('vp_value', 'N', 8, 3), ('printed', 'N', 3, 0)])
+    o = ShpOut(os.path.join(out_dir, 'graticule'), shapefile.POLYLINE, [
+        ('axis', 'C', 5, 0), ('vp_value', 'N', 8, 3), ('printed', 'N', 3, 0), ('label', 'C', 12, 0), ('length_km', 'N', 10, 2),
+        ('offset_deg', 'N', 8, 4)])
     for pts, rec in grat_items:
-        o.add(LineString([ll(x, y) for x, y in pts]), rec)
+        coords = [ll(x, y) for x, y in pts]
+        axis, val, printed = rec
+        label = ('%d%s%s' % (abs(printed), '\u00b0', 'E' if val >= 0 else 'W') if axis == 'lon'
+                 else '%d%s%s' % (abs(printed), '\u00b0', 'N' if val >= 0 else 'S')) if printed is not None else ''
+        o.add(LineString(coords), rec + [label, round(geo_length_km(coords), 2),
+                                         round(val - printed, 4) if printed is not None else None])
     print('graticule:', o.close())
-    o = ShpOut(os.path.join(out_dir, 'map_frame'), shapefile.POLYGON, [('name', 'C', 24, 0)])
-    o.add(shapely_to_shp_geom(Polygon([ll(x, y) for x, y in frame.exterior.coords])), ['map frame (VP BBox)'])
+    o = ShpOut(os.path.join(out_dir, 'map_frame'), shapefile.POLYGON, [
+        ('name', 'C', 24, 0), ('area_km2', 'N', 12, 1), ('perim_km', 'N', 10, 1), ('width_deg', 'N', 9, 5), ('height_deg', 'N', 9, 5),
+        ('min_lon', 'N', 10, 5), ('max_lon', 'N', 10, 5), ('min_lat', 'N', 10, 5), ('max_lat', 'N', 10, 5),
+        ('width_pt', 'N', 9, 2), ('height_pt', 'N', 9, 2), ('scale', 'C', 16, 0)])
+    fgeo = Polygon([ll(x, y) for x, y in frame.exterior.coords])
+    fb = fgeo.bounds
+    pt_per_deg = ginfo['points_per_degree']['x']
+    scale_den = 111320.0 * math.cos(math.radians((fb[1] + fb[3]) / 2)) / (pt_per_deg * 0.0254 / 72)
+    o.add(shapely_to_shp_geom(fgeo), ['map frame (VP BBox)', round(geo_area_km2(fgeo), 1), round(geo_perimeter_km(fgeo), 1),
+                                      round(fb[2] - fb[0], 5), round(fb[3] - fb[1], 5), round(fb[0], 5), round(fb[2], 5),
+                                      round(fb[1], 5), round(fb[3], 5), round(FR['x1'] - FR['x0'], 2),
+                                      round(FR['y_top'] - FR['y_bottom'], 2), '1:%s' % format(int(round(scale_den, -3)), ',')])
     o.close()
 
     # ---- towns (markers) + names, state capitals, state labels, river labels, pegmatite marks
@@ -1220,18 +1360,37 @@ def main(pdf_path, out_dir):
     # their symbol (grey square with a centre dot) is part of the raster and is drawn under the middle of the
     # bold capital-name label, so capitals are positioned from the label and never matched to a town circle.
     town_assign = assign_names(town_markers, town_names, 12)
-    o = ShpOut(os.path.join(out_dir, 'towns'), shapefile.POINT, [('name', 'C', 60, 0), ('kind', 'C', 24, 0), ('name_dist', 'N', 6, 1)])
+    zone_of_pt = lambda x, y: next((z for z in 'ABCDEFG' if zones[z].contains(Point(x, y))), '')
+
+    def nearest_locality(x, y):
+        best = None
+        for l in num_labels:
+            dd = math.hypot(l['cx'] - x, l['cy'] - y)
+            if best is None or dd < best[0]:
+                best = (dd, l)
+        if best is None:
+            return ['', None]
+        return ['%s%d' % (best[1]['zone'] or '?', best[1]['number']), round(best[0] * a * 111.32 * math.cos(math.radians(9.0)), 1)]
+
+    o = ShpOut(os.path.join(out_dir, 'towns'), shapefile.POINT, [
+        ('name', 'C', 60, 0), ('kind', 'C', 24, 0), ('name_dist', 'N', 6, 1), ('lon', 'N', 12, 6), ('lat', 'N', 12, 6),
+        ('zone', 'C', 1, 0), ('near_loc', 'C', 8, 0), ('near_km', 'N', 7, 1), ('src_seq', 'N', 10, 0)])
     for j, (mx, my, seq) in enumerate(town_markers):
+        lon_, lat_ = map(deg, ll(mx, my))
         if j in town_assign:
             i, dd = town_assign[j]
-            o.add(Point(*map(deg, ll(mx, my))), [town_names[i]['text'].strip(), 'town marker', round(dd, 1)])
+            o.add(Point(lon_, lat_), [town_names[i]['text'].strip(), 'town marker', round(dd, 1), lon_, lat_, zone_of_pt(mx, my)]
+                  + nearest_locality(mx, my) + [seq])
         else:
-            o.add(Point(*map(deg, ll(mx, my))), ['', 'town marker (no name)', None])
+            o.add(Point(lon_, lat_), ['', 'town marker (no name)', None, lon_, lat_, zone_of_pt(mx, my)] + nearest_locality(mx, my) + [seq])
     named = {i for i, dd in town_assign.values()}
     for i, w in enumerate(town_names):
         if i not in named:                 # name whose circle is shared with / hidden by a neighbouring label
             bx0, by0, bx1, by1 = label_box(w)
-            o.add(Point(*map(deg, ll(bx0 - 2, (by0 + by1) / 2))), [w['text'].strip(), 'name only (no marker)', None])
+            px_, py_ = bx0 - 2, (by0 + by1) / 2
+            lon_, lat_ = map(deg, ll(px_, py_))
+            o.add(Point(lon_, lat_), [w['text'].strip(), 'name only (no marker)', None, lon_, lat_, zone_of_pt(px_, py_)]
+                  + nearest_locality(px_, py_) + [w.get('seq', 0) or 0])
     n_towns = o.close()
     print('towns: %d markers (%d named, %d unnamed) + %d names without their own marker' % (
         len(town_markers), len(town_assign), len(town_markers) - len(town_assign), len(town_names) - len(town_assign)))
@@ -1260,14 +1419,24 @@ def main(pdf_path, out_dir):
                 return best[1], best[2], 'raster capital square'
         return ex, ey, 'label centre (square not isolated)'
 
-    o = ShpOut(os.path.join(out_dir, 'state_capitals'), shapefile.POINT, [('name', 'C', 60, 0), ('src', 'C', 40, 0)])
+    o = ShpOut(os.path.join(out_dir, 'state_capitals'), shapefile.POINT, [
+        ('name', 'C', 60, 0), ('src', 'C', 40, 0), ('lon', 'N', 12, 6), ('lat', 'N', 12, 6), ('zone', 'C', 1, 0),
+        ('ref_lon', 'N', 10, 4), ('ref_lat', 'N', 10, 4), ('ref_dx_km', 'N', 7, 1), ('ref_dy_km', 'N', 7, 1),
+        ('near_loc', 'C', 8, 0), ('near_km', 'N', 7, 1)])
     cap_points = {}
     n_sq = 0
     for w in cap_names:
         x, y, src = capital_square(w)
         n_sq += src.startswith('raster')
-        cap_points[w['text'].strip()] = (x, y)
-        o.add(Point(*map(deg, ll(x, y))), [w['text'].strip(), src])
+        name_ = w['text'].strip()
+        cap_points[name_] = (x, y)
+        lon_, lat_ = map(deg, ll(x, y))
+        ref = CAPITAL_REFERENCE.get(name_)
+        if ref:
+            dx_ = round((lon_ - ref[0]) * 111.32 * math.cos(math.radians(9.0)), 1)
+            dy_ = round((lat_ - ref[1]) * 111.32, 1)
+        o.add(Point(lon_, lat_), [name_, src, lon_, lat_, zone_of_pt(x, y), ref[0] if ref else None, ref[1] if ref else None,
+                                  dx_ if ref else None, dy_ if ref else None] + nearest_locality(x, y))
     print('state_capitals: %d (%d located on the raster square)' % (o.close(), n_sq))
 
     # independent georeferencing check: capitals (positioned from the map) vs. reference coordinates, for the
@@ -1303,30 +1472,67 @@ def main(pdf_path, out_dir):
         print('capital check vs reference: /VP mean offset (%.1f, %.1f) km, rms %.1f km (n=%d)' % (
             mx_, my_, cap_check['VP_affine']['rms_km'], n))
 
-    o = ShpOut(os.path.join(out_dir, 'state_name_labels'), shapefile.POINT, [('name', 'C', 60, 0)])
+    o = ShpOut(os.path.join(out_dir, 'state_name_labels'), shapefile.POINT, [
+        ('name', 'C', 60, 0), ('lon', 'N', 12, 6), ('lat', 'N', 12, 6), ('zone', 'C', 1, 0), ('font', 'C', 32, 0),
+        ('size_pt', 'N', 6, 2), ('angle', 'N', 6, 1), ('capital', 'C', 60, 0)])
+    STATE_CAPITAL = {'ABIA': 'Umuahia', 'ADAMAWA': 'Yola', 'AKWA IBOM': 'Uyo', 'ANAMBRA': 'Awka', 'BAUCHI': 'Bauchi',
+                     'BAYELSA': 'Yenagoa', 'BENUE': 'Makurdi', 'BORNO': 'Maiduguri', 'CROSS RIVER': 'Calabar', 'DELTA': 'Asaba',
+                     'EBONYI': 'Abakaliki', 'EDO': 'Benin City', 'EKITI': 'Ado-Ekiti', 'ENUGU': 'Enugu', 'GOMBE': 'Gombe',
+                     'IMO': 'Owerri', 'JIGAWA': 'Dutse', 'KADUNA': 'Kaduna', 'KANO': 'Kano', 'KATSINA': 'Katsina', 'KEBBI': 'Birnin Kebbi',
+                     'KOGI': 'Lokoja', 'KWARA': 'Ilorin', 'LAGOS': 'Ikeja', 'NASARAWA': 'Lafia', 'NIGER': 'Minna', 'OGUN': 'Abeokuta',
+                     'ONDO': 'Akure', 'OSUN': 'Osogbo', 'OYO': 'Ibadan', 'PLATEAU': 'Jos', 'RIVERS': 'Port Harcourt', 'SOKOTO': 'Sokoto',
+                     'TARABA': 'Jalingo', 'YOBE': 'Damaturu', 'ZAMFARA': 'Gusau', 'FCT': 'Abuja', 'F.C.T': 'Abuja', 'ABUJA': 'Abuja'}
     for w in words:
         if w['layer'] == 'State_Boundarys - Default' and w['text'].strip():
             cx, cy = label_centre(w)
-            o.add(Point(*map(deg, ll(cx, cy))), [w['text'].strip()])
+            lon_, lat_ = map(deg, ll(cx, cy))
+            nm = w['text'].strip()
+            key_ = re.sub(r'\bSTATE\b', '', nm.upper()).replace(',', ' ').replace('.', '')
+            key_ = re.sub(r'\s+', ' ', key_).strip()
+            cap_ = STATE_CAPITAL.get(key_) or STATE_CAPITAL.get(key_.split(' ')[0], '')
+            o.add(Point(lon_, lat_), [nm, lon_, lat_, zone_of_pt(cx, cy), w['font'][:32], round(w['size'], 2), round(w['angle'], 1), cap_])
     print('state_name_labels:', o.close())
 
     # river names follow the river curves (one rotation per glyph) -> assemble along the drawing order
     river_words = assemble_curved_labels([t for t in texts if t['layer'] == 'Rivers - Default'])
-    o = ShpOut(os.path.join(out_dir, 'river_labels'), shapefile.POINT, [('name', 'C', 60, 0), ('angle', 'N', 6, 1), ('n_glyphs', 'N', 3, 0)])
+    o = ShpOut(os.path.join(out_dir, 'river_labels'), shapefile.POINT, [
+        ('name', 'C', 60, 0), ('angle', 'N', 6, 1), ('n_glyphs', 'N', 3, 0), ('lon', 'N', 12, 6), ('lat', 'N', 12, 6),
+        ('zone', 'C', 1, 0), ('size_pt', 'N', 6, 2), ('kind', 'C', 16, 0), ('in_frame', 'C', 3, 0)])
     for w in river_words:
-        o.add(Point(*map(deg, ll(w['x'] + 0.3 * w['size'], w['y'] + 0.3 * w['size']))), [w['text'][:60], round(w['angle'], 1), w['nglyph']])
+        px_, py_ = w['x'] + 0.3 * w['size'], w['y'] + 0.3 * w['size']
+        lon_, lat_ = map(deg, ll(px_, py_))
+        t_ = w['text']
+        kind_ = 'lake' if re.search(r'\blake\b|\bl\.', t_, re.I) else ('river' if re.search(r'\br\.|river', t_, re.I) else 'water name')
+        o.add(Point(lon_, lat_), [t_[:60], round(w['angle'], 1), w['nglyph'], lon_, lat_, zone_of_pt(px_, py_), round(w['size'], 2),
+                                  kind_, 'yes' if frame.contains(Point(px_, py_)) else 'no'])
     print('river_labels: %d names (from %d glyph runs)' % (o.close(), sum(w['nglyph'] for w in river_words)))
 
-    o = ShpOut(os.path.join(out_dir, 'pegmatite_marks'), shapefile.POINT, [('symbol', 'C', 2, 0), ('meaning', 'C', 40, 0)])
+    o = ShpOut(os.path.join(out_dir, 'pegmatite_marks'), shapefile.POINT, [
+        ('symbol', 'C', 2, 0), ('meaning', 'C', 40, 0), ('lon', 'N', 12, 6), ('lat', 'N', 12, 6), ('zone', 'C', 1, 0),
+        ('size_pt', 'N', 6, 2), ('near_loc', 'C', 8, 0), ('near_km', 'N', 7, 1), ('near_mins', 'C', 120, 0),
+        ('geo_code', 'C', 8, 0), ('geo_unit', 'C', 64, 0), ('geo_era', 'C', 48, 0)])
+    loc_by_key = {('%s%d' % (l['zone'] or '?', l['number'])): l for l in num_labels}
     for w in words:
         if w['layer'] == 'Pegmatite - Default' and w['text'].strip() == 'P' and frame.contains(Point(w['x0'], w['y0'])):
             cx, cy = label_centre(w)
-            o.add(Point(*map(deg, ll(cx, cy))), ['P', 'Pegmatite (geology legend)'])
+            lon_, lat_ = map(deg, ll(cx, cy))
+            nl_ = nearest_locality(cx, cy)
+            ent = loc_by_key.get(nl_[0])
+            ent = ent['entry'] if ent else None
+            hf = host_fields(lon_, lat_)
+            o.add(Point(lon_, lat_), ['P', 'Pegmatite (geology legend)', lon_, lat_, zone_of_pt(cx, cy), round(w['size'], 2)]
+                  + nl_ + [(' | '.join(ent['minerals']) if ent else '')[:120], hf[0], hf[1], hf[3]])
     print('pegmatite_marks:', o.close())
 
     # ---- all map text (everything inside the frame, with layer + font)
+    LABEL_KIND = {'Towns - Default': 'town name', 'STATE CAPITALS - Default': 'state capital name',
+                  'State_Boundarys - Default': 'state name', 'Rivers - Default': 'river / lake name',
+                  'Pegmatite - Default': 'pegmatite mark', 'mineral numbers - Default': 'locality number',
+                  'Graticule': 'graticule label', 'Other 2': 'inset legend / title text', 'Other': 'layout text'}
     o = ShpOut(os.path.join(out_dir, 'map_labels'), shapefile.POINT, [
-        ('text', 'C', 100, 0), ('layer', 'C', 32, 0), ('font', 'C', 32, 0), ('size_pt', 'N', 6, 2), ('angle', 'N', 6, 1)])
+        ('text', 'C', 100, 0), ('layer', 'C', 32, 0), ('font', 'C', 32, 0), ('size_pt', 'N', 6, 2), ('angle', 'N', 6, 1),
+        ('kind', 'C', 28, 0), ('lon', 'N', 12, 6), ('lat', 'N', 12, 6), ('zone', 'C', 1, 0), ('n_chars', 'N', 4, 0),
+        ('width_pt', 'N', 7, 2), ('height_pt', 'N', 6, 2)])
     for w in words:
         if not w['text'].strip() or not frame.contains(Point(w['x0'], w['y0'])):
             continue
@@ -1335,11 +1541,19 @@ def main(pdf_path, out_dir):
         if 'ESRI' in w['font']:
             continue   # pattern fills of the geology legend swatches
         cx, cy = label_centre(w)
-        o.add(Point(*map(deg, ll(cx, cy))), [w['text'].strip()[:100], w['layer'], w['font'][:32], round(w['size'], 2), round(w['angle'], 1)])
+        lon_, lat_ = map(deg, ll(cx, cy))
+        bx0, by0, bx1, by1 = label_box(w)
+        t_ = w['text'].strip()
+        o.add(Point(lon_, lat_), [t_[:100], w['layer'], w['font'][:32], round(w['size'], 2), round(w['angle'], 1),
+                                  LABEL_KIND.get(w['layer'], 'other text'), lon_, lat_, zone_of_pt(cx, cy), len(t_),
+                                  round(bx1 - bx0, 2), round(by1 - by0, 2)])
     for w in river_words:
         if frame.contains(Point(w['x'], w['y'])):
-            o.add(Point(*map(deg, ll(w['x'] + 0.3 * w['size'], w['y'] + 0.3 * w['size']))),
-                  [w['text'][:100], w['layer'], w['font'][:32], round(w['size'], 2), round(w['angle'], 1)])
+            px_, py_ = w['x'] + 0.3 * w['size'], w['y'] + 0.3 * w['size']
+            lon_, lat_ = map(deg, ll(px_, py_))
+            o.add(Point(lon_, lat_), [w['text'][:100], w['layer'], w['font'][:32], round(w['size'], 2), round(w['angle'], 1),
+                                      LABEL_KIND.get(w['layer'], 'other text'), lon_, lat_, zone_of_pt(px_, py_), len(w['text']),
+                                      round(w['nglyph'] * w['size'] * 0.55, 2), round(w['size'], 2)])
     print('map_labels:', o.close())
 
     # geology legend (text + swatch colours) of the inset legend inside the frame
