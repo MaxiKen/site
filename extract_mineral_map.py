@@ -454,6 +454,51 @@ def split_codes(s):
     return out
 
 
+def is_code_token(tok):
+    """True when a token of the name cell is a mineral code (also 'Ta.Nb.W' chains, '(Gys)', 'SI')."""
+    tok = tok.strip('().,;:')
+    if not tok:
+        return False
+    parts = [t for t in tok.split('.') if t]
+    return all(CODE_TOKEN.match(t) and (t in CODE_DICT or t in CODE_ALIASES or t.capitalize() in CODE_DICT) for t in parts)
+
+
+def split_codes_from_name(name):
+    """The table sometimes prints the codes inside the locality cell.  Peel code tokens off the end of the name
+    ("Orukpa C", "AFU HILL Sn. Ta.Nb.W", "Odaru (Gys)") or split a code glued to the last word ("AgilaBr.Ka",
+    "IkpaBa", "ljerLs").  Returns (name, codes, changed)."""
+    toks = name.split()
+    tail = []
+    while len(toks) > 1 and is_code_token(toks[-1]):
+        tail.insert(0, toks.pop().strip('()'))
+    if tail:
+        return ' '.join(toks), ' '.join(tail), True
+    mg = re.match(r'^(.*?[a-z]{2})((?:[A-Z][a-z]{0,2})(?:\.[A-Z][a-z]{0,2})*)$', name)
+    if mg and all(t in CODE_DICT for t in mg.group(2).split('.')) and len(mg.group(1).split()[-1]) >= 3:
+        return mg.group(1), mg.group(2), True
+    return name, '', False
+
+
+def fix_name_glitches(name):
+    """The EXPLANATIONS table text carries OCR-type glitches in the locality names.  Only patterns that are
+    never a real spelling are corrected (the printed form is kept in the entry's flags and raw text):
+      * word-initial 'l' before a capital or a consonant is a capital I  ('lFE', 'ljebu-Ode', 'lgbo', 'lkara')
+      * a capital 'I' between two lower-case letters is an 'l'            ('MaIlam', 'OrIu', 'AjiaIa', 'fieId')
+      * a capital 'I' after the capital of a capitalised word, or before 'll', is an 'i'  ('HIlls', 'hIlls')
+      * 'II' at the start of a word before lower case is 'Il'            ('lIe' -> 'IIe' -> 'Ile')
+      * 'q' not followed by 'u' is a 'g'                                  ('Kaltunqo', 'Kaqoro', 'Alaqbede')
+      * a digit 0 inside an all-capital word is the letter O               ('KAN0')
+    """
+    fixed = re.sub(r"(?<![A-Za-z])l(?=[A-Z]|[bcdfgjkmnpqrstvxz])", 'I', name)
+    fixed = re.sub(r"(?<![A-Za-z])II(?=[a-z])", 'Il', fixed)
+    fixed = re.sub(r"(?<=[A-Za-z])I(?=ll)", 'i', fixed)                       # 'hIlls' ('lll' never occurs)
+    fixed = re.sub(r"(?<=[a-z])I(?=[a-z])", 'l', fixed)
+    fixed = re.sub(r"(?<![A-Za-z])([A-Z])I(?=[a-z]{2})", r"\1i", fixed)
+    fixed = re.sub(r"q(?!u)", 'g', fixed)
+    fixed = re.sub(r"(?<=[A-Z])0(?=[A-Z]|\b)|(?<=[A-Z]{2})0", 'O', fixed)
+    return fixed
+
+
 def expand_codes(codes):
     names, unknown, conf = [], [], []
     for c in codes:
@@ -557,20 +602,11 @@ def parse_table(words):
                     if suffix:
                         flags.append('number suffix "%s" in source (inserted entry)' % suffix)
                     if not mins:
-                        # codes glued to the name ("Orukpa C", "AgilaBr.Ka", "LOKOJA (AGBAJA) Fe")
-                        toks = name.split()
-                        tail = []
-                        while len(toks) > 1 and CODE_TOKEN.match(toks[-1]) and \
-                                (toks[-1].rstrip('.') in CODE_DICT or toks[-1].rstrip('.') in CODE_ALIASES):
-                            tail.insert(0, toks.pop())
-                        if tail:
-                            name, mins = ' '.join(toks), ' '.join(tail)
+                        # codes glued to the name ("Orukpa C", "AgilaBr.Ka", "LOKOJA (AGBAJA) Fe",
+                        # "AFU HILL Sn. Ta.Nb.W", "Odaru (Gys)", "IkpaBa", "ljerLs")
+                        name, mins, split = split_codes_from_name(name)
+                        if split:
                             flags.append('codes split from name cell')
-                        else:
-                            mg = re.match(r'^(.*?[a-z])((?:[A-Z][a-z]{0,2})(?:\.[A-Z][a-z]{0,2})+)$', name)
-                            if mg and all(t in CODE_DICT for t in mg.group(2).split('.')):
-                                name, mins = mg.group(1), mg.group(2)
-                                flags.append('codes split from name cell')
                     last = {'zone': row_zone, 'number': num, 'number_printed': num_tok + suffix, 'locality': name,
                             'minerals_raw': mins, 'block': bi + 1, 'y': y, 'flags': flags, 'suffix': suffix,
                             'raw': (name_txt + ' | ' + min_txt).strip()}
@@ -584,13 +620,8 @@ def parse_table(words):
                     mins = (extra + ' ' + min_txt).strip()
                     flags = ['number token "%s" unreadable - inferred from sequence' % tok]
                     if not mins:
-                        toks = name.split()
-                        tail = []
-                        while len(toks) > 1 and CODE_TOKEN.match(toks[-1]) and \
-                                (toks[-1].rstrip('.') in CODE_DICT or toks[-1].rstrip('.') in CODE_ALIASES):
-                            tail.insert(0, toks.pop())
-                        if tail:
-                            name, mins = ' '.join(toks), ' '.join(tail)
+                        name, mins, split = split_codes_from_name(name)
+                        if split:
                             flags.append('codes split from name cell')
                     guess = parse_number_token(tok.replace('•', ''))
                     last = {'zone': row_zone, 'number': None, 'number_printed': tok, 'locality': name,
@@ -657,6 +688,10 @@ def parse_table(words):
         e['unknown_codes'] = unknown
         e['code_conf'] = conf
         e['locality'] = re.sub(r'\s+', ' ', e['locality']).strip(' .-')
+        fixed = fix_name_glitches(e['locality'])
+        if fixed != e['locality']:
+            e['flags'].append('name printed "%s" (letter glitch corrected)' % e['locality'])
+            e['locality'] = fixed
     return table, problems
 
 
@@ -849,16 +884,24 @@ def main(pdf_path, out_dir):
         if not moved:
             break
 
+    label_count = collections.Counter((l['zone'], l['number']) for l in num_labels)
     for l in num_labels:
         hits = idx.get((l['zone'], l['number']), [])
         l['entry'], l['match'] = None, 'number not in table'
+        l['n_printed'] = label_count[(l['zone'], l['number'])]
         if hits:
             l['entry'] = hits[0]
             l['match'] = 'exact' if len(hits) == 1 else 'exact (%d table rows share this number)' % len(hits)
+            if l['n_printed'] > len(hits):
+                # the map face prints this number more than once (all copies are complete labels drawn in the
+                # zone's own sequence, so they are not assembly artefacts): every copy gets the same table row
+                l['match'] += ' (number printed %dx in zone %s)' % (l['n_printed'], l['zone'])
+    dup_numbers = sorted((z, n, c) for (z, n), c in label_count.items() if c > 1 and c > len(idx.get((z, n), [])))
     qa['number_labels'] = {'labels': len(num_labels), 'matched': sum(1 for l in num_labels if l['entry']),
                            'stray_zero_glyphs_dropped': [(round(l['x0'], 1), round(l['y0'], 1)) for l in stray],
                            'rezoned_by_numbering_sequence': [(l['zone_note'], l['number']) for l in num_labels if l['zone_note']],
                            'match_kinds': dict(collections.Counter(l['match'].split(' (')[0] for l in num_labels)),
+                           'numbers_printed_more_than_once': dup_numbers,
                            'per_zone': dict(collections.Counter(l['zone'] for l in num_labels)),
                            'unmatched': sorted((l['zone'] or '?', l['number']) for l in num_labels if not l['entry'])}
     lab_keys = set((l['zone'], l['number']) for l in num_labels)
@@ -1135,7 +1178,7 @@ def main(pdf_path, out_dir):
         ('sym_cands', 'C', 254, 0), ('label_lon', 'N', 12, 6), ('label_lat', 'N', 12, 6),
         # added attributes: coordinates, commodity summary, host rock unit from the geological map
         ('lon', 'N', 12, 6), ('lat', 'N', 12, 6), ('n_minerals', 'N', 3, 0), ('mineral_1', 'C', 60, 0),
-        ('group_1', 'C', 24, 0), ('groups', 'C', 120, 0), ('n_unknown', 'N', 3, 0),
+        ('group_1', 'C', 24, 0), ('groups', 'C', 120, 0), ('n_unknown', 'N', 3, 0), ('n_printed', 'N', 2, 0),
         ('geo_code', 'C', 8, 0), ('geo_unit', 'C', 64, 0), ('geo_form', 'C', 48, 0), ('geo_era', 'C', 48, 0),
         ('geo_period', 'C', 40, 0), ('geo_epoch', 'C', 48, 0), ('geo_src', 'C', 60, 0)])
     loc_rows = []
@@ -1156,19 +1199,21 @@ def main(pdf_path, out_dir):
         llon, llat = ll(l['cx'], l['cy'])
         mins = e['minerals'] if e else []
         groups = sorted({commodity_group(m) for m in mins})
+        if not groups:
+            groups = ['no code printed' if e else 'not in table']
         group_count.update(groups)
         rec = [l['zone'] or '', l['number'], '%s%d' % (l['zone'] or '?', l['number']),
                e['locality'] if e else '', e['minerals_raw'] if e else '', ' | '.join(mins),
                ' '.join(e['code_conf']) if e else '', l['match'], '; '.join(e['flags'])[:200] if e else '',
                pos_src, snap_d, scol, scand[:254], deg(llon), deg(llat),
                deg(lon), deg(lat), len(mins), (mins[0] if mins else '')[:60],
-               commodity_group(mins[0]) if mins else '', ' | '.join(groups)[:120],
-               len(e['unknown_codes']) if e else 0] + host_fields(lon, lat)
+               commodity_group(mins[0]) if mins else groups[0], ' | '.join(groups)[:120],
+               len(e['unknown_codes']) if e else 0, l['n_printed']] + host_fields(lon, lat)
         o.add(Point(deg(lon), deg(lat)), rec)
         loc_rows.append(dict(zip(['zone', 'number', 'zone_num', 'locality', 'codes_raw', 'minerals', 'code_conf', 'match',
                                   'table_flags', 'position_source', 'snap_dist_pt', 'symbol_colour', 'symbol_candidates',
                                   'label_lon', 'label_lat', 'lon', 'lat', 'n_minerals', 'mineral_1', 'group_1', 'groups',
-                                  'n_unknown_codes', 'geo_code', 'geo_unit', 'geo_formation', 'geo_era', 'geo_period',
+                                  'n_unknown_codes', 'n_printed', 'geo_code', 'geo_unit', 'geo_formation', 'geo_era', 'geo_period',
                                   'geo_epoch', 'geo_source'], rec)))
     print('mineral_localities:', o.close(), '| commodity groups:', dict(group_count.most_common()),
           '| host geology:', 'joined' if host else 'not available')

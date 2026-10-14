@@ -176,7 +176,7 @@ River Niger / River Benue, one unnamed reservoir) with `kind`, `labels_in`, area
 
 | layer | attributes added in this pass (all earlier fields kept) |
 |---|---|
-| `mineral_localities` | `lon`, `lat` (final point), `n_minerals`, `mineral_1`, `group_1`, `groups` (commodity groups: energy, precious metals, ferrous metals, base metals, rare metals, gemstones, industrial minerals, construction materials, unknown), `n_unknown` (codes not in the legend), and the **host rock unit from the 2011 geological map**: `geo_code`, `geo_unit`, `geo_form`, `geo_era`, `geo_period`, `geo_epoch`, `geo_src` (both maps are 1:2 M and their georeferences differ by ~8 km, so treat this as ±10 km) |
+| `mineral_localities` | `lon`, `lat` (final point), `n_minerals`, `mineral_1`, `group_1`, `groups` (commodity groups: energy, precious metals, ferrous metals, base metals, rare metals, gemstones, industrial minerals, construction materials, unknown; `no code printed` for the 4 points whose table row has no code, `not in table` for the 4 numbers absent from the table), `n_unknown` (codes not in the legend), `n_printed` (how often the number is printed on the map face – 38 numbers appear twice, both copies are kept with `match = exact (number printed 2x in zone …)`), and the **host rock unit from the 2011 geological map**: `geo_code`, `geo_unit`, `geo_form`, `geo_era`, `geo_period`, `geo_epoch`, `geo_src` (both maps are 1:2 M and their georeferences differ by ~8 km, so treat this as ±10 km) |
 | `mineral_symbols_raster` | `lon`, `lat`, symbol size on the page (`w_pt`, `h_pt`, `w_mm`, `h_mm`) and on the ground (`w_km`, `h_km`), `n_cands`, `group_1`, `near_grps` |
 | `map_zones` | `n_local`, `n_symbols`, `area_km2`, `perim_km`, centroid and bounds, `top_grps` (three most frequent commodity groups) |
 | `map_frame` | `area_km2`, `perim_km`, extent in degrees and points, nominal `scale` (1:1,978,000 from the /VP affine) |
@@ -189,6 +189,8 @@ River Niger / River Benue, one unnamed reservoir) with `kind`, `labels_in`, area
 | `pegmatite_marks` | `lon`, `lat`, `zone`, nearest locality and its minerals, host unit from the geological map |
 | `map_labels` | `kind` (town name, state capital name, state name, river / lake name, …), `lon`, `lat`, `zone`, `n_chars`, text box size |
 
+Locality names: 52 table names with OCR-type glitches (`lkorodu`, `Kaqoro`, `OrIu`, `KAN0`) are corrected by
+rules that only touch impossible spellings; the printed form stays in `flags`/`tbl_flags` and `raw_text`.
 `explanations_table.csv` and `mineral_localities.csv` carry the same commodity-group column; `mineral_legend.csv`
 gains `commodity_group` and `localities_in_table` per legend mineral, `mineral_code_dictionary.csv` gains
 `commodity_group` and `uses_on_map` per code.
@@ -642,13 +644,13 @@ Size fields: -
 | `number` | N5 | 999 | 100 |
 | `zone_num` | C6 | 999 | 100 |
 | `locality` | C80 | 994 | 99 |
-| `codes_raw` | C40 | 985 | 99 |
-| `minerals` | C254 | 985 | 99 |
-| `min_conf` | C40 | 985 | 99 |
+| `codes_raw` | C40 | 991 | 99 |
+| `minerals` | C254 | 991 | 99 |
+| `min_conf` | C40 | 991 | 99 |
 | `match` | C80 | 999 | 100 |
-| `tbl_flags` | C200 | 135 | 14 |
+| `tbl_flags` | C200 | 179 | 18 |
 | `pos_src` | C36 | 999 | 100 |
-| `snap_pt` | N6.1 | 672 | 67 |
+| `snap_pt` | N6.1 | 675 | 68 |
 | `sym_colour` | C24 | 849 | 85 |
 | `sym_cands` | C254 | 849 | 85 |
 | `label_lon` | N12.6 | 999 | 100 |
@@ -656,10 +658,11 @@ Size fields: -
 | `lon` | N12.6 | 999 | 100 |
 | `lat` | N12.6 | 999 | 100 |
 | `n_minerals` | N3 | 999 | 100 |
-| `mineral_1` | C60 | 985 | 99 |
-| `group_1` | C24 | 985 | 99 |
-| `groups` | C120 | 985 | 99 |
+| `mineral_1` | C60 | 991 | 99 |
+| `group_1` | C24 | 999 | 100 |
+| `groups` | C120 | 999 | 100 |
 | `n_unknown` | N3 | 999 | 100 |
+| `n_printed` | N2 | 999 | 100 |
 | `geo_code` | C8 | 995 | 100 |
 | `geo_unit` | C64 | 995 | 100 |
 | `geo_form` | C48 | 475 | 48 |
@@ -685,7 +688,7 @@ Size fields: -
 | `near_num` | C8 | 1077 | 68 |
 | `near_dist` | N6.1 | 1077 | 68 |
 | `near_loc` | C80 | 1073 | 67 |
-| `near_mins` | C200 | 1064 | 67 |
+| `near_mins` | C200 | 1069 | 67 |
 | `lon` | N12.6 | 1593 | 100 |
 | `lat` | N12.6 | 1593 | 100 |
 | `w_pt` | N6.2 | 1593 | 100 |
@@ -696,7 +699,7 @@ Size fields: -
 | `h_km` | N7.2 | 1593 | 100 |
 | `n_cands` | N3 | 1593 | 100 |
 | `group_1` | C24 | 1350 | 85 |
-| `near_grps` | C120 | 1064 | 67 |
+| `near_grps` | C120 | 1069 | 67 |
 
 ### pegmatite_marks  (Point, 23 features)
 

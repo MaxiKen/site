@@ -11,7 +11,7 @@
       "F": 202,
       "G": 224
     },
-    "entries_with_flags": 160,
+    "entries_with_flags": 209,
     "unknown_codes": [
       "A",
       "By",
@@ -25,6 +25,7 @@
       "Ma",
       "Os",
       "RS",
+      "SI",
       "Si",
       "Sp",
       "Sr",
@@ -65,6 +66,198 @@
       "exact": 995,
       "number not in table": 4
     },
+    "numbers_printed_more_than_once": [
+      [
+        "A",
+        30,
+        2
+      ],
+      [
+        "A",
+        33,
+        2
+      ],
+      [
+        "A",
+        83,
+        2
+      ],
+      [
+        "A",
+        97,
+        2
+      ],
+      [
+        "B",
+        4,
+        2
+      ],
+      [
+        "B",
+        23,
+        2
+      ],
+      [
+        "B",
+        88,
+        2
+      ],
+      [
+        "B",
+        138,
+        2
+      ],
+      [
+        "C",
+        48,
+        2
+      ],
+      [
+        "D",
+        33,
+        2
+      ],
+      [
+        "D",
+        83,
+        2
+      ],
+      [
+        "D",
+        115,
+        2
+      ],
+      [
+        "D",
+        119,
+        2
+      ],
+      [
+        "D",
+        121,
+        2
+      ],
+      [
+        "E",
+        23,
+        2
+      ],
+      [
+        "E",
+        65,
+        2
+      ],
+      [
+        "E",
+        69,
+        2
+      ],
+      [
+        "E",
+        110,
+        2
+      ],
+      [
+        "E",
+        128,
+        2
+      ],
+      [
+        "E",
+        167,
+        2
+      ],
+      [
+        "E",
+        226,
+        2
+      ],
+      [
+        "F",
+        36,
+        2
+      ],
+      [
+        "F",
+        40,
+        2
+      ],
+      [
+        "F",
+        55,
+        2
+      ],
+      [
+        "F",
+        64,
+        2
+      ],
+      [
+        "F",
+        83,
+        2
+      ],
+      [
+        "F",
+        183,
+        2
+      ],
+      [
+        "F",
+        196,
+        2
+      ],
+      [
+        "G",
+        30,
+        2
+      ],
+      [
+        "G",
+        67,
+        2
+      ],
+      [
+        "G",
+        73,
+        2
+      ],
+      [
+        "G",
+        94,
+        2
+      ],
+      [
+        "G",
+        104,
+        2
+      ],
+      [
+        "G",
+        122,
+        2
+      ],
+      [
+        "G",
+        133,
+        2
+      ],
+      [
+        "G",
+        179,
+        2
+      ],
+      [
+        "G",
+        196,
+        2
+      ],
+      [
+        "G",
+        223,
+        2
+      ]
+    ],
     "per_zone": {
       "G": 195,
       "F": 168,
@@ -122,20 +315,20 @@
     "with_candidate_rule": 1350,
     "labels_total": 999,
     "labels_with_table_entry": 995,
-    "labels_whose_minerals_have_a_legend_symbol": 913,
-    "labels_snapped_to_colour_consistent_symbol_within_25pt": 672,
-    "symbols_linked_to_a_label": 628,
-    "symbols_claimed_by_several_labels": 42,
+    "labels_whose_minerals_have_a_legend_symbol": 919,
+    "labels_snapped_to_colour_consistent_symbol_within_25pt": 675,
+    "symbols_linked_to_a_label": 630,
+    "symbols_claimed_by_several_labels": 43,
     "symbols_without_any_label_within_14pt": 516,
     "snap_distance_pt_quartiles": [
-      9.906744753317572,
-      12.837835916713772,
-      15.497938292460816
+      9.911641131543984,
+      12.832816734074532,
+      15.475305767906436
     ],
     "snapped_by_colour": {
       "yellow": 229,
-      "green": 60,
-      "outline": 150,
+      "green": 61,
+      "outline": 152,
       "khaki": 49,
       "red": 73,
       "purple": 39,
@@ -148,15 +341,17 @@
     }
   },
   "commodity_groups": {
-    "industrial minerals": 302,
-    "construction materials": 285,
-    "rare metals": 129,
+    "industrial minerals": 304,
+    "construction materials": 287,
+    "rare metals": 130,
     "precious metals": 77,
     "gemstones": 76,
     "ferrous metals": 48,
     "energy": 47,
     "base metals": 36,
-    "unknown": 16
+    "unknown": 17,
+    "no code printed": 4,
+    "not in table": 4
   },
   "capital_check_km": {
     "n": 33,
