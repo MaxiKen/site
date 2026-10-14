@@ -489,7 +489,7 @@
     unit_code: 'unit code here', unit_era: 'unit era', unit_per: 'unit period', n_chars: 'characters', page_x: 'page x (pt)', page_y: 'page y (pt)',
     label: 'label', page_pt: 'page position (pt)', n_lines: 'lines of this axis', name_src: 'name source', labels_in: 'water names inside',
     min_lon: 'west', max_lon: 'east', min_lat: 'south', max_lat: 'north', n_minerals: 'minerals listed', mineral_1: 'first mineral',
-    group_1: 'commodity group (first)', groups: 'commodity groups', n_unknown: 'unknown codes', geo_code: 'host unit code (2011 map)',
+    group_1: 'commodity group (first)', groups: 'commodity groups', n_unknown: 'unknown codes', n_printed: 'number printed on map (times)', geo_code: 'host unit code (2011 map)',
     geo_unit: 'host unit', geo_form: 'host formation', geo_era: 'host era', geo_period: 'host period', geo_epoch: 'host epoch / stage',
     geo_src: 'host geology source', w_pt: 'width (pt)', h_pt: 'height (pt)', w_mm: 'width on paper (mm)', h_mm: 'height on paper (mm)',
     w_km: 'width on the ground (km)', h_km: 'height on the ground (km)', n_cands: 'candidate count', near_grps: 'its commodity groups',
