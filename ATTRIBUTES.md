@@ -189,7 +189,20 @@ River Niger / River Benue, one unnamed reservoir) with `kind`, `labels_in`, area
 | `pegmatite_marks` | `lon`, `lat`, `zone`, nearest locality and its minerals, host unit from the geological map |
 | `map_labels` | `kind` (town name, state capital name, state name, river / lake name, …), `lon`, `lat`, `zone`, `n_chars`, text box size |
 
-`explanations_table.csv` and `mineral_localities.csv` carry the same commodity-group column.
+`explanations_table.csv` and `mineral_localities.csv` carry the same commodity-group column; `mineral_legend.csv`
+gains `commodity_group` and `localities_in_table` per legend mineral, `mineral_code_dictionary.csv` gains
+`commodity_group` and `uses_on_map` per code.
+
+### 2.1 Summary tables (`summaries.py`)
+
+| file | content |
+|---|---|
+| `shapefiles/summary_area_by_unit.csv` | every legend unit (101 incl. the omitted ones): polygons, area (16 duplicate polygons excluded), % of the mapped 912 896 km², perimeter, largest polygon, with formation / rock class / era / period / epoch / Ma / age source |
+| `shapefiles/summary_area_by_age.csv` | area by era, period, epoch, printed series, printed period bracket and rock class (e.g. Cenozoic 33.7 %, Mesozoic 19.9 %, Migmatite-Gneiss basement 24.6 %, Pan-African granites + cataclastics 15.0 %, schist belts 6.2 %, undated 0.6 %; sedimentary 51.6 %, metamorphic 31.9 %, plutonic 14.4 %, volcanic 1.5 %) |
+| `shapefiles_minerals/summary_localities_by_host_geology.csv` | the 999 localities by host unit of the 2011 map (67 units): count, %, top minerals, commodity groups, zones – e.g. 128 on Migmatite, 80 on the porphyritic Older Granite, 66 on Granite Gneiss, 55 on Alluvium |
+| `shapefiles_minerals/summary_localities_by_group.csv` | commodity group × host era and × zone A–G |
+
+The same statistics are shown live under **Compare → Attribute statistics** in the viewer.
 
 ## 3. Size fields
 

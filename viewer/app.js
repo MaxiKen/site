@@ -807,7 +807,45 @@
       m.layers.forEach(l => { h += '<tr><td>' + esc(l.id) + '</td><td class="num">' + fmt(l.count) + '</td><td>' + esc(l.geometry) + '</td></tr>'; });
       h += '</table></details>';
     }
+    h += statisticsHtml();
     $('[data-panel="compare"]').innerHTML = h;
+  }
+
+  // attribute statistics computed from the loaded layers (area by era / rock class, localities by host geology)
+  function statisticsHtml() {
+    let h = '';
+    const bar = (v, max, col) => '<span class="bar" style="width:' + Math.max(2, Math.round(100 * v / max)) + '%;background:' + col + '"></span>';
+    if (data['geology:geology_units']) {
+      const live = data['geology:geology_units'].features.map(f => f.properties).filter(p => !p.dup_of);
+      const total = live.reduce((a, p) => a + (p.area_km2 || 0), 0);
+      const agg = key => { const m = {}; live.forEach(p => { const k = p[key] || 'no age in the printed legend'; m[k] = m[k] || { n: 0, a: 0 }; m[k].n++; m[k].a += p.area_km2 || 0; }); return Object.entries(m).sort((x, y) => y[1].a - x[1].a); };
+      h += '<h3>Attribute statistics – 2011 rock units</h3><p class="muted">' + fmt(live.length) + ' polygons (16 duplicates excluded), ' + fmt(Math.round(total)) + ' km² mapped; ages read from the printed legend brackets.</p>';
+      [['era', 'Area by era'], ['rock_cls', 'Area by rock class'], ['period', 'Area by period (ICS)']].forEach(([key, title]) => {
+        const rows = agg(key), max = rows[0][1].a;
+        h += '<details' + (key === 'era' ? ' open' : '') + '><summary>' + title + '</summary><table class="cmp stats">';
+        rows.forEach(([k, v]) => { const col = (SCHEME_COLOURS[key] && SCHEME_COLOURS[key][k]) || UNDATED; h += '<tr><td><div class="out">' + esc(k === '' ? '(none)' : k) + '</div><div class="barwrap">' + bar(v.a, max, col) + '</div></td><td class="num">' + fmt(Math.round(v.a)) + ' km²<div class="src">' + (100 * v.a / total).toFixed(1) + '% · ' + fmt(v.n) + ' pol.</div></td></tr>'; });
+        h += '</table></details>';
+      });
+    }
+    if (data['minerals:mineral_localities']) {
+      const locs = data['minerals:mineral_localities'].features.map(f => f.properties);
+      const grp = {}, host = {}, unit = {};
+      locs.forEach(p => {
+        String(p.groups || '').split(' | ').forEach(g => { if (g) grp[g] = (grp[g] || 0) + 1; });
+        const e = p.geo_era || 'outside the 2011 mapped units'; host[e] = (host[e] || 0) + 1;
+        if (p.geo_code) { const u = unit[p.geo_code] = unit[p.geo_code] || { n: 0, name: p.geo_unit, era: p.geo_era }; u.n++; }
+      });
+      const gr = Object.entries(grp).sort((a, b) => b[1] - a[1]), hr = Object.entries(host).sort((a, b) => b[1] - a[1]), ur = Object.entries(unit).sort((a, b) => b[1].n - a[1].n).slice(0, 12);
+      h += '<h3>Attribute statistics – 2023 mineral localities</h3><p class="muted">' + fmt(locs.length) + ' numbered localities; commodity groups from the legend minerals, host rock from the 2011 map (±10 km).</p>';
+      h += '<details open><summary>Localities by commodity group</summary><table class="cmp stats">';
+      gr.forEach(([k, v]) => { h += '<tr><td><div class="out">' + esc(k) + '</div><div class="barwrap">' + bar(v, gr[0][1], '#b45309') + '</div></td><td class="num">' + fmt(v) + '</td></tr>'; });
+      h += '</table></details><details><summary>Localities by host era (2011 geology)</summary><table class="cmp stats">';
+      hr.forEach(([k, v]) => { h += '<tr><td><div class="out">' + esc(k) + '</div><div class="barwrap">' + bar(v, hr[0][1], SCHEME_COLOURS.era[k] || UNDATED) + '</div></td><td class="num">' + fmt(v) + '</td></tr>'; });
+      h += '</table></details><details><summary>Most frequent host units (top 12)</summary><table class="cmp stats">';
+      ur.forEach(([k, v]) => { h += '<tr><td><div class="out">' + esc(k) + ' – ' + esc(v.name) + '</div><div class="src">' + esc(v.era || '') + '</div></td><td class="num">' + fmt(v.n) + '</td></tr>'; });
+      h += '</table></details><p class="muted">Full tables: <code>shapefiles/summary_area_by_unit.csv</code>, <code>summary_area_by_age.csv</code>, <code>shapefiles_minerals/summary_localities_by_host_geology.csv</code>, <code>summary_localities_by_group.csv</code> (from <code>summaries.py</code>).</p>';
+    }
+    return h;
   }
 
   function renderAboutPanel() {

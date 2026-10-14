@@ -241,3 +241,6 @@ button { font: inherit; cursor: pointer; }
 .scheme-key .legend-row { padding: 2px 0; }
 .legend-row .age { font-size: 11px; color: #475569; font-weight: 400; }
 .legend-row .desc i { color: #64748b; font-style: italic; }
+.cmp.stats td { vertical-align: middle; }
+.barwrap { height: 6px; background: #f1f5f9; border-radius: 3px; margin-top: 3px; overflow: hidden; }
+.barwrap .bar { display: block; height: 100%; border-radius: 3px; }

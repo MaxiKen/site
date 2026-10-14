@@ -139,7 +139,7 @@ COMMODITY_GROUPS = [
     ('precious metals',      r'gold|silver'),
     ('ferrous metals',       r'iron ore|manganese|chromite|nickel|molybden'),
     ('base metals',          r'copper|lead|zinc|galena|bismuth'),
-    ('rare metals',          r'tin|cassiterite|columbite|tantalite|lithium|lepidolite|wolfram|monazite|zircon|pyroclore'),
+    ('rare metals',          r'\btin\b|cassiterite|columbite|tantalite|lithium|lepidolite|wolfram|monazite|zircon|pyroclore'),
     ('gemstones',            r'beryl|aquamarine|emerald|corundum|sapphire|ruby|garnet|tourmaline|topaz|rose quartz|gemstone'),
     ('industrial minerals',  r'baryte|bentonite|feldspar|flourite|fluorite|gypsum|kaolin|kyanite|sillimanite|talc|mica|magnesite|'
                              r'diatomite|phosphate|graphite|asbestos|serpentine|calcite|trona|evaporite|brine|salt|potash|pyrite|'
@@ -946,18 +946,22 @@ def main(pdf_path, out_dir):
         codes_by_name[nm.split(' (')[0]].append(code)
     with open(os.path.join(out_dir, 'mineral_legend.csv'), 'w', newline='') as f:
         wr = csv.writer(f)
-        wr.writerow(['legend_no', 'mineral', 'code_printed_in_legend', 'table_codes_mapped_here', 'symbol_png'])
+        wr.writerow(['legend_no', 'mineral', 'commodity_group', 'code_printed_in_legend', 'table_codes_mapped_here',
+                     'localities_in_table', 'symbol_png'])
+        uses = collections.Counter(c for e in table for c in e['codes'])
         for r in legend_rows:
             m = re.search(r'\(([a-z]+)\)', r['mineral'])
             clean = re.sub(r'\s*\([a-z]+\)\s*$', '', r['mineral']).strip()
-            wr.writerow([r['legend_no'], clean, m.group(1) if m else '', ' '.join(codes_by_name.get(clean, [])), r['symbol_png']])
+            codes_here = codes_by_name.get(clean, [])
+            n_loc = sum(1 for e in table if any(expand_codes([c])[0][0].split(' (')[0] == clean for c in e['codes']))
+            wr.writerow([r['legend_no'], clean, commodity_group(clean), m.group(1) if m else '', ' '.join(codes_here), n_loc, r['symbol_png']])
     with open(os.path.join(out_dir, 'mineral_code_dictionary.csv'), 'w', newline='') as f:
         wr = csv.writer(f)
-        wr.writerow(['code', 'meaning', 'confidence', 'uses_in_table'])
-        uses = collections.Counter(c for e in table for c in e['codes'])
+        wr.writerow(['code', 'meaning', 'commodity_group', 'confidence', 'uses_in_table', 'uses_on_map'])
+        on_map = collections.Counter(c for e in table if (e['zone'], e['number']) in lab_keys for c in e['codes'])
         for code in sorted(set(list(CODE_DICT) + list(uses))):
             nm, conf = expand_codes([code])[0][0], expand_codes([code])[2][0]
-            wr.writerow([code, nm, conf, uses.get(code, 0)])
+            wr.writerow([code, nm, commodity_group(nm), conf, uses.get(code, 0), on_map.get(code, 0)])
     print('legend: %d entries (%d raster symbols)' % (len(legend_names), len(blobs_leg)))
 
     # ---- raster symbol detection (colour-class blobs + outline blobs)

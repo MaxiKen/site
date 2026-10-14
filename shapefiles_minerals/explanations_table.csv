@@ -81,8 +81,8 @@ A,79,79,Bagega,Ag,Ag,Silver,precious metals,legend,,yes,,1,79. Bagega | Ag
 A,80,80,Bagega,Pb. Zn,Pb Zn,Lead - Zinc (lead) | Lead - Zinc (zinc),base metals,certain certain,,yes,,1,80 Bagega | Pb. Zn
 A,81,81,Bagega,Cr,Cr,Chromite,ferrous metals,certain,,yes,,1,81. Bagega | Cr
 A,82,82,Bagega,Ba,Ba,Baryte,industrial minerals,certain,,no,,1,82 Bagega | Ba
-A,83,83,Chafe,Ab. Tc,Ab Tc,Asbestos / Serpentine | Talc,industrial minerals | rare metals,probable legend,,yes,,1,83. Chafe | Ab. Tc
-A,84,84,Baboali,Tc. Ab,Tc Ab,Talc | Asbestos / Serpentine,industrial minerals | rare metals,legend probable,,no,,1,84. Baboali | Tc. Ab
+A,83,83,Chafe,Ab. Tc,Ab Tc,Asbestos / Serpentine | Talc,industrial minerals,probable legend,,yes,,1,83. Chafe | Ab. Tc
+A,84,84,Baboali,Tc. Ab,Tc Ab,Talc | Asbestos / Serpentine,industrial minerals,legend probable,,no,,1,84. Baboali | Tc. Ab
 A,85,85,Magami,Ta,Ta,Tantalite,rare metals,legend,,no,,1,85 Magami | Ta
 A,86,86,DAN GULBI,Au,Au,Gold,precious metals,certain,,yes,,1,86. DAN GULBI | Au
 A,87,87,Dan Fasa,G,G,Gold (typo for Au?),precious metals,uncertain,,yes,,1,87. Dan Fasa | G
@@ -129,7 +129,7 @@ B,23,23,Gwarzo,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,1,23 Gwarzo | Fp
 B,24,24,Malumfashi,Mb,Mb,Marble,construction materials,certain,,yes,,1,24. Malumfashi | Mb
 B,25,25,Boni,Ka,Ka,Kaolin / kaolinitic clay,industrial minerals,certain,,no,,1,25. Boni | Ka
 B,26,26,Adanimai,Wa,Wa,unknown code,unknown,unknown,Wa,yes,,1,26. Adanimai | Wa
-B,27,27,Shemi,Ab.Sp,Ab Sp,Asbestos / Serpentine | unknown code,rare metals | unknown,probable unknown,Sp,yes,,1,27 Shemi | Ab.Sp
+B,27,27,Shemi,Ab.Sp,Ab Sp,Asbestos / Serpentine | unknown code,industrial minerals | unknown,probable unknown,Sp,yes,,1,27 Shemi | Ab.Sp
 B,28,28,Bakori,Au,Au,Gold,precious metals,certain,,yes,,1,28 Bakori | Au
 B,29,29,BQkor~,Sn,Sn,Tin / cassiterite (no legend symbol),rare metals,certain,,yes,,1,29 BQkor~ | Sn
 B,30,30,Karage,Cl,Cl,Clay / Pottery Clay,construction materials,certain,,yes,,1,30 Karage | Cl
@@ -380,7 +380,7 @@ D,24,24,Agwara,W,W,Wolframite,rare metals,legend,,no,,3,24.Agwara               
 D,25,25,Kinimu,Tc,Tc,Talc,industrial minerals,legend,,no,,3,25.Kinimu                      Tc |
 D,26,26,Iboli,Be. Gm,Be Gm,"Beryl, Aquamarine, Emerald | Gemstone (not in legend)",gemstones,certain uncertain,,no,,3,26.Iboli | Be. Gm
 D,27,27,lboli,Ta,Ta,Tantalite,rare metals,legend,,yes,,3,27.lboli | Ta
-D,28,28,kontagora,Ab,Ab,Asbestos / Serpentine,rare metals,probable,,yes,,3,28.kontagora | Ab
+D,28,28,kontagora,Ab,Ab,Asbestos / Serpentine,industrial minerals,probable,,yes,,3,28.kontagora | Ab
 D,29,29,Kontagora,Fp,Fp,Feldspar,industrial minerals,certain,,yes,,3,29.Kontagora | Fp
 D,30,30,Pandogari,Tc,Tc,Talc,industrial minerals,legend,,yes,,3,30.Pandogari | Tc
 D,31,31,Pandogari,Qa,Qa,Quartz (not in legend),construction materials,uncertain,,yes,,3,31.Pandogari | Qa

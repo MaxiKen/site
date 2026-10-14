@@ -7,7 +7,8 @@ fields (area / length) and their totals, so that "every layer has a complete
 attribute table" can be checked in one go.
 
 Usage:  python inventory_attributes.py [dir ...]   (default: shapefiles shapefiles_minerals)
-        python inventory_attributes.py --markdown > ATTRIBUTES.md
+        python inventory_attributes.py --markdown            # markdown tables on stdout
+        python inventory_attributes.py --update-attributes-md  # refresh section 4 of ATTRIBUTES.md
 """
 import os
 import sys
@@ -45,7 +46,7 @@ def inventory(path):
 
 
 def main(argv):
-    md = '--markdown' in argv
+    md = '--markdown' in argv or '--update-attributes-md' in argv
     dirs = [a for a in argv if not a.startswith('--')] or ['shapefiles', 'shapefiles_minerals']
     out = []
     for d in dirs:
@@ -72,7 +73,18 @@ def main(argv):
                 for (name, ftype, size, dec), c in zip(inv['fields'], inv['filled']):
                     cells.append(f'{name}={c}' + ('' if c == n else f'({100 * c / n if n else 0:.0f}%)'))
                 out.append('   ' + ', '.join(cells))
-    print('\n'.join(out))
+    text = '\n'.join(out)
+    if '--update-attributes-md' in argv:
+        # refresh section 4 of ATTRIBUTES.md (everything after its heading) with the measured fill rates
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ATTRIBUTES.md')
+        doc = open(path, encoding='utf-8').read()
+        head, sep, _ = doc.partition('## 4. Fill rate of every field')
+        intro_end = doc.find('\n## shapefiles', doc.find('## 4. Fill rate'))
+        intro = doc[len(head) + len(sep):intro_end] if intro_end > 0 else ''
+        open(path, 'w', encoding='utf-8').write(head + sep + intro + text + '\n')
+        print('ATTRIBUTES.md section 4 updated')
+    else:
+        print(text)
 
 
 if __name__ == '__main__':

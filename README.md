@@ -102,7 +102,8 @@ What the viewer offers (designed for a phone screen, works on desktop too):
   locality finder (number such as `B 12`, name or mineral).
 * **Compare** – the GeoPDF verdict and PDF-primitive vs feature counts for the 2011 map; the
   georeference check, table/number/symbol matching statistics and the capital-city test for the 2023
-  map. Quick zooms: Jos Plateau, Niger Delta, Lake Chad, Sokoto, the 2011 legend panel, the 2023
+  map; attribute statistics (area by era / rock class / period, localities by commodity group and by
+  host geology). Quick zooms: Jos Plateau, Niger Delta, Lake Chad, Sokoto, the 2011 legend panel, the 2023
   EXPLANATIONS table.
 
 ---
@@ -148,7 +149,7 @@ Unlike the geological map, only part of this map is vector. The **background geo
 | `map_raster/` | PNG + `.pgw` | the untouched 75 dpi raster strips reassembled and world‑filed (`mineral_map_base_75dpi.png`, the actual symbol source) and a 150 dpi render of the full map face |
 | `qa_report.json` | | all counts above, the unmatched numbers, snap statistics, the capital check, commodity-group counts |
 
-Every point layer carries `lon`/`lat` (+ `zone`), every line layer `length_km`, `n_vert`, midpoint / start / end and `closed`; the full per-layer field list with fill rates is in [ATTRIBUTES.md](ATTRIBUTES.md) §2–4 (`python inventory_attributes.py` regenerates it).
+Every point layer carries `lon`/`lat` (+ `zone`), every line layer `length_km`, `n_vert`, midpoint / start / end and `closed`; the full per-layer field list with fill rates is in [ATTRIBUTES.md](ATTRIBUTES.md) §2–4 (`python inventory_attributes.py --update-attributes-md` regenerates it). `python summaries.py` writes the cross-map summary tables (`summary_area_by_unit.csv`, `summary_area_by_age.csv`, `summary_localities_by_host_geology.csv`, `summary_localities_by_group.csv`).
 
 ### How the table/number join was verified
 

@@ -148,9 +148,9 @@
     }
   },
   "commodity_groups": {
-    "industrial minerals": 300,
+    "industrial minerals": 302,
     "construction materials": 285,
-    "rare metals": 133,
+    "rare metals": 129,
     "precious metals": 77,
     "gemstones": 76,
     "ferrous metals": 48,

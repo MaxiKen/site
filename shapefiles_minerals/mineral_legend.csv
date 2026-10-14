@@ -1,68 +1,68 @@
-legend_no,mineral,code_printed_in_legend,table_codes_mapped_here,symbol_png
-1,Asbestos / Serpentine,,Ab,legend_symbols/symbol_01_Asbestos_Serpentine.png
-2,Ball Clay,,Bcl,legend_symbols/symbol_02_Ball_Clay.png
-3,Baryte,,Ba,legend_symbols/symbol_03_Baryte.png
-4,Bauxitic Clay,,Bx,legend_symbols/symbol_04_Bauxitic_Clay.png
-5,Bentonite,,Bn,legend_symbols/symbol_05_Bentonite.png
-6,"Beryl, Aquamarine, Emerald",,Aq Be E EmI,legend_symbols/symbol_06_Beryl_Aquamarine_Emerald.png
-7,Bismuth,,Bi,legend_symbols/symbol_07_Bismuth.png
-8,Bitumen,,Bit,legend_symbols/symbol_08_Bitumen.png
-9,Brick Clay,,Bc,legend_symbols/symbol_09_Brick_Clay.png
-10,Brine,,Br,legend_symbols/symbol_10_Brine.png
-11,Chromite,,Cr,legend_symbols/symbol_11_Chromite.png
-12,Clay / Pottery Clay,,Cl,legend_symbols/symbol_12_Clay_Pottery_Clay.png
-13,Coal,,C,legend_symbols/symbol_13_Coal.png
-14,Columbite,,Nb,legend_symbols/symbol_14_Columbite.png
-15,Copper minerals,,Cu,legend_symbols/symbol_15_Copper_minerals.png
-16,"Corundum, Sapphire & Ruby",,Cor Ru,legend_symbols/symbol_16_Corundum_Sapphire_Ruby.png
-17,Diatomite,,Dt Di,legend_symbols/symbol_17_Diatomite.png
-18,Dimension Stone,,Ds,legend_symbols/symbol_18_Dimension_Stone.png
-19,Evaporite,,Ev,legend_symbols/symbol_19_Evaporite.png
-20,Feldspar,,Fp,legend_symbols/symbol_20_Feldspar.png
-21,Fire Clay,,Fc,legend_symbols/symbol_21_Fire_Clay.png
-22,Flourite,,Fl Fr F,legend_symbols/symbol_22_Flourite.png
-23,Garnet,,Gn,legend_symbols/symbol_23_Garnet.png
-24,Oil and Gas,,Oil,legend_symbols/symbol_24_Oil_and_Gas.png
-25,Glass Sand,,Gs,legend_symbols/symbol_25_Glass_Sand.png
-26,Gold,,Au G,legend_symbols/symbol_26_Gold.png
-27,Graphite,,Gr,legend_symbols/symbol_27_Graphite.png
-28,River Gravel,,Gvl Grl,legend_symbols/symbol_28_River_Gravel.png
-29,Galena,,Pbs PbS,legend_symbols/symbol_29_Galena.png
-30,Granite,,,legend_symbols/symbol_30_Granite.png
-31,Gypsum,,Gy Gys,legend_symbols/symbol_31_Gypsum.png
-32,Phosphate,,P,legend_symbols/symbol_32_Phosphate.png
-33,"Iron Ore (Magnetite, Ilmenite)",,,legend_symbols/symbol_33_Iron_Ore_Magnetite_Ilmenite.png
-34,Kaolin / kaolinitic clay,,Ka,legend_symbols/symbol_34_Kaolin_kaolinitic_clay.png
-35,Kyanite,,Ky,legend_symbols/symbol_35_Kyanite.png
-36,Lead - Zinc,,Pb Zn,legend_symbols/symbol_36_Lead_Zinc.png
-37,Lepidolite,,Lp,legend_symbols/symbol_37_Lepidolite.png
-38,Lignite,,Lg,legend_symbols/symbol_38_Lignite.png
-39,Limestone,,Ls,legend_symbols/symbol_39_Limestone.png
-40,Manganese,,Mn,legend_symbols/symbol_40_Manganese.png
-41,Marble,,Mb,legend_symbols/symbol_41_Marble.png
-42,Marcasite,mc,Mc,legend_symbols/symbol_42_Marcasite_mc.png
-43,Marl,mi,Mi Ml MI,legend_symbols/symbol_43_Marl_mi.png
-44,Mica,m,M Mu m,legend_symbols/symbol_44_Mica_m.png
-45,Magnesite,,Mg,legend_symbols/symbol_45_Magnesite.png
-46,Molybdenite,mo,Mo,legend_symbols/symbol_46_Molybdenite_mo.png
-47,Monazite,,Mz,legend_symbols/symbol_47_Monazite.png
-48,Nickel,ni,Ni,legend_symbols/symbol_48_Nickel_ni.png
-49,Phosphate Rock,,Pr,legend_symbols/symbol_49_Phosphate_Rock.png
-50,Psammite,,Ps,legend_symbols/symbol_50_Psammite.png
-51,Pyrite / Pyroclore,py,Py,legend_symbols/symbol_51_Pyrite_Pyroclore_py.png
-52,Rose Quartz,r,R,legend_symbols/symbol_52_Rose_Quartz_r.png
-53,Saltlake/ Potash,,Na,legend_symbols/symbol_53_Saltlake_Potash.png
-54,Silica Sand,ss,Ss,legend_symbols/symbol_54_Silica_Sand_ss.png
-55,Sillimanite,sl,Sl,legend_symbols/symbol_55_Sillimanite_sl.png
-56,Silver,ag,Ag,legend_symbols/symbol_56_Silver_ag.png
-57,Talc,tc,Tc,legend_symbols/symbol_57_Talc_tc.png
-58,Tantalite,ta,Ta,legend_symbols/symbol_58_Tantalite_ta.png
-59,Tar Sand,ts,Ts,legend_symbols/symbol_59_Tar_Sand_ts.png
-60,Topaz,tpz,To Tpz,legend_symbols/symbol_60_Topaz_tpz.png
-61,Tourmaline,tm,Tm,legend_symbols/symbol_61_Tourmaline_tm.png
-62,Trona,tr,Tr,legend_symbols/symbol_62_Trona_tr.png
-63,Uranium,u,U,legend_symbols/symbol_63_Uranium_u.png
-64,Wolframite,w,W,legend_symbols/symbol_64_Wolframite_w.png
-65,Zircon,zr,Zr,legend_symbols/symbol_65_Zircon_zr.png
-66,"Lithium (Ambligonite, Kunzite, Moganite, Spodumene, etc)",,,legend_symbols/symbol_66_Lithium_Ambligonite_Kunzite_Moganite_Spo.png
-67,Calcite,,Ca,
+legend_no,mineral,commodity_group,code_printed_in_legend,table_codes_mapped_here,localities_in_table,symbol_png
+1,Asbestos / Serpentine,industrial minerals,,Ab,4,legend_symbols/symbol_01_Asbestos_Serpentine.png
+2,Ball Clay,construction materials,,Bcl,2,legend_symbols/symbol_02_Ball_Clay.png
+3,Baryte,industrial minerals,,Ba,29,legend_symbols/symbol_03_Baryte.png
+4,Bauxitic Clay,construction materials,,Bx,4,legend_symbols/symbol_04_Bauxitic_Clay.png
+5,Bentonite,industrial minerals,,Bn,11,legend_symbols/symbol_05_Bentonite.png
+6,"Beryl, Aquamarine, Emerald",gemstones,,Aq Be E EmI,48,legend_symbols/symbol_06_Beryl_Aquamarine_Emerald.png
+7,Bismuth,base metals,,Bi,1,legend_symbols/symbol_07_Bismuth.png
+8,Bitumen,energy,,Bit,2,legend_symbols/symbol_08_Bitumen.png
+9,Brick Clay,construction materials,,Bc,3,legend_symbols/symbol_09_Brick_Clay.png
+10,Brine,industrial minerals,,Br,38,legend_symbols/symbol_10_Brine.png
+11,Chromite,ferrous metals,,Cr,7,legend_symbols/symbol_11_Chromite.png
+12,Clay / Pottery Clay,construction materials,,Cl,131,legend_symbols/symbol_12_Clay_Pottery_Clay.png
+13,Coal,energy,,C,25,legend_symbols/symbol_13_Coal.png
+14,Columbite,rare metals,,Nb,50,legend_symbols/symbol_14_Columbite.png
+15,Copper minerals,base metals,,Cu,6,legend_symbols/symbol_15_Copper_minerals.png
+16,"Corundum, Sapphire & Ruby",gemstones,,Cor Ru,6,legend_symbols/symbol_16_Corundum_Sapphire_Ruby.png
+17,Diatomite,industrial minerals,,Dt Di,6,legend_symbols/symbol_17_Diatomite.png
+18,Dimension Stone,construction materials,,Ds,4,legend_symbols/symbol_18_Dimension_Stone.png
+19,Evaporite,industrial minerals,,Ev,0,legend_symbols/symbol_19_Evaporite.png
+20,Feldspar,industrial minerals,,Fp,24,legend_symbols/symbol_20_Feldspar.png
+21,Fire Clay,construction materials,,Fc,3,legend_symbols/symbol_21_Fire_Clay.png
+22,Flourite,industrial minerals,,Fl Fr F,7,legend_symbols/symbol_22_Flourite.png
+23,Garnet,gemstones,,Gn,4,legend_symbols/symbol_23_Garnet.png
+24,Oil and Gas,energy,,Oil,10,legend_symbols/symbol_24_Oil_and_Gas.png
+25,Glass Sand,construction materials,,Gs,35,legend_symbols/symbol_25_Glass_Sand.png
+26,Gold,precious metals,,Au G,89,legend_symbols/symbol_26_Gold.png
+27,Graphite,industrial minerals,,Gr,11,legend_symbols/symbol_27_Graphite.png
+28,River Gravel,construction materials,,Gvl Grl,3,legend_symbols/symbol_28_River_Gravel.png
+29,Galena,base metals,,Pbs PbS,5,legend_symbols/symbol_29_Galena.png
+30,Granite,unknown,,,0,legend_symbols/symbol_30_Granite.png
+31,Gypsum,industrial minerals,,Gy Gys,43,legend_symbols/symbol_31_Gypsum.png
+32,Phosphate,industrial minerals,,P,18,legend_symbols/symbol_32_Phosphate.png
+33,"Iron Ore (Magnetite, Ilmenite)",ferrous metals,,,0,legend_symbols/symbol_33_Iron_Ore_Magnetite_Ilmenite.png
+34,Kaolin / kaolinitic clay,industrial minerals,,Ka,76,legend_symbols/symbol_34_Kaolin_kaolinitic_clay.png
+35,Kyanite,industrial minerals,,Ky,6,legend_symbols/symbol_35_Kyanite.png
+36,Lead - Zinc,base metals,,Pb Zn,31,legend_symbols/symbol_36_Lead_Zinc.png
+37,Lepidolite,rare metals,,Lp,1,legend_symbols/symbol_37_Lepidolite.png
+38,Lignite,energy,,Lg,9,legend_symbols/symbol_38_Lignite.png
+39,Limestone,construction materials,,Ls,62,legend_symbols/symbol_39_Limestone.png
+40,Manganese,ferrous metals,,Mn,6,legend_symbols/symbol_40_Manganese.png
+41,Marble,construction materials,,Mb,40,legend_symbols/symbol_41_Marble.png
+42,Marcasite,industrial minerals,mc,Mc,2,legend_symbols/symbol_42_Marcasite_mc.png
+43,Marl,construction materials,mi,Mi Ml MI,5,legend_symbols/symbol_43_Marl_mi.png
+44,Mica,industrial minerals,m,M Mu m,26,legend_symbols/symbol_44_Mica_m.png
+45,Magnesite,industrial minerals,,Mg,2,legend_symbols/symbol_45_Magnesite.png
+46,Molybdenite,ferrous metals,mo,Mo,2,legend_symbols/symbol_46_Molybdenite_mo.png
+47,Monazite,rare metals,,Mz,3,legend_symbols/symbol_47_Monazite.png
+48,Nickel,ferrous metals,ni,Ni,1,legend_symbols/symbol_48_Nickel_ni.png
+49,Phosphate Rock,industrial minerals,,Pr,0,legend_symbols/symbol_49_Phosphate_Rock.png
+50,Psammite,construction materials,,Ps,0,legend_symbols/symbol_50_Psammite.png
+51,Pyrite / Pyroclore,rare metals,py,Py,8,legend_symbols/symbol_51_Pyrite_Pyroclore_py.png
+52,Rose Quartz,gemstones,r,R,0,legend_symbols/symbol_52_Rose_Quartz_r.png
+53,Saltlake/ Potash,industrial minerals,,Na,12,legend_symbols/symbol_53_Saltlake_Potash.png
+54,Silica Sand,construction materials,ss,Ss,2,legend_symbols/symbol_54_Silica_Sand_ss.png
+55,Sillimanite,industrial minerals,sl,Sl,1,legend_symbols/symbol_55_Sillimanite_sl.png
+56,Silver,precious metals,ag,Ag,5,legend_symbols/symbol_56_Silver_ag.png
+57,Talc,industrial minerals,tc,Tc,21,legend_symbols/symbol_57_Talc_tc.png
+58,Tantalite,rare metals,ta,Ta,65,legend_symbols/symbol_58_Tantalite_ta.png
+59,Tar Sand,energy,ts,Ts,9,legend_symbols/symbol_59_Tar_Sand_ts.png
+60,Topaz,gemstones,tpz,To Tpz,4,legend_symbols/symbol_60_Topaz_tpz.png
+61,Tourmaline,gemstones,tm,Tm,16,legend_symbols/symbol_61_Tourmaline_tm.png
+62,Trona,industrial minerals,tr,Tr,13,legend_symbols/symbol_62_Trona_tr.png
+63,Uranium,energy,u,U,4,legend_symbols/symbol_63_Uranium_u.png
+64,Wolframite,rare metals,w,W,17,legend_symbols/symbol_64_Wolframite_w.png
+65,Zircon,rare metals,zr,Zr,9,legend_symbols/symbol_65_Zircon_zr.png
+66,"Lithium (Ambligonite, Kunzite, Moganite, Spodumene, etc)",rare metals,,,0,legend_symbols/symbol_66_Lithium_Ambligonite_Kunzite_Moganite_Spo.png
+67,Calcite,industrial minerals,,Ca,6,

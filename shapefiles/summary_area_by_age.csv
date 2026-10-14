@@ -1,0 +1,50 @@
+grouping,value,polygons,area_km2,pct_of_mapped_area,legend_codes
+era,Cenozoic,198,307970.7,33.74,AB Al Bnst Cst Dsh Esh Glcl Gwss Imsh Issh Kss MS MWS OAlgs SDsm Wss b bb
+era,Mesozoic,293,181720.5,19.91,ANsh Ajst Arlsh Asl Awst Bss Bssf Esh Ess Fsh GIgss GIpg GIss Glls Gss JyA JyG Jyr LCM Lass MGp Mcst Mlst MyG MyP Myl Mys NPss Ncsh Nsh Psh Ts Tst Wcs Wsh Wss Yls r
+era,Neoproterozoic-Palaeozoic,532,136751.3,14.98,D MV My ODh OGCh OGS OGd OGe OGf OGh OGm OGp OGr OGu OSq aMy qs
+era,"Archaean-Palaeoproterozoic, reworked in the Neoproterozoic",249,224575.9,24.6,GG Ge M MG MaG OPg bG bG-h bS
+era,Neoproterozoic (Pan-African deformed),245,56590.5,6.2,BIF MS Mc Qs Sa Sf Sp Su m
+era,(none),9,5286.8,0.58, Gdss Gmsh P s
+period,Quaternary,39,91374.9,10.01,AB Al MS MWS SDsm
+period,Paleogene-Quaternary (Tertiary-Recent),77,11357.5,1.24,b bb
+period,Neogene-Quaternary,14,123877.9,13.57,Bnst Cst
+period,Paleogene-Neogene,3,4763.9,0.52,OAlgs
+period,Paleogene,65,76596.5,8.39,Dsh Esh Glcl Gwss Imsh Issh Kss Wss
+period,Cretaceous,221,170405.5,18.67,ANsh Ajst Arlsh Asl Awst Bss Bssf Esh Ess Fsh GIgss GIpg GIss Glls Gss LCM Lass Mcst Mlst NPss Ncsh Nsh Psh Ts Tst Wcs Wsh Wss Yls
+period,Jurassic,72,11315.1,1.24,JyA JyG Jyr MGp MyG MyP Myl Mys r
+period,Ediacaran-Cambrian,532,136751.3,14.98,D MV My ODh OGCh OGS OGd OGe OGf OGh OGm OGp OGr OGu OSq aMy qs
+period,(none),503,286453.2,31.38, BIF GG Gdss Ge Gmsh M MG MS MaG Mc OPg P Qs Sa Sf Sp Su bG bG-h bS m s
+epoch,Holocene,39,91374.9,10.01,AB Al MS MWS SDsm
+epoch,(none),1184,445877.1,48.84, BIF D GG Gdss Ge Gmsh JyA JyG Jyr M MG MGp MS MV MaG Mc My MyG MyP Myl Mys ODh OGCh OGS OGd OGe OGf OGh OGm OGp OGr OGu OPg OSq P Qs Sa Sf Sp Su aMy b bG bG-h bS bb m qs r s
+epoch,Pliocene-Pleistocene,14,123877.9,13.57,Bnst Cst
+epoch,Oligocene-Miocene,3,4763.9,0.52,OAlgs
+epoch,Eocene (Late / Priabonian),6,7633.5,0.84,Issh
+epoch,Eocene (Middle / Lutetian-Bartonian),46,38142.6,4.18,Esh Glcl Gwss Wss
+epoch,Eocene (Early / Ypresian),4,5327.1,0.58,Imsh
+epoch,Paleocene,9,25493.3,2.79,Dsh Kss
+epoch,Late Cretaceous: Coniacian-Maastrichtian,29,26529.9,2.91,Ajst Asl Bssf LCM Mcst Ncsh Nsh
+epoch,Late Cretaceous: Senonian (Coniacian-Maastrichtian),28,18796.6,2.06,Glls Gss Ts Tst Wcs Wsh Wss
+epoch,Late Cretaceous: Turonian-Campanian,94,83972.4,9.2,Esh Ess Fsh GIgss GIpg GIss Lass NPss Psh
+epoch,Late Cretaceous: Coniacian,6,1508.5,0.17,ANsh
+epoch,Albian-Cenomanian,37,27772.9,3.04,Awst Bss Mlst Yls
+epoch,Early Cretaceous: Albian,27,11825.1,1.3,Arlsh
+printed series,(none),432,484041.3,53.02, AB ANsh Ajst Al Arlsh Asl Awst Bnst Bss Bssf Cst Dsh Esh Ess Fsh GIgss GIpg GIss Gdss Glcl Glls Gmsh Gss Gwss Imsh Issh Kss LCM Lass MS MWS Mcst Mlst MyP NPss Ncsh Nsh OAlgs P Psh SDsm Ts Tst Wcs Wsh Wss Yls b bb s
+printed series,Per Alkaline young Granite Series,68,10936.7,1.2,JyA JyG Jyr MGp MyG MyP Myl Mys r
+printed series,Pan - African Older Granite Series,472,132603.9,14.53,D MV ODh OGCh OGS OGd OGe OGf OGh OGm OGp OGr OGu OSq
+printed series,Cataclastic Rocks,60,4147.4,0.45,My aMy qs
+printed series,Migmatite - Gneiss Complex,249,224575.9,24.6,GG Ge M MG MaG OPg bG bG-h bS
+printed series,Meta - Sedimentary / Meta - Volcanic Series,245,56590.5,6.2,BIF MS Mc Qs Sa Sf Sp Su m
+printed period bracket,NEOGENE,53,215252.8,23.58,AB Al Bnst Cst MS MWS SDsm
+printed period bracket,TERTIARY TO RECENT VOLCANICS,77,11357.5,1.24,b bb
+printed period bracket,PALAEOGENE,68,81360.4,8.91,Dsh Esh Glcl Gwss Imsh Issh Kss OAlgs Wss
+printed period bracket,CRETACEOUS,208,154765.0,16.95,ANsh Arlsh Asl Awst Bss Bssf Esh Ess Fsh GIgss GIpg GIss Glls LCM Lass Mcst Mlst NPss Ncsh Nsh Psh Ts Tst Wcs Wsh Wss Yls
+printed period bracket,(none),22,20927.3,2.29, Ajst Gdss Gmsh Gss P s
+printed period bracket,JURASSIC,72,11315.1,1.24,JyA JyG Jyr MGp MyG MyP Myl Mys r
+printed period bracket,PRE - CAMBRIAN TO CAMBRIAN,1026,417917.7,45.78,BIF D GG Ge M MG MS MV MaG Mc My ODh OGCh OGS OGd OGe OGf OGh OGm OGp OGr OGu OPg OSq Qs Sa Sf Sp Su aMy bG bG-h bS m qs
+rock class,sedimentary,345,471317.0,51.63,AB ANsh Ajst Al Arlsh Asl Awst Bnst Bss Bssf Cst Dsh Esh Ess Fsh GIgss GIpg GIss Gdss Glcl Glls Gmsh Gss Gwss Imsh Issh Kss LCM Lass MS MWS Mcst Mlst NPss Ncsh Nsh OAlgs Psh SDsm Ts Tst Wcs Wsh Wss Yls
+rock class,volcanic,93,13353.4,1.46,JyA Jyr Myl b bb r
+rock class,plutonic,467,131456.6,14.4,JyG MGp MyG MyP Mys ODh OGS OGd OGe OGf OGh OGm OGp OGr OSq
+rock class,metamorphic,551,291214.1,31.9,BIF GG Ge M MG MS MV MaG Mc OGCh OGu OPg Qs Sa Sf Sp Su bG bG-h bS m
+rock class,fault rock,60,4147.4,0.45,My aMy qs
+rock class,minor intrusive,6,732.0,0.08,D P
+rock class,(none),4,675.2,0.07, s
