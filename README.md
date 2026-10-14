@@ -64,6 +64,29 @@ python extract_shapefiles.py ilide.info-geological-map-of-nigeria-pr_a0987e407d1
 
 The script parses the PDF content stream itself (paths, text and Optional‑Content tags), fits the graticule, rebuilds polygons/lines/points and writes the shapefiles; it runs in ~10 s.
 
+## Project GeoPackage – everything in one file
+
+`nigeria_maps.gpkg` (20.6 MB, EPSG:4326) bundles the whole project for QGIS / ArcGIS / GDAL:
+
+| tables | content |
+|---|---|
+| `geology2011_*` (17 feature layers) | every layer of `shapefiles/` – rock units with era / period / epoch / Ma, boundaries, faults, rivers, roads, towns, labels … |
+| `minerals2023_*` (16 feature layers) | every layer of `shapefiles_minerals/` – the 999 localities with codes, minerals, commodity groups and host geology, symbols, zones, rivers, towns, labels … |
+| `geology2011_map_pdf`, `minerals2023_map_pdf` (tile layers) | the two PDF pages rendered and georeferenced (zoom 4–8, 0.0027°/px ≈ 300 m; GDAL/QGIS open them as ordinary rasters with overviews) |
+| `geology2011_legend`, `…_summary_area_by_unit`, `…_summary_area_by_age` | the printed legend with ages, and the area statistics |
+| `minerals2023_legend`, `…_code_dictionary`, `…_explanations_table`, `…_summary_localities_by_host_geology`, `…_summary_localities_by_group` | the mineral legend, every code with meaning / group / confidence, the full EXPLANATIONS table, the locality statistics |
+| `project_layers` | catalogue: one row per table (source map, kind, geometry, feature count, source file, description) |
+| `gpkg_metadata` | project description, both georeferences, accuracy note, build date (JSON) |
+
+```bash
+python build_project_gpkg.py              # rebuild (3 s when the viewer tiles exist, otherwise renders them first)
+python build_project_gpkg.py --zmax 9     # finer PDF rasters (≈150 m/px, +25 MB)
+python build_project_gpkg.py --check      # integrity + GDAL raster check (pip install rasterio for the latter)
+```
+
+Field names are the shapefile names documented in [ATTRIBUTES.md](ATTRIBUTES.md); the per-map GeoPackages
+(`shapefiles/nigeria_geology.gpkg`, `shapefiles_minerals/nigeria_minerals.gpkg`) stay as before.
+
 ## 4. Live comparison viewer (mobile-first) – both maps
 
 ```bash

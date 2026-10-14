@@ -1,0 +1,137 @@
+<PAMDataset>
+  <Metadata domain="GEOPACKAGE">
+    <MDI key="GPKG_METADATA_ITEM_1">{
+ "title": "Nigeria geological (2011) and mineral resources (2023) maps - extracted GIS layers",
+ "built": "2026-10-14T11:29:02Z",
+ "crs": "EPSG:4326 (WGS 84 geographic)",
+ "layers": "geology2011_* = 17 layers from the Geological Map of Nigeria 2011 (not a GeoPDF; georeferenced from the printed graticule); minerals2023_* = 16 layers from the Mineral Resources Map of Nigeria 2023 (GeoPDF /VP georeference); *_map_pdf = the PDF pages as tile pyramids",
+ "geology_2011_georeference": {
+  "lon = a*x + b": {
+   "a": 0.006344690965581331,
+   "b": 1.7544578039042098
+  },
+  "lat = c*y + d": {
+   "c": 0.00634488747510426,
+   "d": 3.2845481786541253
+  },
+  "points_per_degree_x": 157.61208945002969,
+  "points_per_degree_y": 157.60720799600435,
+  "n_meridians": 12,
+  "n_parallels": 10,
+  "max_residual_deg": 0.0010540699994834313,
+  "approx_scale_denominator": 2002085,
+  "graticule_x": [
+   [
+    196.202,
+    3.0
+   ],
+   [
+    353.883,
+    4.0
+   ],
+   [
+    511.564,
+    5.0
+   ],
+   [
+    669.246,
+    6.0
+   ],
+   [
+    826.927,
+    7.0
+   ],
+   [
+    984.248,
+    8.0
+   ],
+   [
+    1141.93,
+    9.0
+   ],
+   [
+    1299.611,
+    10.0
+   ],
+   [
+    1457.292,
+    11.0
+   ],
+   [
+    1614.974,
+    12.0
+   ],
+   [
+    1772.295,
+    13.0
+   ],
+   [
+    1929.976,
+    14.0
+   ]
+  ],
+  "graticule_y": [
+   [
+    112.688,
+    4.0
+   ],
+   [
+    270.368,
+    5.0
+   ],
+   [
+    428.047,
+    6.0
+   ],
+   [
+    585.726,
+    7.0
+   ],
+   [
+    743.045,
+    8.0
+   ],
+   [
+    900.724,
+    9.0
+   ],
+   [
+    1058.404,
+    10.0
+   ],
+   [
+    1216.083,
+    11.0
+   ],
+   [
+    1373.762,
+    12.0
+   ],
+   [
+    1531.081,
+    13.0
+   ]
+  ]
+ },
+ "minerals_2023_georeference": {
+  "affine": {
+   "lon = a*x + b": [
+    0.006345724172407311,
+    2.0050854046149746
+   ],
+   "lat = c*y + d": [
+    0.006345627204878867,
+    2.6164530590605355
+   ]
+  },
+  "points_per_degree": {
+   "x": 157.58642714857245,
+   "y": 157.58883522674404
+  }
+ },
+ "tiles": "EPSG:4326 global scheme (Leaflet L.CRS.EPSG4326): at zoom z 2^(z+1) x 2^z tiles of 256 px, zoom 4-8",
+ "accuracy": "both maps are ~1:2 000 000; the two georeferences differ by ~8 km (rms 11 km on 33 state capitals), so cross-map joins (minerals2023_mineral_localities.geo_*) are +-10 km statements",
+ "documentation": "README.md and ATTRIBUTES.md in the repository (field dictionary, derivation of the stratigraphic ages, audit of every layer)"
+}</MDI>
+  </Metadata>
+</PAMDataset>
