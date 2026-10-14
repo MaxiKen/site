@@ -317,6 +317,7 @@ def check(gpkg):
         meta, _, geometry, fields = ogr_read(gpkg, layer=name)
         n += len(fields[0]) if fields else 0
     print('vector/attribute layers readable: %d (%d rows in total)' % (len(pyogrio.list_layers(gpkg)), n))
+    os.environ.setdefault('GDAL_PAM_ENABLED', 'NO')     # no "GPKG:...aux.xml" side-car files next to the cwd
     try:
         import rasterio
     except ImportError:
