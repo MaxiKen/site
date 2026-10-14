@@ -643,6 +643,15 @@ def geo_area_km2(geom):
     return geom.area * 111.32 * math.cos(lat) * 110.57
 
 
+def geo_perimeter_km(geom):
+    polys = geom.geoms if geom.geom_type == 'MultiPolygon' else [geom]
+    L = 0.0
+    for pg in polys:
+        for ring in [pg.exterior] + list(pg.interiors):
+            L += geo_length_km(list(ring.coords))
+    return L
+
+
 def safe_name(s):
     s = re.sub(r'[^A-Za-z0-9]+', '_', s).strip('_')
     return s[:48] or 'layer'
@@ -691,6 +700,366 @@ def shapely_to_shp_geom(geom):
     if geom.geom_type == 'MultiPolygon':
         return MultiPolygon([orient(g, sign=-1.0) for g in geom.geoms]).__geo_interface__
     return geom.__geo_interface__
+
+
+# --------------------------------------------------------------------------
+# 2b. Stratigraphy from the EXPLANATIONS panel
+# --------------------------------------------------------------------------
+# The legend column of the PDF carries, left of the colour swatches, three levels of
+# curly brackets with printed age / series labels:
+#   x ~ 2593 pt  period brackets      (NEOGENE, PALAEOGENE, CRETACEOUS, JURASSIC, PRE-CAMBRIAN TO CAMBRIAN,
+#                                      TERTIARY TO RECENT VOLCANICS)
+#   x ~ 2673 pt  one extra bracket    (Albian: Bima Fm + Asu River Group)
+#   x ~ 2680 pt  sub-age / series brackets or single-row labels (Holocene, Pleistocene / Pliocene, ...,
+#                                      Pan-African Older Granite Series, Migmatite-Gneiss Complex, ...)
+# Right of the descriptions "--- <Formation>" names are printed, and the stratigraphic
+# correlation chart (x 2145-2380) lists the unit codes per sedimentary basin.  The functions
+# below read those printed elements geometrically; nothing is typed in by hand except the
+# ICS translation of the printed terms and three documented fall-backs (see STRAT_FALLBACK).
+
+# printed term (normalised) -> eon, era, period, epoch/stage, age range (Ma, ICS 2023) and a literature note
+ICS = {
+    'recent':                     ('Phanerozoic', 'Cenozoic', 'Quaternary', 'Holocene', 0.0, 0.0117, ''),
+    'holocene':                   ('Phanerozoic', 'Cenozoic', 'Quaternary', 'Holocene', 0.0, 0.0117, ''),
+    'pleistocene / pliocene':     ('Phanerozoic', 'Cenozoic', 'Neogene-Quaternary', 'Pliocene-Pleistocene', 0.0117, 5.333, ''),
+    'tertiary to recent volcanics': ('Phanerozoic', 'Cenozoic', 'Paleogene-Quaternary (Tertiary-Recent)', '', 0.0, 66.0,
+                                   'Nigerian plateau basalts (Jos, Biu, Mambilla) are Miocene to Holocene'),
+    'oligocene / miocene':        ('Phanerozoic', 'Cenozoic', 'Paleogene-Neogene', 'Oligocene-Miocene', 5.333, 33.9, ''),
+    'upper eocene':               ('Phanerozoic', 'Cenozoic', 'Paleogene', 'Eocene (Late / Priabonian)', 33.9, 37.71, ''),
+    'middle eocene':              ('Phanerozoic', 'Cenozoic', 'Paleogene', 'Eocene (Middle / Lutetian-Bartonian)', 37.71, 47.8, ''),
+    'lower eocene':               ('Phanerozoic', 'Cenozoic', 'Paleogene', 'Eocene (Early / Ypresian)', 47.8, 56.0, ''),
+    'palaeocene':                 ('Phanerozoic', 'Cenozoic', 'Paleogene', 'Paleocene', 56.0, 66.0, ''),
+    'coniancian / maestrichtian': ('Phanerozoic', 'Mesozoic', 'Cretaceous', 'Late Cretaceous: Coniacian-Maastrichtian', 66.0, 89.8, ''),
+    'coniancian':                 ('Phanerozoic', 'Mesozoic', 'Cretaceous', 'Late Cretaceous: Coniacian', 86.3, 89.8, ''),
+    'senonian':                   ('Phanerozoic', 'Mesozoic', 'Cretaceous', 'Late Cretaceous: Senonian (Coniacian-Maastrichtian)', 66.0, 89.8,
+                                   'Rima Group of the Sokoto Basin is Maastrichtian'),
+    'turonian / pre maastrichtian': ('Phanerozoic', 'Mesozoic', 'Cretaceous', 'Late Cretaceous: Turonian-Campanian', 72.1, 93.9, ''),
+    'albian / cenomanian':        ('Phanerozoic', 'Mesozoic', 'Cretaceous', 'Albian-Cenomanian', 93.9, 113.0, ''),
+    'albian':                     ('Phanerozoic', 'Mesozoic', 'Cretaceous', 'Early Cretaceous: Albian', 100.5, 113.0, ''),
+    'jurassic':                   ('Phanerozoic', 'Mesozoic', 'Jurassic', '', 145.0, 201.4,
+                                   'Younger Granite ring complexes are dated c. 213-141 Ma (Late Triassic-Jurassic)'),
+    'pre - cambrian to cambrian': ('Precambrian-Phanerozoic', 'Archaean-Proterozoic (to Cambrian)', '(Precambrian) - Cambrian', '', 485.4, 4000.0,
+                                   'basement: Archaean-Palaeoproterozoic gneiss protoliths reworked and intruded in the Pan-African (c. 750-500 Ma)'),
+}
+# series-level refinements of the Precambrian-Cambrian bracket (the printed series / complex label decides)
+SERIES_ICS = {
+    'pan - african older granite series': ('Proterozoic-Phanerozoic', 'Neoproterozoic-Palaeozoic', 'Ediacaran-Cambrian', '', 485.4, 1000.0,
+                                           'Pan-African granitoids, c. 750-500 Ma'),
+    'meta - sedimentary / meta - volcanic series': ('Proterozoic', 'Neoproterozoic (Pan-African deformed)', '', '', 538.8, 1000.0,
+                                                    'schist belts: Neoproterozoic metasediments / metavolcanics, deformed c. 600 Ma'),
+    'migmatite - gneiss complex': ('Archaean-Proterozoic', 'Archaean-Palaeoproterozoic, reworked in the Neoproterozoic', '', '', 538.8, 4000.0,
+                                   'protoliths c. 2.7-2.0 Ga (Eburnean / Liberian), Pan-African migmatisation c. 600 Ma'),
+    'cataclastic rocks': ('Proterozoic-Phanerozoic', 'Neoproterozoic-Palaeozoic', 'Ediacaran-Cambrian', '', 485.4, 1000.0,
+                          'Pan-African shear zones (c. 600-550 Ma)'),
+}
+# rows the legend leaves without any bracket or label: printed evidence used instead
+STRAT_FALLBACK = {
+    ('Gss', 20): ('Senonian', 'correlation chart (Gombe Formation drawn in the Senonian band)'),
+    ('Ajst', 21): ('Coniancian / Maestrichtian', 'legend position between Gombe Fm and Nsukka Fm; Ajali Formation is Maastrichtian'),
+    ('Ts', 34): ('Senonian', 'correlation chart key: ts, Tst, Tss, Tcs = Rima Group (Senonian band)'),
+    ('MyP', 49): ('JURASSIC', 'code family My- (Younger Granite series); row sits 2 pt above the JURASSIC bracket'),
+    ('P', 59): ('', 'no age printed; basement pegmatites of Nigeria are late Pan-African (c. 560-530 Ma)'),
+}
+ROCK_CLASS_RULES = [
+    ('fault rock',     r'mylonite|cataclas|sheared'),
+    ('minor intrusive', r'pegmatite|dolerite'),
+    ('metamorphic',    r'schist|gneiss|migmat|quartzite|marble|amphibol|banded iron|phyl|slate|meta|granulite|charnock'),
+    ('volcanic',       r'basalt|rhyolite|ignimbrite|trachy|andes|volcanic'),
+    ('plutonic',       r'granite|syenite|gabbro|diorite|granodiorite|porph'),
+    ('sedimentary',    r'sand|clay|shale|limestone|silt|coal|lignite|gravel|pebble|grit|alluvium|swamp|ironstone|mudstone|conglomerate|beach'),
+]
+CHART_COLUMNS = [  # x range (pt) of the basin columns of the correlation chart, header as printed
+    (2145.6, 2163.6, 'N.W.: Bida - Lokoja'), (2163.6, 2183.4, 'N.W.: Sokoto'), (2183.4, 2203.6, 'N.W.: Yola'),
+    (2203.6, 2224.1, 'N.E.: Numan'), (2224.1, 2243.2, 'N.E.: Maiduguri'), (2243.2, 2262.6, 'N.E.: Gombe'),
+    (2262.6, 2321.7, 'S.E.'), (2321.7, 2380.3, 'S.W.')]
+CHART_ALIASES = {'cst': 'Cst', 'ncst': 'Ncsh', 'kst': 'Kss', 'ims': 'Imsh', 'ash': 'ANsh', 'ylsh': 'Yls', 'bst': 'Bss',
+                 'mcs': 'Mcst', 'gicl': 'Glcl'}
+
+
+def rock_class(desc, code=''):
+    d = desc.lower()
+    for cls, rx in ROCK_CLASS_RULES:
+        if re.search(rx, d):
+            return cls
+    return ''
+
+
+def _vertical_runs(paths, x_lo, x_hi, min_len=8.0):
+    """Vertical straight runs (x, y_lo, y_hi) of stroked layout paths inside an x window (page coords)."""
+    runs = []
+    for p in paths:
+        if p['layer'] not in ('Other 3', 'Other 2') or p['op'] not in ('S', 's', 'B', 'B*', 'b', 'b*'):
+            continue
+        for pts, _ in p['subpaths']:
+            i = 0
+            while i < len(pts):
+                j = i
+                while j + 1 < len(pts) and abs(pts[j + 1][0] - pts[i][0]) < 1.5:
+                    j += 1
+                if j > i:
+                    ys = [q[1] for q in pts[i:j + 1]]
+                    x = sum(q[0] for q in pts[i:j + 1]) / (j - i + 1)
+                    if x_lo <= x <= x_hi and max(ys) - min(ys) >= min_len:
+                        runs.append((x, min(ys), max(ys)))
+                i = max(j, i + 1)
+    return runs
+
+
+def _brackets(runs):
+    """Pair vertical arms into curly brackets: upper arm, lower arm, optional hook continuing the lower arm.
+    Works in page-down coordinates (y_d = top .. bottom); returns [(top, bottom, gap_top, gap_bottom)]."""
+    arms = sorted(runs)                     # (top_d, bottom_d)
+    merged = []
+    for a in arms:                          # join touching pieces (the hooks)
+        if merged and a[0] <= merged[-1][1] + 1.0:
+            merged[-1] = (merged[-1][0], max(merged[-1][1], a[1]))
+        else:
+            merged.append(a)
+    out = []
+    i = 0
+    while i + 1 < len(merged):
+        up, lo = merged[i], merged[i + 1]
+        out.append((up[0], lo[1], up[1], lo[0]))
+        i += 2
+    return out
+
+
+def legend_stratigraphy(legend, words, paths, page_h):
+    """Attach formation / age / series / basin attributes (all read from the printed panel) to the legend rows."""
+    H = page_h
+    rows = []
+    for i, e in enumerate(legend, 1):
+        e['row'] = i
+        rows.append((i, H - e['y_top'], H - e['y_bot']))          # top_d, bottom_d
+    row_h = sum(b - t for _, t, b in rows) / len(rows)
+
+    def overlap(a0, a1, b0, b1):
+        return max(0.0, min(a1, b1) - max(a0, b0))
+
+    def members(top, bot):
+        return [i for i, t, b in rows if overlap(t, b, top, bot) >= 0.45 * row_h]
+
+    # ---- printed labels (layout layer words -> lines -> blocks)
+    lw = [w for w in words if w['layer'] in ('Other 3', 'Other 2') and abs(w['angle']) < 5 and w['text'].strip()]
+    lw.sort(key=lambda w: (-w['y0'], w['x0']))
+    lines = []
+    for w in lw:
+        if lines and abs(lines[-1]['y0'] - w['y0']) < 2.0 and -1.0 <= w['x0'] - lines[-1]['x1'] < 1.2 * w['size']:
+            lines[-1]['text'] += ' ' + w['text'].strip()
+            lines[-1]['x1'] = w['x1'] + 0.6 * w['size']
+        else:
+            lines.append({'text': w['text'].strip(), 'x0': w['x0'], 'x1': w['x1'] + 0.6 * w['size'], 'y0': w['y0'],
+                          'size': w['size'], 'yc': H - (w['y0'] + 0.35 * w['size'])})
+    sub = [l for l in lines if 2596 <= l['x0'] <= 2672 and l['yc'] > 80]
+    per = [l for l in lines if 2500 <= l['x0'] < 2592 and l['yc'] > 80 and l['text'].upper() == l['text']
+           and re.search('[A-Z]{4}', l['text'])]
+    blocks = []
+    for l in sorted(sub, key=lambda l: l['yc']):
+        if blocks and l['yc'] - blocks[-1]['lines'][-1]['yc'] < 9 and abs(l['x0'] - blocks[-1]['lines'][0]['x0']) < 40:
+            blocks[-1]['lines'].append(l)
+        else:
+            blocks.append({'lines': [l]})
+    for b in blocks:
+        b['yc'] = sum(l['yc'] for l in b['lines']) / len(b['lines'])
+        series_like = any(re.search(r'series|complex|rocks', l['text'], re.I) for l in b['lines'])
+        text = ''
+        for l in b['lines']:
+            sep = ' / ' if (text.endswith('/') or not series_like) else ' '
+            text = (text.rstrip(' /') + sep + l['text'].strip()) if text else l['text'].strip()
+        b['text'] = text.rstrip(' /')
+    pblocks = []
+    for l in sorted(per, key=lambda l: l['yc']):
+        if pblocks and l['yc'] - pblocks[-1]['lines'][-1]['yc'] < 9:
+            pblocks[-1]['lines'].append(l)
+        else:
+            pblocks.append({'lines': [l]})
+    for b in pblocks:
+        b['yc'] = sum(l['yc'] for l in b['lines']) / len(b['lines'])
+        b['text'] = ' '.join(l['text'] for l in b['lines'])
+
+    # ---- brackets (page-down coordinates)
+    def runs_d(x_lo, x_hi):
+        return [(H - y_hi, H - y_lo) for x, y_lo, y_hi in _vertical_runs(paths, x_lo, x_hi)]
+    br_period = _brackets(runs_d(2588, 2598))
+    br_sub = _brackets(runs_d(2676, 2683))
+    br_extra = _brackets(runs_d(2670, 2676))
+
+    info = {i: {'age_print': '', 'series': '', 'period_prt': '', 'age_src': '', 'note': ''} for i, _, _ in rows}
+
+    def is_series(t):
+        return bool(re.search(r'series|complex|rocks|volcanics', t, re.I))
+
+    used_blocks = set()
+    for level, brs in (('sub-age bracket', br_sub), ('extra bracket', br_extra)):
+        for top, bot, g0, g1 in brs:
+            mem = members(top, bot)
+            labs = [b for b in blocks if top <= b['yc'] <= bot and id(b) not in used_blocks]
+            if not mem or not labs:
+                continue
+            for b in labs:
+                used_blocks.add(id(b))
+            if len(labs) == 1 and len(labs[0]['lines']) == len(mem) and len(mem) > 1:
+                # stacked label, one line per row (Oligocene / Miocene over Upper Eocene)
+                for i, l in zip(mem, labs[0]['lines']):
+                    info[i]['age_print'] = l['text']
+                    info[i]['age_src'] = level + ' (stacked label, one line per row)'
+            else:
+                for b in labs:
+                    key = 'series' if is_series(b['text']) else 'age_print'
+                    for i in mem:
+                        if not info[i][key]:
+                            info[i][key] = b['text']
+                            info[i]['age_src'] = info[i]['age_src'] or level
+    # single-row labels (no bracket)
+    for b in blocks:
+        if id(b) in used_blocks:
+            continue
+        best = max(rows, key=lambda r: overlap(r[1], r[2], b['yc'] - 0.5 * b['lines'][0]['size'], b['yc'] + 0.5 * b['lines'][0]['size']))
+        i = best[0]
+        key = 'series' if is_series(b['text']) else 'age_print'
+        if not info[i][key]:
+            info[i][key] = b['text']
+            info[i]['age_src'] = 'legend row label'
+            used_blocks.add(id(b))
+    # period brackets
+    for top, bot, g0, g1 in br_period:
+        labs = [b for b in pblocks if top <= b['yc'] <= bot]
+        for i in members(top, bot):
+            info[i]['period_prt'] = ' / '.join(b['text'] for b in labs)
+    # a row that shares a sub-age bracket or a series label with dated rows inherits their period label
+    # (bracket ends are drawn up to ~7 pt short of the swatch edge)
+    for top, bot, g0, g1 in br_sub + br_extra:
+        mem = members(top, bot)
+        pp = collections.Counter(info[i]['period_prt'] for i in mem if info[i]['period_prt'])
+        if pp:
+            for i in mem:
+                if not info[i]['period_prt']:
+                    info[i]['period_prt'] = pp.most_common(1)[0][0]
+    # rows without series inside the Precambrian bracket: nearest sub-age bracket (<= 10 pt)
+    for i, t, b in rows:
+        if info[i]['period_prt'].startswith('PRE') and not info[i]['series']:
+            best = None
+            for top, bot, g0, g1 in br_sub:
+                d = max(0.0, top - b, t - bot)
+                if d <= 10 and (best is None or d < best[0]):
+                    best = (d, top, bot)
+            if best:
+                mem = members(best[1], best[2])
+                if mem and info[mem[0]]['series']:
+                    info[i]['series'] = info[mem[0]]['series']
+                    info[i]['age_src'] = f'nearest series bracket ({best[0]:.1f} pt away)'
+
+    # ---- "--- Formation" names right of the descriptions and spanning group names
+    names = [l for l in lines if l['x0'] >= 2700 and '---' in l['text']]
+    spans = [l for l in lines if l['x0'] >= 2860 and '---' not in l['text'] and re.search(r'Formation|Group|group', l['text'])]
+    for i, t, b in rows:
+        e = legend[i - 1]
+        e['formation'] = ''
+        e['strat_grp'] = ''
+        for l in names:
+            y0, y1 = l['yc'] - 0.55 * l['size'], l['yc'] + 0.55 * l['size']
+            if overlap(t, b, y0, y1) >= 0.35 * l['size']:
+                e['formation'] = l['text'].split('---', 1)[1].strip()
+        for l in spans:
+            y0, y1 = l['yc'] - 0.55 * l['size'] - 4, l['yc'] + 0.55 * l['size'] + 4
+            if overlap(t, b, y0, y1) > 0:
+                e['strat_grp'] = l['text'].strip()
+
+    # ---- correlation chart: key (code -> formation) and basin columns
+    chart = [l for l in lines if 2145 <= l['x0'] <= 2381 and 180 <= l['yc'] <= 746]
+    key_codes = [l for l in lines if 2384 <= l['x0'] <= 2423 and 180 <= l['yc'] <= 746]
+    key = collections.defaultdict(list)
+    for kc in key_codes:
+        name = [l for l in lines if 2426 <= l['x0'] <= 2440 and abs(l['y0'] - kc['y0']) < 2]
+        if not name:
+            continue
+        for c in re.split(r'[,\s]+', kc['text']):
+            c = c.strip()
+            if c:
+                key[CHART_ALIASES.get(c.lower(), c)].append((name[0]['text'], kc['yc']))
+    cells = []     # filled cells of the chart: (x0, x1, top_d, bottom_d, area)
+    for pth in paths:
+        if pth['layer'] not in ('Other 3', 'Other 2') or pth['op'] not in ('f', 'f*', 'B', 'B*', 'b', 'b*'):
+            continue
+        pts = [q for sp, _ in pth['subpaths'] for q in sp]
+        if not pts:
+            continue
+        x0, x1 = min(q[0] for q in pts), max(q[0] for q in pts)
+        t, b = H - max(q[1] for q in pts), H - min(q[1] for q in pts)
+        if 2140 <= x0 and x1 <= 2385 and 178 <= t and b <= 748 and x1 - x0 > 12 and b - t > 6:
+            cells.append((x0, x1, t, b, (x1 - x0) * (b - t)))
+    basins = collections.defaultdict(set)
+    for l in chart:
+        xc, yc = (l['x0'] + l['x1']) / 2, l['yc']
+        inside = [c for c in cells if c[0] - 1 <= xc <= c[1] + 1 and c[2] - 1 <= yc <= c[3] + 1]
+        if inside:
+            c = min(inside, key=lambda c: c[4])
+            cols = [name for x0, x1, name in CHART_COLUMNS if c[0] - 2 <= (x0 + x1) / 2 <= c[1] + 2]
+        else:
+            cols = [name for x0, x1, name in CHART_COLUMNS if x0 <= xc < x1]
+        for code_ in re.split(r'[,\s]+', l['text']):
+            code_ = code_.strip()
+            if re.fullmatch(r'[A-Za-z]{1,6}', code_):
+                basins[CHART_ALIASES.get(code_.lower(), code_)].update(cols)
+    chart_age = {}   # rough era of a key line from the age labels at the left of the chart
+    age_lab = [l for l in lines if 2060 <= l['x0'] <= 2141 and 180 <= l['yc'] <= 746 and l['text'].upper() == l['text']]
+
+    def era_of_key_line(yc):
+        near = min(age_lab, key=lambda l: abs(l['yc'] - yc), default=None)
+        if not near:
+            return ''
+        return 'Mesozoic' if re.search(r'SENON|CRETAC|TURON|CENOMAN|ALBIAN', near['text']) else 'Cenozoic'
+
+    # ---- translate the printed terms
+    def norm(t):
+        return re.sub(r'\s+', ' ', t.replace('–', '-').replace('/', ' ')).strip().lower()
+    SERIES_N = {norm(k): v for k, v in SERIES_ICS.items()}
+    ICS_N = {norm(k): v for k, v in ICS.items()}
+    for i, t, b in rows:
+        e = legend[i - 1]
+        inf = info[i]
+        code = e['code']
+        fb = STRAT_FALLBACK.get((code, i))
+        if fb and not inf['age_print']:
+            if fb[0] and fb[0].upper() == fb[0]:
+                inf['period_prt'] = inf['period_prt'] or fb[0]
+            else:
+                inf['age_print'] = fb[0]
+            inf['age_src'] = 'fall-back: ' + fb[1]
+            inf['note'] = fb[1]
+        term = norm(inf['age_print']) or norm(inf['period_prt'])
+        ics = ICS_N.get(term)
+        if norm(inf['series']) in SERIES_N and inf['period_prt'].startswith('PRE'):
+            ics = SERIES_N[norm(inf['series'])]
+        if ics is None and term:
+            # try each part of a composite term, e.g. 'turonian / pre maastrichtian'
+            ics = next((ICS_N[k] for k in ICS_N if k in term), None)
+        e.update({
+            'age_print': inf['age_print'], 'series': inf['series'], 'period_prt': inf['period_prt'],
+            'age_src': inf['age_src'], 'strat_note': inf['note'],
+            'eon': ics[0] if ics else '', 'era': ics[1] if ics else '', 'period': ics[2] if ics else '',
+            'epoch': ics[3] if ics else '', 'age_ma_min': ics[4] if ics else None, 'age_ma_max': ics[5] if ics else None,
+            'age_lit': ics[6] if ics else '', 'rock_cls': rock_class(e['description']),
+            'basins': '; '.join(sorted(basins.get(code, []))),
+        })
+        if not e['formation'] and code in key and e['rock_cls'] == 'sedimentary' and e['era'] in ('Cenozoic', 'Mesozoic'):
+            cands = key[code]
+            if len(cands) == 1:
+                e['formation'] = cands[0][0] + ' (chart key)'
+            else:
+                era = e['era']
+                pick = [c for c in cands if era_of_key_line(c[1]) == era.split('-')[0]]
+                if len(pick) == 1:
+                    e['formation'] = pick[0][0] + ' (chart key)'
+                    e['strat_note'] = (e['strat_note'] + '; ' if e['strat_note'] else '') + \
+                        'code %s appears twice in the chart key (%s); chosen by age' % (code, ' / '.join(c[0] for c in cands))
+        if e['strat_grp'] and e['strat_grp'] == e['formation'].replace(' (chart key)', ''):
+            e['strat_grp'] = ''
+    n_age = sum(1 for e in legend if e['age_print'] or e['period_prt'])
+    print(f'stratigraphy: {n_age}/{len(legend)} legend rows dated from the printed panel '
+          f'({len(br_period)} period brackets, {len(br_sub) + len(br_extra)} sub-age brackets, '
+          f'{sum(1 for e in legend if e["formation"])} formation names, {len(basins)} codes in the correlation chart)')
+    return legend
 
 
 # --------------------------------------------------------------------------
@@ -772,13 +1141,19 @@ def main(pdf_path, out_dir):
         right = [w for w in layout_words if max(xs) <= w['x0'] <= max(xs) + 6 and min(ys) - 2 <= w['y0'] <= max(ys)]
         code = ' '.join(w['text'] for w in sorted(inside, key=lambda w: w['x0'])).strip()
         desc = ' '.join(w['text'] for w in sorted(right, key=lambda w: w['x0'])).strip()
-        legend.append({'fill': p['fill'], 'code': code, 'description': desc, 'x': min(xs), 'y': min(ys)})
+        legend.append({'fill': p['fill'], 'code': code, 'description': desc, 'x': min(xs), 'y': min(ys),
+                       'y_top': max(ys), 'y_bot': min(ys)})
     legend.sort(key=lambda e: (-e['y'], e['x']))
+    page_h = float(page.MediaBox[3])
+    legend_stratigraphy(legend, words, paths, page_h)
+    LEGEND_COLS = ['row', 'code', 'description', 'fill', 'formation', 'strat_grp', 'age_print', 'series', 'period_prt',
+                   'eon', 'era', 'period', 'epoch', 'age_ma_min', 'age_ma_max', 'age_lit', 'age_src', 'rock_cls',
+                   'basins', 'strat_note']
     with open(os.path.join(out_dir, 'legend.csv'), 'w', newline='') as f:
-        wr = csv.DictWriter(f, fieldnames=['code', 'description', 'fill'])
+        wr = csv.DictWriter(f, fieldnames=LEGEND_COLS)
         wr.writeheader()
         for e in legend:
-            wr.writerow({k: e[k] for k in ('code', 'description', 'fill')})
+            wr.writerow({k: ('' if e.get(k) is None else e.get(k)) for k in LEGEND_COLS})
     colour_counts = collections.Counter(e['fill'] for e in legend)
     legend_by_colour = {e['fill']: e for e in legend if colour_counts[e['fill']] == 1}
     print(f'legend entries: {len(legend)} ({len(legend_by_colour)} with a unique colour)')
@@ -827,12 +1202,76 @@ def main(pdf_path, out_dir):
     poly_fields = [('ocg_id', 'N', 6, 0), ('layer_no', 'N', 4, 0), ('unit', 'C', 120, 0),
                    ('fill', 'C', 7, 0), ('code', 'C', 12, 0), ('code_src', 'C', 6, 0),
                    ('leg_code', 'C', 12, 0), ('leg_desc', 'C', 120, 0), ('lbl_code', 'C', 12, 0),
-                   ('n_lbl', 'N', 5, 0), ('area_km2', 'N', 14, 3), ('n_rings', 'N', 5, 0),
-                   ('src_seq', 'N', 10, 0), ('dup_of', 'N', 10, 0)]
+                   ('n_lbl', 'N', 5, 0), ('area_km2', 'N', 14, 3), ('perim_km', 'N', 12, 2),
+                   ('cen_lon', 'N', 11, 6), ('cen_lat', 'N', 11, 6), ('n_rings', 'N', 5, 0),
+                   ('src_seq', 'N', 10, 0), ('dup_of', 'N', 10, 0),
+                   # stratigraphy read from the EXPLANATIONS panel (see legend.csv for the full record)
+                   ('leg_row', 'N', 4, 0), ('formation', 'C', 64, 0), ('strat_grp', 'C', 48, 0),
+                   ('age_print', 'C', 48, 0), ('series', 'C', 64, 0), ('period_prt', 'C', 40, 0),
+                   ('eon', 'C', 40, 0), ('era', 'C', 64, 0), ('period', 'C', 48, 0), ('epoch', 'C', 64, 0),
+                   ('age_ma_min', 'N', 9, 4), ('age_ma_max', 'N', 9, 4), ('age_src', 'C', 120, 0),
+                   ('rock_cls', 'C', 16, 0), ('basins', 'C', 120, 0)]
+    STRAT_KEYS = ['row', 'formation', 'strat_grp', 'age_print', 'series', 'period_prt', 'eon', 'era', 'period',
+                  'epoch', 'age_ma_min', 'age_ma_max', 'age_src', 'rock_cls', 'basins']
+    legend_by_code = collections.defaultdict(list)
+    for e in legend:
+        legend_by_code[e['code']].append(e)
+
+    def hex_rgb(h):
+        h = (h or '#000000').lstrip('#')
+        return tuple(int(h[k:k + 2], 16) for k in (0, 2, 4)) if len(h) == 6 else (0, 0, 0)
+
+    def code_key(c):
+        # map labels confuse capital I and lower-case l (GIls / Glls); compare codes without that distinction
+        return c.lower().replace('i', 'l')
+    legend_by_ckey = collections.defaultdict(list)
+    legend_by_form = collections.defaultdict(list)
+    for e in legend:
+        legend_by_ckey[code_key(e['code'])].append(e)
+        if e.get('formation'):
+            legend_by_form[re.sub(r'[^a-z0-9]+', '', e['formation'].replace('(chart key)', '').lower())].append(e)
+    older_granite = next((e for e in legend if 'older' in (e.get('series') or '').lower() and e['code'] == 'OGh'), None)
+
+    def strat_record(leg, code, fill, layer_name=''):
+        """legend row for a polygon: the colour/description match, else its code (nearest colour if ambiguous),
+        else the formation name; units missing from the printed legend get a flagged fall-back or stay blank."""
+        e, note = leg, ''
+        if e is None and code:
+            cands = legend_by_code.get(code) or legend_by_ckey.get(code_key(code)) or []
+            if len(cands) > 1:
+                fr = hex_rgb(fill)
+                cands = sorted(cands, key=lambda c: sum((a - b) ** 2 for a, b in zip(hex_rgb(c['fill']), fr)))
+            if cands:
+                e = cands[0]
+                if e['code'] != code:
+                    note = f'legend row matched by code with I/l confusion ({code} = {e["code"]})'
+        if e is None and layer_name:
+            cands = legend_by_form.get(re.sub(r'[^a-z0-9]+', '', layer_name.lower()), [])
+            if len(cands) == 1:
+                e = cands[0]
+                note = f'not in printed legend; layer name "{layer_name}" = formation of legend row {e["row"]} ({e["code"]})'
+        if e is None and code.startswith('OG') and older_granite is not None:
+            # e.g. OGp 'Coarse porphyritic biotite and biotite hornblende granite' (245 polygons) has no legend row
+            rec = [None, '', '', '', older_granite['series'], older_granite['period_prt'], older_granite['eon'],
+                   older_granite['era'], older_granite['period'], older_granite['epoch'],
+                   older_granite['age_ma_min'], older_granite['age_ma_max'],
+                   'fall-back: unit not in printed legend; code family OG- = Pan-African Older Granite rows 62-70',
+                   rock_class(layer_name, code), '']
+            return rec
+        if e is None:
+            return [None, '', '', '', '', '', '', '', '', '', None, None,
+                    'not in printed legend; no age inferred' if (code or layer_name) else '',
+                    rock_class(layer_name, code) if layer_name else '', '']
+        rec = [e.get(k) if e.get(k) is not None else ('' if k not in ('row', 'age_ma_min', 'age_ma_max') else None)
+               for k in STRAT_KEYS]
+        if note:
+            rec[STRAT_KEYS.index('age_src')] = (note + '; ' + rec[STRAT_KEYS.index('age_src')]).strip('; ')
+        return rec
     units_out = ShpOut(os.path.join(out_dir, 'geology_units'), shapefile.POLYGON, poly_fields)
     from shapely.strtree import STRtree
     code_tree = STRtree([pt for pt, _ in unit_code_pts]) if unit_code_pts else None
     per_layer_records = collections.defaultdict(list)
+    unit_records_all = []
     n_invalid = 0
     layer_codes = collections.defaultdict(collections.Counter)
     polys_tmp = []
@@ -886,11 +1325,15 @@ def main(pdf_path, out_dir):
             code, src = '', ''
         dup_of = seen_geoms.setdefault(geom.wkb, p['seq'])
         dup_of = 0 if dup_of == p['seq'] else dup_of
+        cen = geom.representative_point()
         rec = [key[0], layer_index[key], key[1], p['fill'] or '', code, src, leg_code, leg_desc,
-               lbl_code, n_lbl, round(geo_area_km2(geom), 3),
-               len(geom.geoms) if geom.geom_type == 'MultiPolygon' else 1, p['seq'], dup_of]
+               lbl_code, n_lbl, round(geo_area_km2(geom), 3), round(geo_perimeter_km(geom), 2),
+               round(cen.x, 6), round(cen.y, 6),
+               len(geom.geoms) if geom.geom_type == 'MultiPolygon' else 1, p['seq'], dup_of] + \
+            strat_record(leg, code, p['fill'], key[1])
         units_out.add(shapely_to_shp_geom(geom), rec)
         per_layer_records[key].append((geom, rec))
+        unit_records_all.append((geom, rec))
     print('geology polygons:', units_out.close(), f'({n_invalid} needed make_valid)')
     # one shapefile per original PDF layer
     for key, recs in per_layer_records.items():
@@ -971,14 +1414,21 @@ def main(pdf_path, out_dir):
     # major rivers: filled polygons (+ their outlines are the strokes)
     mr = [p for p in paths if p['layer'] == 'Major River']
     o = ShpOut(os.path.join(out_dir, 'major_rivers_poly'), shapefile.POLYGON, [
-        ('ocg_id', 'N', 6, 0), ('layer', 'C', 32, 0), ('fill', 'C', 7, 0), ('area_km2', 'N', 14, 3),
-        ('n_rings', 'N', 5, 0), ('src_seq', 'N', 10, 0)])
+        ('ocg_id', 'N', 6, 0), ('layer', 'C', 32, 0), ('name', 'C', 254, 0), ('fill', 'C', 7, 0),
+        ('area_km2', 'N', 14, 3), ('perim_km', 'N', 12, 2), ('n_rings', 'N', 5, 0), ('src_seq', 'N', 10, 0)])
+    water_names = [(Point(*ll(w['x0'] + 0.3 * w['size'] * w['nchar'], w['y0'] + 0.35 * w['size'])),
+                    re.sub(r'\s+', ' ', w['text']).strip()) for w in uniq_words if label_kind(w) == 'water name']
     for p in mr:
         if p['op'] in ('f', 'f*', 'B', 'B*', 'b', 'b*'):
             geom = build_polygon(p['subpaths'], affine)
             if geom is not None and not geom.is_empty:
-                o.add(shapely_to_shp_geom(geom), [p['ocg_id'], 'Major River', p['fill'] or '',
-                                                  round(geo_area_km2(geom), 3),
+                pg = prep(geom)
+                inside = []
+                for pt, name in water_names:
+                    if pg.contains(pt) and name not in inside:
+                        inside.append(name)
+                o.add(shapely_to_shp_geom(geom), [p['ocg_id'], 'Major River', '; '.join(inside), p['fill'] or '',
+                                                  round(geo_area_km2(geom), 3), round(geo_perimeter_km(geom), 2),
                                                   len(geom.geoms) if geom.geom_type == 'MultiPolygon' else 1, p['seq']])
     print('major_rivers_poly:', o.close())
     o = ShpOut(os.path.join(out_dir, 'major_rivers_outline'), shapefile.POLYLINE, line_fields)
@@ -994,7 +1444,28 @@ def main(pdf_path, out_dir):
 
     # ---- point layers from marker symbols
     pt_fields = [('ocg_id', 'N', 6, 0), ('layer', 'C', 32, 0), ('name', 'C', 64, 0),
-                 ('name_kind', 'C', 16, 0), ('name_dist', 'N', 8, 2), ('src_seq', 'N', 10, 0)]
+                 ('name_kind', 'C', 16, 0), ('name_dist', 'N', 8, 2), ('src_seq', 'N', 10, 0),
+                 ('lon', 'N', 11, 6), ('lat', 'N', 11, 6),
+                 # geology unit of this map under the point
+                 ('unit_code', 'C', 12, 0), ('unit', 'C', 120, 0), ('unit_era', 'C', 64, 0), ('unit_per', 'C', 48, 0)]
+    unit_geoms = [g for g, _ in unit_records_all if not g.is_empty]
+    unit_recs = [r for g, r in unit_records_all if not g.is_empty]
+    unit_tree = STRtree(unit_geoms) if unit_geoms else None
+    FI = {name: k for k, (name, *_rest) in enumerate(poly_fields)}
+
+    def under(pt):
+        """[unit_code, unit, era, period] of the (smallest) unit polygon containing the point."""
+        if unit_tree is None:
+            return ['', '', '', '']
+        hits = [k for k in unit_tree.query(pt, predicate='within')]
+        if not hits:
+            return ['', '', '', '']
+        k = min(hits, key=lambda k: unit_recs[k][FI['area_km2']])
+        r = unit_recs[k]
+        return [r[FI['code']], r[FI['unit']], r[FI['era']] or '', r[FI['period']] or '']
+
+    def pt_rec(ocg, layer, name, kind, dist, seq, lon, lat):
+        return [ocg, layer, name, kind, dist, seq, round(lon, 6), round(lat, 6)] + under(Point(lon, lat))
     towns = [p for p in paths if p['layer'] == 'Towns']
     town_labels = [w for w in uniq_words if label_kind(w) == 'town']
     # ArcMap put each town label up-right of its marker: the marker centre sits
@@ -1018,7 +1489,8 @@ def main(pdf_path, out_dir):
     for ti, p in enumerate(towns):
         cx, cy = centroid_pdf(p)
         name, kind, dist = town_name.get(ti, ('', '', 0))
-        o.add(Point(*ll(cx, cy)), [p['ocg_id'], 'Towns', name, kind, round(dist, 2), p['seq']])
+        lon, lat = ll(cx, cy)
+        o.add(Point(lon, lat), pt_rec(p['ocg_id'], 'Towns', name, kind, round(dist, 2), p['seq'], lon, lat))
     print('towns:', o.close(), f'({len(town_name)} named)')
 
     # state capitals have no marker in the PDF (label only, drawn twice for the halo).
@@ -1036,14 +1508,16 @@ def main(pdf_path, out_dir):
     for w in caps:
         width = (w['x1'] - w['x0']) + 0.65 * w['size']
         px, py = w['x0'] + width / 2, w['y0'] + 0.35 * w['size']
-        o.add(Point(*ll(px, py)), [w['ocg_id'], 'Labels', w['text'], 'label centre', 0, w['seq']])
+        lon, lat = ll(px, py)
+        o.add(Point(lon, lat), pt_rec(w['ocg_id'], 'Labels', w['text'], 'label centre', 0, w['seq'], lon, lat))
     print('state_capitals:', o.close())
 
     vp = [p for p in paths if p['layer'] == 'Volcanic Plugs&Pipes']
     o = ShpOut(os.path.join(out_dir, 'volcanic_plugs'), shapefile.POINT, pt_fields)
     for p in vp:
         cx, cy = centroid_pdf(p)
-        o.add(Point(*ll(cx, cy)), [p['ocg_id'], 'Volcanic Plugs&Pipes', '', '', 0, p['seq']])
+        lon, lat = ll(cx, cy)
+        o.add(Point(lon, lat), pt_rec(p['ocg_id'], 'Volcanic Plugs&Pipes', '', 'no name on map', 0, p['seq'], lon, lat))
     print('volcanic_plugs:', o.close())
 
     # ---- graticule + frame (QA)
