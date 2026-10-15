@@ -12,28 +12,7 @@
       "G": 224
     },
     "entries_with_flags": 209,
-    "unknown_codes": [
-      "A",
-      "By",
-      "Cm",
-      "Cs",
-      "Cy",
-      "Cz",
-      "Da",
-      "In",
-      "Ke",
-      "Ma",
-      "Os",
-      "RS",
-      "SI",
-      "Si",
-      "Sp",
-      "Sr",
-      "Tn",
-      "Us",
-      "Wa",
-      "sT"
-    ]
+    "unknown_codes": []
   },
   "number_labels": {
     "labels": 999,
@@ -315,23 +294,23 @@
     "with_candidate_rule": 1350,
     "labels_total": 999,
     "labels_with_table_entry": 995,
-    "labels_whose_minerals_have_a_legend_symbol": 919,
-    "labels_snapped_to_colour_consistent_symbol_within_25pt": 675,
-    "symbols_linked_to_a_label": 630,
-    "symbols_claimed_by_several_labels": 43,
+    "labels_whose_minerals_have_a_legend_symbol": 916,
+    "labels_snapped_to_colour_consistent_symbol_within_25pt": 684,
+    "symbols_linked_to_a_label": 638,
+    "symbols_claimed_by_several_labels": 44,
     "symbols_without_any_label_within_14pt": 516,
     "snap_distance_pt_quartiles": [
-      9.911641131543984,
-      12.832816734074532,
-      15.475305767906436
+      9.840213422211205,
+      12.811539469088967,
+      15.440042828239484
     ],
     "snapped_by_colour": {
-      "yellow": 229,
-      "green": 61,
-      "outline": 152,
-      "khaki": 49,
+      "yellow": 230,
+      "green": 64,
+      "outline": 154,
+      "khaki": 51,
       "red": 73,
-      "purple": 39,
+      "purple": 40,
       "dark tan": 4,
       "blue grey": 10,
       "dark grey": 38,
@@ -340,18 +319,35 @@
       "tan": 2
     }
   },
+  "symbol_identification": {
+    "blobs": 1593,
+    "by_method": {
+      "signature determination": 1019,
+      "table row at its number": 198,
+      "template match within family": 138,
+      "visual template match": 113,
+      "sliver signature": 53,
+      "table row at nearest number": 32,
+      "fragment of a symbol of the same colour": 12,
+      "cluster signature": 11,
+      "no legend symbol matches": 9,
+      "half of a symbol cut by an overprint": 8
+    },
+    "not_a_mineral_symbol": 99,
+    "minerals_identified": 65,
+    "decisions_file": "symbol_decisions.py (GROUP_DECISIONS / CODE_RESOLUTIONS)"
+  },
   "commodity_groups": {
-    "industrial minerals": 304,
-    "construction materials": 287,
-    "rare metals": 130,
-    "precious metals": 77,
-    "gemstones": 76,
+    "industrial minerals": 312,
+    "construction materials": 294,
+    "rare metals": 135,
+    "precious metals": 78,
+    "gemstones": 77,
     "ferrous metals": 48,
     "energy": 47,
     "base metals": 36,
-    "unknown": 17,
-    "no code printed": 4,
-    "not in table": 4
+    "no code printed": 1,
+    "not in table": 1
   },
   "capital_check_km": {
     "n": 33,

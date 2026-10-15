@@ -306,6 +306,7 @@ def build_meta_minerals(tile_info, layers):
         'codes': codes,
         'qa': {'table': qa.get('table'), 'number_labels': qa.get('number_labels'),
                'raster_symbols': {k: v for k, v in qa.get('raster_symbols', {}).items() if k != 'by_colour'},
+               'symbol_identification': qa.get('symbol_identification', {}),
                'capital_check_km': {k: v for k, v in qa.get('capital_check_km', {}).items() if k != 'per_capital'}},
     }
     write_json(os.path.join(out, 'meta.json'), meta)
