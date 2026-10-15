@@ -58,7 +58,11 @@ DATASETS = {
                    'summary_localities_by_host_geology.csv': ('summary_localities_by_host_geology',
                                                               'localities per host rock unit of the 2011 map'),
                    'summary_localities_by_group.csv': ('summary_localities_by_group',
-                                                       'commodity group x host era x numbering zone')},
+                                                       'commodity group x host era x numbering zone'),
+                   'symbol_identification.csv': ('symbol_identification',
+                                                 'the symbol-identification pass: one row per raster symbol blob with '
+                                                 'its single mineral, the method, the template-match score and margin '
+                                                 'and the evidence (see README section 4)')},
     },
 }
 
@@ -93,9 +97,11 @@ DESCRIPTIONS = {
         'roads': 'road centrelines with length_km',
         'railway': 'railway lines',
         'graticule': 'graticule with printed label and GeoPDF (/VP) value',
-        'mineral_symbols_raster': 'every mineral symbol detected on the raster map face (colour, size, fill class, candidates)',
+        'mineral_symbols_raster': 'every mineral symbol detected on the raster map face (colour, size, fill class) with its '
+                                  'single identified mineral, identification method, template-match score and evidence',
         'mineral_localities': 'one point per mineral number printed on the map, joined to the EXPLANATIONS table: locality, '
-                              'codes, minerals, commodity groups, position source, n_printed, host rock unit of the 2011 map',
+                              'codes, minerals (all codes resolved), commodity groups, position source, n_printed, the single '
+                              'identification of the symbol at the number, host rock unit of the 2011 map; no empty fields',
         'towns': 'town symbols with name',
         'state_capitals': 'state capitals with reference coordinates and offsets',
         'state_name_labels': 'state name label positions',

@@ -74,7 +74,8 @@ The script parses the PDF content stream itself (paths, text and Optional‑Cont
 | `minerals2023_*` (16 feature layers) | every layer of `shapefiles_minerals/` – the 999 localities with codes, minerals, commodity groups and host geology, symbols, zones, rivers, towns, labels … |
 | `geology2011_map_pdf`, `minerals2023_map_pdf` (tile layers) | the two PDF pages rendered and georeferenced (zoom 4–8, 0.0027°/px ≈ 300 m; GDAL/QGIS open them as ordinary rasters with overviews) |
 | `geology2011_legend`, `…_summary_area_by_unit`, `…_summary_area_by_age` | the printed legend with ages, and the area statistics |
-| `minerals2023_legend`, `…_code_dictionary`, `…_explanations_table`, `…_summary_localities_by_host_geology`, `…_summary_localities_by_group` | the mineral legend, every code with meaning / group / confidence, the full EXPLANATIONS table, the locality statistics |
+| `minerals2023_legend`, `…_code_dictionary`, `…_explanations_table`, `…_summary_localities_by_host_geology`, `…_summary_localities_by_group` | the mineral legend, every code with meaning / group / confidence, the full EXPLANATIONS table (with `resolved_as` / `resolution_evidence` for the codes this project resolved), the locality statistics |
+| `minerals2023_symbol_identification` | the symbol-identification pass (§4): one row per raster symbol blob with its single mineral, method, score, margin and evidence |
 | `project_layers` | catalogue: one row per table (source map, kind, geometry, feature count, source file, description) |
 | `gpkg_metadata` | project description, both georeferences, accuracy note, build date (JSON) |
 
