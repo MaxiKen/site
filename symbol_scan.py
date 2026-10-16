@@ -107,7 +107,8 @@ def coverage(peaks):
     for r in rows:
         lon, lat = float(r['lon']), float(r['lat'])
         blobs.append({'blob': int(r['blob']), 'mineral': r['mineral'], 'method': r['method'],
-                      'cx': (lon - c0) / a, 'cy': (lat - f0) / e,
+                      # World files locate pixel CENTRES; icon boxes use EDGES.
+                      'cx': (lon - c0) / a + 0.5, 'cy': (lat - f0) / e + 0.5,
                       'bw': float(r['body_w_px']), 'bh': float(r['body_h_px'])})
     for p in peaks:
         hit = None

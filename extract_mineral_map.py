@@ -939,9 +939,10 @@ def main(pdf_path, out_dir):
     os.makedirs(rdir, exist_ok=True)
     base.save(os.path.join(rdir, 'mineral_map_base_75dpi.png'))
     px_deg = a / sx
+    py_deg = c / sx
     ulx, uly = ll(FR['x0'], top_y)
     with open(os.path.join(rdir, 'mineral_map_base_75dpi.pgw'), 'w') as f:
-        f.write(f'{px_deg:.10f}\n0\n0\n{-px_deg:.10f}\n{ulx + px_deg / 2:.8f}\n{uly - px_deg / 2:.8f}\n')
+        f.write(f'{px_deg:.10f}\n0\n0\n{-py_deg:.10f}\n{ulx + px_deg / 2:.8f}\n{uly - py_deg / 2:.8f}\n')
     with open(os.path.join(rdir, 'mineral_map_base_75dpi.png.aux.xml'), 'w') as f:
         f.write(f'<PAMDataset><SRS>{WGS84_PRJ}</SRS></PAMDataset>')
     raster_info = {'width': base.width, 'height': base.height, 'px_per_pt': sx, 'x0_pt': FR['x0'], 'y_top_pt': top_y}
@@ -1181,52 +1182,61 @@ def main(pdf_path, out_dir):
                 if n0.startswith(c0) or c0.startswith(n0):
                     return True
         return False
-    sym_pts = np.array([s['pt'] for s in symbols]) if symbols else np.zeros((0, 2))
     SNAP_R, HINT_R = 25.0, 14.0
-    for i, l in enumerate(num_labels):
-        l['sym'] = None
-        if not len(sym_pts):
-            continue
-        dd = np.hypot(sym_pts[:, 0] - l['cx'], sym_pts[:, 1] - l['cy'])
-        order = np.argsort(dd)
-        for j in order:
-            if dd[j] > SNAP_R:
-                break
-            if consistent(l['entry'], symbols[j]['candidates']):
-                l['sym'], l['sym_dist'] = int(j), float(dd[j])
-                symbols[j]['labels'].append((float(dd[j]), i))
-                break
-        if l['sym'] is None:
-            j = int(order[0])
-            if dd[j] <= HINT_R:
-                l['hint'], l['hint_dist'] = j, float(dd[j])
-    lab_pts = np.array([(l['cx'], l['cy']) for l in num_labels])
-    for j, s in enumerate(symbols):
-        s['near_label'], s['link'] = None, ''
-        if s['labels']:
-            s['labels'].sort()
-            s['near_label'], s['near_dist'] = s['labels'][0][1], s['labels'][0][0]
-            s['link'] = 'colour-consistent' + (' (+%d more labels)' % (len(s['labels']) - 1) if len(s['labels']) > 1 else '')
-        else:
-            dd = np.hypot(lab_pts[:, 0] - s['pt'][0], lab_pts[:, 1] - s['pt'][1])
-            i = int(np.argmin(dd))
-            if dd[i] <= HINT_R:
-                s['near_label'], s['near_dist'], s['link'] = i, float(dd[i]), 'nearest printed number (colour not consistent)'
-    snapped = sum(1 for l in num_labels if l['sym'] is not None)
-    with_entry = [l for l in num_labels if l['entry']]
-    symbol_expected = [l for l in with_entry if any(not n.endswith('(no legend symbol)') and '(?)' not in n and 'not in legend' not in n for n in l['entry']['minerals'])]
-    qa['raster_symbols'].update({
-        'labels_total': len(num_labels), 'labels_with_table_entry': len(with_entry),
-        'labels_whose_minerals_have_a_legend_symbol': len(symbol_expected),
-        'labels_snapped_to_colour_consistent_symbol_within_%dpt' % int(SNAP_R): snapped,
-        'symbols_linked_to_a_label': sum(1 for s in symbols if s['labels']),
-        'symbols_claimed_by_several_labels': sum(1 for s in symbols if len(s['labels']) > 1),
-        'symbols_without_any_label_within_%dpt' % int(HINT_R): sum(1 for s in symbols if s['near_label'] is None),
-        'snap_distance_pt_quartiles': [float(v) for v in np.percentile([l['sym_dist'] for l in num_labels if l['sym'] is not None], [25, 50, 75])] if snapped else None,
-        'snapped_by_colour': dict(collections.Counter(symbols[l['sym']]['colour'] for l in num_labels if l['sym'] is not None)),
-    })
-    print('labels snapped to a colour-consistent symbol within %.0f pt: %d / %d (of %d whose minerals have a legend symbol)' % (
-        SNAP_R, snapped, len(num_labels), len(symbol_expected)))
+    def link_symbols():
+        # Rebuilt after geometry validation; no stale fragment IDs or hints.
+        for l in num_labels:
+            for key in ('hint', 'hint_dist', 'sym_dist'):
+                l.pop(key, None)
+        for s in symbols:
+            s['labels'] = []
+        sym_pts = np.array([s['pt'] for s in symbols]) if symbols else np.zeros((0, 2))
+        for i, l in enumerate(num_labels):
+            l['sym'] = None
+            if not len(sym_pts):
+                continue
+            dd = np.hypot(sym_pts[:, 0] - l['cx'], sym_pts[:, 1] - l['cy'])
+            order = np.argsort(dd)
+            for j in order:
+                if dd[j] > SNAP_R:
+                    break
+                if consistent(l['entry'], symbols[j]['candidates']):
+                    l['sym'], l['sym_dist'] = int(j), float(dd[j])
+                    symbols[j]['labels'].append((float(dd[j]), i))
+                    break
+            if l['sym'] is None:
+                j = int(order[0])
+                if dd[j] <= HINT_R:
+                    l['hint'], l['hint_dist'] = j, float(dd[j])
+        lab_pts = np.array([(l['cx'], l['cy']) for l in num_labels])
+        for j, s in enumerate(symbols):
+            s['near_label'], s['link'] = None, ''
+            if s['labels']:
+                s['labels'].sort()
+                s['near_label'], s['near_dist'] = s['labels'][0][1], s['labels'][0][0]
+                s['link'] = 'colour-consistent' + (' (+%d more labels)' % (len(s['labels']) - 1) if len(s['labels']) > 1 else '')
+            else:
+                dd = np.hypot(lab_pts[:, 0] - s['pt'][0], lab_pts[:, 1] - s['pt'][1])
+                i = int(np.argmin(dd))
+                if dd[i] <= HINT_R:
+                    s['near_label'], s['near_dist'], s['link'] = i, float(dd[i]), 'nearest printed number (colour not consistent)'
+        snapped = sum(1 for l in num_labels if l['sym'] is not None)
+        with_entry = [l for l in num_labels if l['entry']]
+        symbol_expected = [l for l in with_entry if any(not n.endswith('(no legend symbol)') and '(?)' not in n and 'not in legend' not in n for n in l['entry']['minerals'])]
+        qa['raster_symbols'].update({
+            'labels_total': len(num_labels), 'labels_with_table_entry': len(with_entry),
+            'labels_whose_minerals_have_a_legend_symbol': len(symbol_expected),
+            'labels_snapped_to_colour_consistent_symbol_within_%dpt' % int(SNAP_R): snapped,
+            'symbols_linked_to_a_label': sum(1 for s in symbols if s['labels']),
+            'symbols_claimed_by_several_labels': sum(1 for s in symbols if len(s['labels']) > 1),
+            'symbols_without_any_label_within_%dpt' % int(HINT_R): sum(1 for s in symbols if s['near_label'] is None),
+            'snap_distance_pt_quartiles': [float(v) for v in np.percentile([l['sym_dist'] for l in num_labels if l['sym'] is not None], [25, 50, 75])] if snapped else None,
+            'snapped_by_colour': dict(collections.Counter(symbols[l['sym']]['colour'] for l in num_labels if l['sym'] is not None)),
+        })
+        print('labels snapped to a colour-consistent symbol within %.0f pt: %d / %d (of %d whose minerals have a legend symbol)' % (
+            SNAP_R, snapped, len(num_labels), len(symbol_expected)))
+
+    link_symbols()
 
     # ---- definitive identification of every symbol blob (symbol_identify.py).
     # One mineral per blob, never a candidate list: signature determinations read
@@ -1239,6 +1249,15 @@ def main(pdf_path, out_dir):
     idents = sid.identify_all(symbols, num_labels, matcher)
     for s, ident in zip(symbols, idents):
         s['ident'] = ident
+    # Classifying ink blobs supplies hypotheses, not final point features.
+    from symbol_geometry import refine_symbols
+    symbols, geometry_qa = refine_symbols(symbols, matcher, px_to_pt, frame)
+    qa['symbol_geometry'] = geometry_qa
+    idents = [s['ident'] for s in symbols]
+    qa['raster_symbols']['raw_blobs'] = qa['raster_symbols']['blobs']
+    qa['raster_symbols']['blobs'] = len(symbols)
+    qa['raster_symbols']['by_colour'] = dict(collections.Counter(s['colour'] for s in symbols))
+    link_symbols()
     qa['symbol_identification'] = {
         'blobs': len(idents),
         'by_method': dict(collections.Counter(i['method'].split(' (')[0] for i in idents).most_common()),
@@ -1250,7 +1269,7 @@ def main(pdf_path, out_dir):
     print('symbol identification: %d blobs, %d methods, %d not-a-symbol' % (
         len(idents), len(qa['symbol_identification']['by_method']), qa['symbol_identification']['not_a_mineral_symbol']))
     with open(os.path.join(out_dir, 'symbol_identification.csv'), 'w', newline='') as f:
-        wr = csv.writer(f)
+        wr = csv.writer(f, lineterminator='\n')
         wr.writerow(['blob', 'colour', 'body_w_px', 'body_h_px', 'fill', 'lon', 'lat', 'mineral', 'method', 'score',
                      'margin', 'evidence'])
         for j, (s, ident) in enumerate(zip(symbols, idents)):
@@ -1353,7 +1372,7 @@ def main(pdf_path, out_dir):
           '| host geology:', 'joined' if host else 'not available')
     qa['commodity_groups'] = dict(group_count.most_common())
     with open(os.path.join(out_dir, 'mineral_localities.csv'), 'w', newline='') as f:
-        wr = csv.DictWriter(f, fieldnames=list(loc_rows[0].keys()))
+        wr = csv.DictWriter(f, fieldnames=list(loc_rows[0].keys()), lineterminator='\n')
         wr.writeheader()
         wr.writerows(loc_rows)
 
@@ -1376,6 +1395,7 @@ def main(pdf_path, out_dir):
 
     # ---- raster symbol blobs
     o = ShpOut(os.path.join(out_dir, 'mineral_symbols_raster'), shapefile.POINT, [
+        ('blob', 'N', 6, 0), ('match_kind', 'C', 16, 0),
         ('colour', 'C', 16, 0), ('w_px', 'N', 4, 0), ('h_px', 'N', 4, 0), ('body_w', 'N', 4, 0), ('body_h', 'N', 4, 0),
         ('fill', 'C', 8, 0), ('mineral', 'C', 64, 0), ('ident_mth', 'C', 44, 0), ('ident_scr', 'C', 16, 0),
         ('ident_evid', 'C', 200, 0), ('link', 'C', 40, 0), ('near_num', 'C', 8, 0), ('near_dist', 'N', 6, 1),
@@ -1403,7 +1423,7 @@ def main(pdf_path, out_dir):
         ident = s['ident']
         wpx, hpx = s['x1'] - s['x0'], s['y1'] - s['y0']
         wpt, hpt = wpx / sx, hpx / sx
-        o.add(Point(deg(lon), deg(lat)), [s['colour'], wpx, hpx, s['bw'], s['bh'],
+        o.add(Point(deg(lon), deg(lat)), [j, 'complete' if 'complete' in ident['method'] else 'partial overlap', s['colour'], wpx, hpx, s['bw'], s['bh'],
                                          s['fill'], ident['mineral'][:64], ident['method'][:44],
                                          ('%.2f' % ident['score']) if ident['score'] is not None else 'n/a',
                                          ident['evidence'][:200], (s['link'] or 'no number within 14 pt')[:40],
@@ -1784,9 +1804,10 @@ def main(pdf_path, out_dir):
         pix = pg.get_pixmap(dpi=150, clip=clip)
         pix.save(os.path.join(rdir, 'mineral_map_face_150dpi.png'))
         px_deg2 = a * 72 / 150
+        py_deg2 = c * 72 / 150
         ulx2, uly2 = ll(FR['x0'] - 10, FR['y_top'] + 10)
         with open(os.path.join(rdir, 'mineral_map_face_150dpi.pgw'), 'w') as f:
-            f.write(f'{px_deg2:.10f}\n0\n0\n{-px_deg2:.10f}\n{ulx2 + px_deg2 / 2:.8f}\n{uly2 - px_deg2 / 2:.8f}\n')
+            f.write(f'{px_deg2:.10f}\n0\n0\n{-py_deg2:.10f}\n{ulx2 + px_deg2 / 2:.8f}\n{uly2 - py_deg2 / 2:.8f}\n')
         with open(os.path.join(rdir, 'mineral_map_face_150dpi.png.aux.xml'), 'w') as f:
             f.write(f'<PAMDataset><SRS>{WGS84_PRJ}</SRS></PAMDataset>')
     except Exception as ex:  # pragma: no cover
@@ -1813,6 +1834,13 @@ def main(pdf_path, out_dir):
                     gtype = 'MultiPolygon'
                 ogr_write(gpkg, geometry, fields, layer=fn[:-4], driver='GPKG', crs='EPSG:4326',
                           geometry_type=gtype, fields=meta['fields'], append=True, promote_to_multi=(gtype == 'MultiPolygon'))
+        # Ship the same identification table in the standalone mineral bundle.
+        from build_project_gpkg import typed_columns
+        with open(os.path.join(out_dir, 'symbol_identification.csv'), newline='') as f:
+            reader = csv.DictReader(f)
+            names, values = typed_columns(list(reader), reader.fieldnames)
+        ogr_write(gpkg, None, values, layer='symbol_identification', driver='GPKG',
+                  geometry_type=None, fields=names, crs=None, append=True)
         print('geopackage:', gpkg)
     except ImportError:
         print('pyogrio not installed - GeoPackage bundle skipped')

@@ -101,7 +101,7 @@
     { file: 'graticule', title: 'Graticule (printed vs /VP)', kind: 'line', on: false, swatch: '#999',
       style: () => ({ color: '#999', weight: 0.7, dashArray: '3 3' }),
       name: p => p.axis + ' – printed ' + p.printed + '°, GeoPDF ' + p.vp_value + '°' },
-    { file: 'mineral_symbols_raster', title: 'Raster symbol blobs (all detections)', kind: 'point', on: false, swatch: '#fff500',
+    { file: 'mineral_symbols_raster', title: 'Mineral icons (validated centres)', kind: 'point', on: false, swatch: '#fff500',
       point: (f, ll) => {
         const c = SYMBOL_RGB[f.properties.colour] || '#999', hollow = f.properties.fill === 'sparse';
         return L.circleMarker(ll, { radius: f.properties.fill === 'round' ? 3.5 : 3, color: hollow ? c : '#000', weight: hollow ? 1.6 : 0.6,
@@ -496,7 +496,7 @@
     geo_unit: 'host unit', geo_form: 'host formation', geo_era: 'host era', geo_period: 'host period', geo_epoch: 'host epoch / stage',
     geo_src: 'host geology source', w_pt: 'width (pt)', h_pt: 'height (pt)', w_mm: 'width on paper (mm)', h_mm: 'height on paper (mm)',
     w_km: 'width on the ground (km)', h_km: 'height on the ground (km)', near_grps: 'its commodity groups',
-    n_local: 'localities', n_symbols: 'raster symbols', top_grps: 'main commodity groups', zones: 'zones separated', n_vert: 'vertices',
+    blob: 'icon / identification ID', match_kind: 'whole-icon match', n_local: 'localities', n_symbols: 'raster symbols', top_grps: 'main commodity groups', zones: 'zones separated', n_vert: 'vertices',
     len_pt: 'length on page (pt)', offset_deg: 'VP minus printed (°)', width_deg: 'width (°)', height_deg: 'height (°)', width_pt: 'width (pt)',
     height_pt: 'height (pt)', scale: 'scale', near_km: 'distance (km)', ref_lon: 'reference lon', ref_lat: 'reference lat',
     ref_dx_km: 'offset E (km)', ref_dy_km: 'offset N (km)', capital: 'state capital', in_frame: 'inside map frame', mid_lon: 'midpoint lon',
@@ -801,13 +801,13 @@
         'so the map frame is placed directly from the file (' + m.georef.points_per_degree.toFixed(2) + ' pt/°). Parallels agree with whole degrees to ' + (m.georef.parallel_max_residual_deg * 1).toFixed(4) + '°; ' +
         'the printed <b>meridian labels sit ' + Math.abs(m.georef.meridian_label_offset_deg).toFixed(3) + '° (≈' + Math.round(Math.abs(m.georef.meridian_label_offset_deg) * 110) + ' km) west</b> of the GeoPDF values – the capital-city check (rms ' + esc(cc.VP_affine ? cc.VP_affine.rms_km : '–') + ' km vs ' + esc(cc.if_meridian_labels_were_right ? cc.if_meridian_labels_were_right.rms_km : '–') + ' km) shows the GeoPDF is right.</div>' +
         '<div class="verdict"><b>Could the shapefiles be extracted?</b> Vector layers: yes. The mineral symbols and the geology background are a 75-dpi raster inside the PDF, so localities are keyed through the printed numbers and the EXPLANATIONS table; ' +
-        'symbols were detected in the raster and matched to the numbers by colour/size/fill.</div>' +
+        'whole icons were validated in the raster and their corrected centres linked to compatible numbered localities.</div>' +
         '<div class="stat-grid">' +
         '<div class="stat"><b>' + fmt(t.entries) + '</b><span>EXPLANATIONS table rows (zones A–G)</span></div>' +
         '<div class="stat"><b>' + fmt(nl.labels) + '</b><span>numbers printed on the map · ' + fmt(nl.matched) + ' joined to the table</span></div>' +
         '<div class="stat"><b>' + fmt(rs.labels_snapped_to_colour_consistent_symbol_within_25pt) + '</b><span>numbers placed on their raster symbol (of ' + fmt(rs.labels_whose_minerals_have_a_legend_symbol) + ' with a legend symbol)</span></div>' +
         '<div class="stat"><b>' + fmt(rs.blobs) + '</b><span>symbol blobs detected · ' + fmt(rs.symbols_without_any_label_within_14pt) + ' without a number</span></div>' +
-        '<div class="stat"><b>' + fmt((m.qa.symbol_identification || {}).blobs || 0) + '</b><span>symbols identified, one mineral each · ' + fmt((m.qa.symbol_identification || {}).not_a_mineral_symbol || 0) + ' are map furniture, not symbols</span></div>' +
+        '<div class="stat"><b>' + fmt((m.qa.symbol_identification || {}).blobs || 0) + '</b><span>symbols identified, one mineral each · ' + fmt((m.qa.symbol_identification || {}).not_a_mineral_symbol || 0) + ' rejected furniture rows exported</span></div>' +
         '<div class="stat"><b>' + fmt(total) + '</b><span>features in the ' + m.layers.length + ' extracted layers</span></div>' +
         '<div class="stat"><b>' + (cc.VP_affine ? cc.VP_affine.mean_dx_km + ' / ' + cc.VP_affine.mean_dy_km : '–') + '</b><span>km mean E / N offset of 33 capitals vs reference</span></div></div>';
       if (nl.unmatched && nl.unmatched.length) h += '<p class="muted">Numbers on the map without a table row: ' + nl.unmatched.map(u => esc(u[0] + u[1])).join(', ') + ' (F110, G53, G86 are missing from the printed list; D256 is a misprint). ' + fmt(nl.table_entries_without_label) + ' table rows have no number on the map.</p>';

@@ -469,17 +469,7 @@ def identify_all(symbols, labels, matcher=None, towns=None):
 
 
 if __name__ == '__main__':
-    import pickle
-    d = pickle.load(open(os.path.join(SHP, '_debug.pkl'), 'rb'))
-    m = Matcher()
-    res = identify_all(d['symbols'], d['labels'], m)
-    import collections as _c
-    print(_c.Counter(r['method'] for r in res))
-    print(_c.Counter(r['mineral'] for r in res).most_common(12))
-    with open(os.path.join(SHP, 'symbol_identification.csv'), 'w', newline='') as f:
-        w = csv.writer(f)
-        w.writerow(['blob', 'colour', 'w_px', 'h_px', 'fill', 'mineral', 'method', 'evidence', 'score', 'margin'])
-        for i, (s, r) in enumerate(zip(d['symbols'], res)):
-            w.writerow([i, s['colour'], s['bw'], s['bh'], s['fill'], r['mineral'], r['method'], r['evidence'],
-                        r['score'], r['margin']])
-    print('wrote symbol_identification.csv')
+    # Never overwrite the final table with raw fragment identifications.
+    # The public entry point always includes whole-icon geometry validation.
+    from extract_mineral_map import main
+    main(os.path.join(ROOT, 'Mineral_Resources_Map_of_Nigeria_2023.pdf'), SHP)

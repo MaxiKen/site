@@ -177,7 +177,7 @@ River Niger / River Benue, one unnamed reservoir) with `kind`, `labels_in`, area
 | layer | attributes added in this pass (all earlier fields kept) |
 |---|---|
 | `mineral_localities` | `lon`, `lat` (final point), `n_minerals`, `mineral_1`, `group_1`, `groups` (commodity groups: energy, precious metals, ferrous metals, base metals, rare metals, gemstones, industrial minerals, construction materials, unknown; `no code printed` for the 4 points whose table row has no code, `not in table` for the 4 numbers absent from the table), `n_unknown` (codes not in the legend), `n_printed` (how often the number is printed on the map face – 38 numbers appear twice, both copies are kept with `match = exact (number printed 2x in zone …)`), and the **host rock unit from the 2011 geological map**: `geo_code`, `geo_unit`, `geo_form`, `geo_era`, `geo_period`, `geo_epoch`, `geo_src` (both maps are 1:2 M and their georeferences differ by ~8 km, so treat this as ±10 km) |
-| `mineral_symbols_raster` | `lon`, `lat`, symbol size on the page (`w_pt`, `h_pt`, `w_mm`, `h_mm`) and on the ground (`w_km`, `h_km`), `n_cands`, `group_1`, `near_grps` |
+| `mineral_symbols_raster` | `lon`, `lat`, symbol size on the page (`w_pt`, `h_pt`, `w_mm`, `h_mm`) and on the ground (`w_km`, `h_km`), `blob`, `match_kind`, `group_1`, `near_grps` |
 | `map_zones` | `n_local`, `n_symbols`, `area_km2`, `perim_km`, centroid and bounds, `top_grps` (three most frequent commodity groups) |
 | `map_frame` | `area_km2`, `perim_km`, extent in degrees and points, nominal `scale` (1:1,978,000 from the /VP affine) |
 | `division_lines` | `length_km`, `zones` (zones the line separates), `n_vert` |
@@ -214,6 +214,22 @@ Every polygon layer has `area_km2` and `perim_km`; every line layer has `len_km`
 geological boundaries 81 832 km, faults 17 700 km, rivers 40 199 km (2011) / 43 219 km (2023), roads 19 625 km /
 18 408 km, railway 3 084 km / 3 091 km, state boundaries 35 581 km, international boundary 4 092 km (the land border
 of Nigeria is ≈4 500 km; the map's line stops at the coast and rounds the Lake Chad corner).
+
+### Validated mineral icon geometry
+
+`mineral_symbols_raster` contains accepted whole icons only, not raw ink fragments.
+`blob` is the zero-based key into `symbol_identification.csv` and the identification
+tables in both GeoPackages. `match_kind` is `complete` or `partial overlap`;
+`ident_mth` specifies the whole-icon template method, `ident_scr` is the native ink-fit
+score, and `ident_evid` records full dimensions and original blob IDs. `w_px`/`h_px`
+and `body_w`/`body_h` now describe the fitted full artwork, not an isolated hatch or
+outline fragment. `fill` describes visible ink occupancy in that full box.
+
+Every symbol point and `lon`/`lat` value is the full fitted artwork's bounding-box
+centre. Linked locality points use this same corrected centre; unsnapped locality
+records remain explicitly marked as label positions. Full pixel boxes, centres,
+complete/partial flags, thresholds and original source IDs are in
+`qa_report.json → symbol_geometry`. See README §4 for acceptance rules and limits.
 
 ## 4. Fill rate of every field (measured on the delivered files)
 
@@ -643,63 +659,70 @@ Size fields: -
 | `zone` | C1 | 999 | 100 |
 | `number` | N5 | 999 | 100 |
 | `zone_num` | C6 | 999 | 100 |
-| `locality` | C80 | 994 | 99 |
-| `codes_raw` | C40 | 991 | 99 |
-| `minerals` | C254 | 991 | 99 |
-| `min_conf` | C40 | 991 | 99 |
+| `locality` | C80 | 999 | 100 |
+| `codes_raw` | C40 | 999 | 100 |
+| `minerals` | C254 | 999 | 100 |
+| `min_conf` | C40 | 999 | 100 |
 | `match` | C80 | 999 | 100 |
-| `tbl_flags` | C200 | 179 | 18 |
+| `tbl_flags` | C200 | 999 | 100 |
 | `pos_src` | C36 | 999 | 100 |
-| `snap_pt` | N6.1 | 675 | 68 |
-| `sym_colour` | C24 | 849 | 85 |
-| `sym_cands` | C254 | 849 | 85 |
+| `snap_pt` | N6.1 | 999 | 100 |
+| `sym_colour` | C24 | 999 | 100 |
+| `symbol` | C64 | 999 | 100 |
+| `sym_method` | C44 | 999 | 100 |
+| `sym_score` | C16 | 999 | 100 |
+| `sym_evid` | C200 | 999 | 100 |
 | `label_lon` | N12.6 | 999 | 100 |
 | `label_lat` | N12.6 | 999 | 100 |
 | `lon` | N12.6 | 999 | 100 |
 | `lat` | N12.6 | 999 | 100 |
 | `n_minerals` | N3 | 999 | 100 |
-| `mineral_1` | C60 | 991 | 99 |
+| `mineral_1` | C60 | 999 | 100 |
 | `group_1` | C24 | 999 | 100 |
 | `groups` | C120 | 999 | 100 |
 | `n_unknown` | N3 | 999 | 100 |
 | `n_printed` | N2 | 999 | 100 |
-| `geo_code` | C8 | 995 | 100 |
-| `geo_unit` | C64 | 995 | 100 |
-| `geo_form` | C48 | 475 | 48 |
-| `geo_era` | C48 | 995 | 100 |
-| `geo_period` | C40 | 662 | 66 |
-| `geo_epoch` | C48 | 478 | 48 |
+| `geo_code` | C8 | 999 | 100 |
+| `geo_unit` | C64 | 999 | 100 |
+| `geo_form` | C48 | 999 | 100 |
+| `geo_era` | C48 | 999 | 100 |
+| `geo_period` | C40 | 999 | 100 |
+| `geo_epoch` | C48 | 999 | 100 |
 | `geo_src` | C60 | 999 | 100 |
 
-### mineral_symbols_raster  (Point, 1593 features)
+### mineral_symbols_raster  (Point, 1155 features)
 
 Size fields: -
 
 | field | type | filled | % |
 |---|---|---:|---:|
-| `colour` | C16 | 1593 | 100 |
-| `w_px` | N4 | 1593 | 100 |
-| `h_px` | N4 | 1593 | 100 |
-| `body_w` | N4 | 1593 | 100 |
-| `body_h` | N4 | 1593 | 100 |
-| `fill` | C8 | 1593 | 100 |
-| `candidates` | C254 | 1350 | 85 |
-| `link` | C40 | 1077 | 68 |
-| `near_num` | C8 | 1077 | 68 |
-| `near_dist` | N6.1 | 1077 | 68 |
-| `near_loc` | C80 | 1073 | 67 |
-| `near_mins` | C200 | 1069 | 67 |
-| `lon` | N12.6 | 1593 | 100 |
-| `lat` | N12.6 | 1593 | 100 |
-| `w_pt` | N6.2 | 1593 | 100 |
-| `h_pt` | N6.2 | 1593 | 100 |
-| `w_mm` | N6.2 | 1593 | 100 |
-| `h_mm` | N6.2 | 1593 | 100 |
-| `w_km` | N7.2 | 1593 | 100 |
-| `h_km` | N7.2 | 1593 | 100 |
-| `n_cands` | N3 | 1593 | 100 |
-| `group_1` | C24 | 1350 | 85 |
-| `near_grps` | C120 | 1069 | 67 |
+| `blob` | N6 | 1155 | 100 |
+| `match_kind` | C16 | 1155 | 100 |
+| `colour` | C16 | 1155 | 100 |
+| `w_px` | N4 | 1155 | 100 |
+| `h_px` | N4 | 1155 | 100 |
+| `body_w` | N4 | 1155 | 100 |
+| `body_h` | N4 | 1155 | 100 |
+| `fill` | C8 | 1155 | 100 |
+| `mineral` | C64 | 1155 | 100 |
+| `ident_mth` | C44 | 1155 | 100 |
+| `ident_scr` | C16 | 1155 | 100 |
+| `ident_evid` | C200 | 1155 | 100 |
+| `link` | C40 | 1155 | 100 |
+| `near_num` | C8 | 1155 | 100 |
+| `near_dist` | N6.1 | 1155 | 100 |
+| `near_loc` | C80 | 1155 | 100 |
+| `near_mins` | C200 | 1155 | 100 |
+| `lon` | N12.6 | 1155 | 100 |
+| `lat` | N12.6 | 1155 | 100 |
+| `w_pt` | N6.2 | 1155 | 100 |
+| `h_pt` | N6.2 | 1155 | 100 |
+| `w_mm` | N6.2 | 1155 | 100 |
+| `h_mm` | N6.2 | 1155 | 100 |
+| `w_km` | N7.2 | 1155 | 100 |
+| `h_km` | N7.2 | 1155 | 100 |
+| `group_1` | C24 | 1155 | 100 |
+| `near_grps` | C120 | 1155 | 100 |
 
 ### pegmatite_marks  (Point, 23 features)
 

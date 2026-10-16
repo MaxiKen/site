@@ -60,7 +60,7 @@ DATASETS = {
                    'summary_localities_by_group.csv': ('summary_localities_by_group',
                                                        'commodity group x host era x numbering zone'),
                    'symbol_identification.csv': ('symbol_identification',
-                                                 'the symbol-identification pass: one row per raster symbol blob with '
+                                                 'validated whole-icon identifications: one centred row per printed symbol with '
                                                  'its single mineral, the method, the template-match score and margin '
                                                  'and the evidence (see README section 4)')},
     },
@@ -97,7 +97,7 @@ DESCRIPTIONS = {
         'roads': 'road centrelines with length_km',
         'railway': 'railway lines',
         'graticule': 'graticule with printed label and GeoPDF (/VP) value',
-        'mineral_symbols_raster': 'every mineral symbol detected on the raster map face (colour, size, fill class) with its '
+        'mineral_symbols_raster': 'validated whole-icon centres (blob ID, complete/partial match, colour, full size) with their '
                                   'single identified mineral, identification method, template-match score and evidence',
         'mineral_localities': 'one point per mineral number printed on the map, joined to the EXPLANATIONS table: locality, '
                               'codes, minerals (all codes resolved), commodity groups, position source, n_printed, the single '
@@ -117,7 +117,7 @@ def iso_now():
 
 
 # --------------------------------------------------------------------------- vector layers
-def add_vector_layers(gpkg, ds, catalogue):
+def add_vector_layers(gpkg, ds, catalogue, append=True):
     d = DATASETS[ds]
     shp_dir = os.path.join(ROOT, d['dir'])
     for fn in sorted(os.listdir(shp_dir)):
@@ -131,7 +131,7 @@ def add_vector_layers(gpkg, ds, catalogue):
             gtype = 'MultiPolygon'
         layer = d['prefix'] + name
         ogr_write(gpkg, geometry, fields, layer=layer, driver='GPKG', crs='EPSG:4326', geometry_type=gtype,
-                  fields=meta['fields'], append=True, promote_to_multi=promote,
+                  fields=meta['fields'], append=append, promote_to_multi=promote,
                   layer_options={'IDENTIFIER': layer, 'DESCRIPTION': DESCRIPTIONS[ds].get(name, '')})
         catalogue.append({'table_name': layer, 'source_map': d['title'], 'kind': 'vector', 'geometry': gtype,
                           'features': int(len(geometry)), 'fields': len(meta['fields']),
@@ -172,7 +172,7 @@ def typed_columns(rows, header):
     return header, arrays
 
 
-def add_tables(gpkg, ds, catalogue):
+def add_tables(gpkg, ds, catalogue, append=True):
     d = DATASETS[ds]
     for fn, (short, desc) in d['tables'].items():
         path = os.path.join(ROOT, d['dir'], fn)
@@ -186,7 +186,7 @@ def add_tables(gpkg, ds, catalogue):
         fields, arrays = typed_columns(rows, header)
         layer = d['prefix'] + short
         ogr_write(gpkg, None, arrays, layer=layer, driver='GPKG', geometry_type=None, fields=fields, crs=None,
-                  append=True, layer_options={'IDENTIFIER': layer, 'DESCRIPTION': desc})
+                  append=append, layer_options={'IDENTIFIER': layer, 'DESCRIPTION': desc})
         catalogue.append({'table_name': layer, 'source_map': d['title'], 'kind': 'attributes', 'geometry': '',
                           'features': len(rows), 'fields': len(fields), 'source_file': '%s/%s' % (d['dir'], fn),
                           'description': desc})
@@ -337,6 +337,39 @@ def check(gpkg):
     con.close()
 
 
+def refresh_minerals(gpkg):
+    """Atomically replace mineral vectors/tables, preserving geology and PDF tiles.
+
+    This deliberately uses overwrite, not append: rerunning the correction must
+    not duplicate any features or identification rows.
+    """
+    import shutil
+    import tempfile
+    if not os.path.isfile(gpkg):
+        raise FileNotFoundError(gpkg)
+    fd, temporary = tempfile.mkstemp(suffix='.gpkg', prefix='.refresh-',
+                                      dir=os.path.dirname(os.path.abspath(gpkg)))
+    os.close(fd)
+    try:
+        shutil.copy2(gpkg, temporary)
+        catalogue = []
+        add_vector_layers(temporary, 'minerals', catalogue, append=False)
+        add_tables(temporary, 'minerals', catalogue, append=False)
+        with sqlite3.connect(temporary) as con:
+            for row in catalogue:
+                con.execute('UPDATE project_layers SET features=?, fields=?, description=? WHERE table_name=?',
+                            (row['features'], row['fields'], row['description'], row['table_name']))
+            if con.execute('PRAGMA integrity_check').fetchone()[0] != 'ok':
+                raise RuntimeError('refreshed GeoPackage failed integrity check')
+            if con.execute('PRAGMA foreign_key_check').fetchall():
+                raise RuntimeError('refreshed GeoPackage failed foreign key check')
+        os.replace(temporary, gpkg)
+    finally:
+        if os.path.exists(temporary):
+            os.remove(temporary)
+    print('refreshed mineral layers/tables; geology and PDF tiles preserved:', gpkg)
+
+
 # --------------------------------------------------------------------------- main
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -344,8 +377,13 @@ def main():
     ap.add_argument('--zmax', type=int, default=8, help='max zoom of the PDF tile pyramids (default 8 = 0.0027 deg/px '
                                                         '~ 300 m; 9 doubles that and adds ~25 MB)')
     ap.add_argument('--no-rasters', action='store_true', help='vector layers and tables only')
+    ap.add_argument('--refresh-minerals', action='store_true',
+                    help='replace only mineral vectors/tables in the existing bundle; preserve PDF tiles and geology')
     ap.add_argument('--check', action='store_true', help='only verify an existing GeoPackage')
     args = ap.parse_args()
+    if args.refresh_minerals:
+        refresh_minerals(args.out)
+        return
     if args.check:
         check(args.out)
         return
