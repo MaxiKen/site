@@ -74,7 +74,8 @@ The script parses the PDF content stream itself (paths, text and Optional‑Cont
 | `minerals2023_*` (16 feature layers) | every layer of `shapefiles_minerals/` – the 999 localities with codes, minerals, commodity groups and host geology, symbols, zones, rivers, towns, labels … |
 | `geology2011_map_pdf`, `minerals2023_map_pdf` (tile layers) | the two PDF pages rendered and georeferenced (zoom 4–8, 0.0027°/px ≈ 300 m; GDAL/QGIS open them as ordinary rasters with overviews) |
 | `geology2011_legend`, `…_summary_area_by_unit`, `…_summary_area_by_age` | the printed legend with ages, and the area statistics |
-| `minerals2023_legend`, `…_code_dictionary`, `…_explanations_table`, `…_summary_localities_by_host_geology`, `…_summary_localities_by_group` | the mineral legend, every code with meaning / group / confidence, the full EXPLANATIONS table, the locality statistics |
+| `minerals2023_legend`, `…_code_dictionary`, `…_explanations_table`, `…_summary_localities_by_host_geology`, `…_summary_localities_by_group` | the mineral legend, every code with meaning / group / confidence, the full EXPLANATIONS table (with `resolved_as` / `resolution_evidence` for the codes this project resolved), the locality statistics |
+| `minerals2023_symbol_identification` | the symbol-identification pass (§4): one row per raster symbol blob with its single mineral, method, score, margin and evidence |
 | `project_layers` | catalogue: one row per table (source map, kind, geometry, feature count, source file, description) |
 | `gpkg_metadata` | project description, both georeferences, accuracy note, build date (JSON) |
 
@@ -151,9 +152,10 @@ Unlike the geological map, only part of this map is vector. The **background geo
 
 | Output | Features | What it carries |
 |---|---|---|
-| `mineral_localities.shp` / `.csv` | 999 points | One point per mineral number printed on the map. `zone`, `number`, `zone_num` (e.g. `E109`); from the table join: `locality`, `codes_raw` (as printed), `minerals` (expanded names), `min_conf` (certain / legend / probable / uncertain / unknown per code), `match` (995 `exact`, 76 of them `exact (number printed 2x in zone …)`, 4 `number not in table`), `n_printed`, `tbl_flags`. Position: `pos_src` = `raster symbol (colour-consistent)` for the 672 numbers whose legend symbol (right colour, size and fill class for the listed mineral) was found within 25 pt – the point is the symbol centre, `snap_pt` the distance – otherwise `label centre` (327; the number itself, ~5–15 pt ≈ 3–10 km from the symbol). `label_lon/lat` always hold the number's own position; `lon`/`lat` the final point. Added attributes: `n_minerals`, `mineral_1`, `group_1`/`groups` (commodity groups), `n_unknown`, and the host rock unit from the 2011 geological map (`geo_code`, `geo_unit`, `geo_form`, `geo_era`, `geo_period`, `geo_epoch`; ±10 km, see ATTRIBUTES.md §2). |
+| `mineral_localities.shp` / `.csv` | 999 points | One point per mineral number printed on the map. `zone`, `number`, `zone_num` (e.g. `E109`); from the table join: `locality`, `codes_raw` (as printed), `minerals` (expanded names), `min_conf` (certain / legend / probable / uncertain / unknown per code), `match` (995 `exact`, 76 of them `exact (number printed 2x in zone …)`, 4 `number not in table`), `n_printed`, `tbl_flags` (`none` when the row carries no flag). Position: `pos_src` = `raster symbol (colour-consistent)` for the numbers whose legend symbol was found within 25 pt – the point is the symbol centre, `snap_pt` the distance – otherwise `label centre` (the number itself; `snap_pt` then holds the distance to the nearest symbol). `label_lon/lat` always hold the number's own position; `lon`/`lat` the final point. `symbol` / `sym_method` / `sym_score` / `sym_evid` carry the single identification of the symbol at the number (see §4 below). Added attributes: `n_minerals`, `mineral_1`, `group_1`/`groups` (commodity groups), `n_unknown`, and the host rock unit from the 2011 geological map (`geo_code`, `geo_unit`, `geo_form`, `geo_era`, `geo_period`, `geo_epoch`; ±10 km, see ATTRIBUTES.md §2) – every field carries an explicit value, never an empty one. |
 | `explanations_table.csv` | 1 171 rows | The complete EXPLANATIONS list (A 103, B 165, C 86, D 157, E 234, F 202, G 224 rows), parsed from the eight text columns: `zone`, `number` (sequential, see caveats), `number_printed`, `locality`, `codes_raw`, `codes`, `minerals`, `code_confidence`, `unknown_codes`, `on_map` (958 rows have their number on the map, 213 do not), `flags`, `table_column`, `raw_text`. |
-| `mineral_symbols_raster.shp` | 1593 points | Every coloured symbol blob detected in the raster: `colour` class, size, `fill` (solid / round / sparse – distinguishes e.g. the solid gold square from the lettered brine circle), `candidates` (legend minerals consistent with colour+size+fill; 1350 blobs have a rule), `link` + `near_*` (the number label it serves, if any). 516 blobs have no number within 14 pt – unnumbered symbols and geology‑pattern fragments. The 54 fragments in the raster's water‑line blue are excluded (no legend symbol has that colour). |
+| `mineral_symbols_raster.shp` | 1609 points | Every coloured symbol blob detected in the raster (including the parts of merged ink bodies, see §4): `colour` class, size, `fill` (solid / round / sparse – distinguishes e.g. the solid gold square from the lettered brine circle) and – from the identification pass of §4 – one definite `mineral` per blob with `ident_mth` (how it was determined), `ident_scr` (template‑match score where a match was used) and `ident_evid` (the corroborating fact), plus `link` + `near_*` (the number label it serves, if any). 95 of the 1609 blobs are determined to be map furniture or ink artefacts rather than mineral symbols (state‑capital squares, raster slivers, linework and label fragments, the Lagos‑Ibadan bridge marks, five merged clusters of different symbols) and say so in `mineral`. The 54 fragments in the raster's water‑line blue are excluded (no legend symbol has that colour). |
+| `symbol_identification.csv` | 1593 rows | The identification pass as a table: blob index, signature, position, the single mineral, method, score, margin and evidence. |
 | `mineral_legend.csv`, `legend_symbols/` | 67 rows, 66 PNGs | Legend order, mineral name, the code printed in the legend (only 19 entries have one), the table codes mapped to that mineral, cut‑outs of each legend symbol. |
 | `mineral_code_dictionary.csv` | 120 codes | Every code used in the table → mineral, with confidence (36 certain, 20 from the legend, 30 probable, 15 uncertain, 19 unknown – e.g. `Us`, `Ke`, `Cy`, each used once or twice). |
 | `map_zones.shp`, `division_lines.shp` | 7 / 5 | The A–G numbering zones polygonised from the division lines + frame (`tbl_rows`, `labels`, `n_local`, `n_symbols`, `area_km2`, `perim_km`, bounds, `top_grps` per zone; `length_km` and the zones separated per line). |
@@ -182,7 +184,7 @@ Every point layer carries `lon`/`lat` (+ `zone`), every line layer `length_km`, 
 * Zone B's rows 156–164 are typeset at the foot of the D column; they are assigned to B by position (`TABLE_ZONE_OVERRIDES`). 118 rows had the mineral codes typed into the locality cell (`Orukpa C`, `AFU HILL Sn. Ta.Nb.W`, `Odaru (Gys)`, `IkpaBa`); they are split off only when every token is a known code (`flags = codes split from name cell`). Only 6 table rows print no code at all (B 109, E 73, E 75, F 155, F 175, F 187) – their points carry `group_1 = no code printed`.
 * The table text has OCR-type letter glitches in 52 locality names (`lkorodu`, `Kaqoro`, `OrIu`, `HIlls`, `KAN0`); only patterns that are never a real spelling are corrected (word-initial `l` before a capital/consonant → `I`, `I` between lower-case letters → `l`, `q` not before `u` → `g`, `0` inside a capital word → `O`); every correction keeps the printed form in `flags` and `raw_text`.
 * **38 numbers are printed twice on the map face** (e.g. A 97 twice, 20 pt apart; F 36 once near 37/33 and once 270 km away). Both copies are complete labels drawn in their zone's own sequence, so they are not assembly artefacts; each copy is kept, joined to the same table row, with `match = exact (number printed 2x in zone …)` and `n_printed = 2` (76 points; list in `qa_report.json → numbers_printed_more_than_once`). Where one copy sits on a colour-consistent symbol and the other does not, `pos_src` tells which.
-* Symbol detection was calibrated on localities with a single mineral (gold = solid yellow 8 × 8 px square, clay = yellow 14 × 10 rectangle, kaolin = khaki rectangle, limestone = hatched green, tantalite = white bowl, barytes/gypsum = white ring arcs, lead‑zinc = red triangle …) and is applied as colour + size + fill‑class rules; a number is only snapped to a symbol whose rule contains one of its minerals. Tin (`Sn`, 73 rows) and quartz/monazite/ruby codes have no legend symbol by design and stay at the label.
+* Symbol detection was calibrated on localities with a single mineral (gold = solid yellow 8 × 8 px square, clay = yellow 14 × 10 rectangle, kaolin = khaki rectangle, limestone = hatched green, tantalite = white bowl, barytes/gypsum = white ring arcs, lead‑zinc = red triangle …); a number is only snapped to a symbol whose signature is consistent with its minerals. Tin (`Sn`, 73 rows) and quartz/monazite/ruby codes have no legend symbol by design and stay at the label. Every blob is then given a single identification (§4).
 
 ### Layer audit – how each layer was checked
 
@@ -202,7 +204,7 @@ Every point layer carries `lon`/`lat` (+ `zone`), every line layer `length_km`, 
 
 * **Positions**: 1 pt ≈ 0.7 km; a snapped point is the symbol centre (±1–2 px), an unsnapped one is the number's centre, which is typically 3–10 km from the deposit symbol. The `/VP` georeference itself is ≈7 km off true positions in both axes (capital check), consistent with a 1:2 M compilation.
 * **Minerals come from codes typed by the map compiler**, with inconsistent spelling (`CI`/`Cl`, `MI`/`mi`, `PbS`/`Pbs`); confidence is recorded per code and 19 codes could not be resolved at all.
-* Mineral symbols without a number (516 blobs) are delivered as raw raster blobs with candidate minerals only – the map gives no other way to identify them.
+* Mineral symbols without a number are identified in the same pass as the numbered ones (§4): by their rendering signature, by fragment/furniture tests, and – where neither applies – by a size‑ and colour‑gated template match against the 66 legend symbols, whose score is kept in `ident_scr` so the strength of each single determination stays visible.
 * Background geology, lakes and the large rivers exist only as raster.
 
 ## 3. Reproducing
@@ -211,3 +213,73 @@ Every point layer carries `lon`/`lat` (+ `zone`), every line layer `length_km`, 
 pip install pikepdf pymupdf shapely pyshp numpy pillow scipy pyogrio   # pyogrio only for the .gpkg
 python extract_mineral_map.py Mineral_Resources_Map_of_Nigeria_2023.pdf shapefiles_minerals   # ~10 s
 ```
+
+## 4. Symbol identification – one mineral per printed symbol
+
+The 2023 map prints its mineral symbols into a 75 dpi raster, so a symbol carries only 8–30 px of
+information and the previous pipeline could only offer *candidate lists* per blob
+("Gypsum | Baryte | Phosphate | …") – or nothing at all for 243 of the 1 593 blobs – while 20 codes of
+the EXPLANATIONS table stayed "unknown code".  This pass replaces all of that with exactly one
+determination per symbol and per locality, each with its method and evidence
+(`symbol_identification.csv`, and the `mineral` / `ident_mth` / `ident_scr` / `ident_evid` fields of
+`mineral_symbols_raster.shp`, `symbol` / `sym_method` / `sym_score` / `sym_evid` of
+`mineral_localities.shp`).  No field anywhere in the mineral outputs is empty.
+
+How each determination is made, in order of precedence (`symbol_identify.identify_all`):
+
+1. **Signature determination** – the map face is a fixed-resolution raster, so one mineral symbol
+   always renders to the same (colour class, pixel box, fill) signature.  Every signature that occurs
+   more than once was read off the raster against the legend sheet and is written down in
+   `symbol_decisions.GROUP_DECISIONS` with its evidence (and, where numbered localities sit on it,
+   the EXPLANATIONS-table vote count that corroborates it).  Signatures whose artwork is identical
+   at map resolution except for the interior glyph (the white circle‑with‑bar family Gypsum/Baryte/
+   Phosphate/Trona/Bitumen, the purple octagon Talc/Molybdenite, …) are resolved per blob by template
+   ranking inside that family – still one mineral per blob.
+2. **The EXPLANATIONS table at the blob's number** – a blob that a printed number snaps to inherits
+   that row's mineral whenever the row names a single legend mineral (or a member of the family).
+3. **Fragment and furniture tests** – a blob that is half of a symbol cut by an overprint rejoins its
+   host signature; slivers, linework bars, the grey state‑capital squares and the Lagos‑Ibadan bridge
+   marks are determined to be *not mineral symbols* and say so.
+4. **Template match** – otherwise the blob is matched against the 66 legend symbols at the map's own
+   resolution, gated by printed size and dominant colour; the score and the margin over the runner‑up
+   are kept (`ident_scr`), and a best score below 0.45 is reported as "no legend symbol matches"
+   rather than guessed.
+
+The 20 codes the legend does not define are resolved in `symbol_decisions.CODE_RESOLUTIONS`, one row
+each, by reading the printed code cell at 900 dpi, the symbol the cartographer printed at that
+locality's number, and – where no symbol is printed – single‑glyph confusion against the codes the
+same zone of the table uses plus the host geology; e.g. `Us` = *Ls* (the symbol at A6/A7 is the
+Limestone hatch), `Ke` = *Ka* (the khaki K square at D126/D148, Kwali being the type locality of
+Nigerian pottery clay), `Sr` = *Br* (the yellow B circle at E161), `sT`/`Tn`/`In`/`Si` = cassiterite,
+which carries no legend symbol and indeed has no symbol at those numbers.  `explanations_table.csv`
+carries the resolution and its evidence per row (`resolved_as`, `resolution_evidence`).
+
+### Second coverage pass – are any printed symbols missing?
+
+`symbol_scan.py` cross-correlates the colour pattern of every legend symbol with the whole map face
+(and checks every peak against the blob list), so a symbol the segmentation missed would show up as
+an uncovered peak.  It found three genuine gaps, now closed:
+
+* **Merged ink bodies.**  A colour component larger than any legend symbol of its colour (two
+  touching Kaolin K squares, a Lepidolite rectangle merged with a Tourmaline triangle, …) used to be
+  dropped or reported as one "cluster".  `extract_mineral_map.split_component` now closes the glyph
+  strokes, erodes the contact neck and keeps the symbol-sized parts (19 parts in this run); where a
+  body is two touching copies of the *same* symbol and no table row covers it, the pair carries one
+  determination ("merged pair of touching symbols", method in `symbol_identification.csv`).
+* **Calcite.**  Legend cell 67 prints no artwork, but the map face prints a blue‑violet triangle with
+  a white C twice (raster px 240,732 and 986,866); the EXPLANATIONS code `Ca` of six localities maps
+  to Calcite through that legend row.  The template (`legend_symbols/symbol_67_Calcite.png`) was cut
+  from the map face at legend scale, the signature is recorded in `symbol_decisions.GROUP_DECISIONS`,
+  and the template is used for signature determination only (never a visual match on fragments).
+* **Nothing else.**  After the fixes the scan leaves no uncovered peak except two linework
+  false-positives (a river bend and a road junction at score 0.80–0.82).
+
+Conversely, seven legend minerals are **listed but never printed** on the map face – Asbestos /
+Serpentine, Bitumen, Copper minerals, Nickel, Rose Quartz, Silver (best whole-map colour-pattern
+score 0.30–0.47, always on another symbol) – plus Calcite's legend cell, which is empty; Psammite
+occurs only as an area tint, not as point symbols.  They therefore carry no symbol rows, by
+cartographic fact rather than by omission.
+
+Result: 999 localities and 1 609 symbol blobs, each with exactly one mineral (or an explicit
+"not a mineral symbol: …" class), 0 unknown codes, 0 candidate lists, 0 empty attribute values;
+66 different minerals identified on the map face.

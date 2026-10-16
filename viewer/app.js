@@ -107,7 +107,7 @@
         return L.circleMarker(ll, { radius: f.properties.fill === 'round' ? 3.5 : 3, color: hollow ? c : '#000', weight: hollow ? 1.6 : 0.6,
           fillColor: hollow ? '#fff' : c, fillOpacity: hollow ? 0.6 : 0.9 });
       },
-      name: p => (p.candidates || 'no matching rule') + (p.near_num ? ' · near ' + p.near_num : '') },
+      name: p => p.mineral + (p.near_num && p.near_num !== 'none on the map' ? ' · near ' + p.near_num : '') },
     { file: 'mineral_localities', title: 'Mineral localities (numbered)', kind: 'point', on: true, swatch: '#fff500',
       point: (f, ll) => localityMarker(f, ll),
       name: p => p.zone_num + ' ' + (p.locality || '(not in table)') + (p.codes_raw ? ' – ' + p.codes_raw : '') },
@@ -476,8 +476,11 @@
     name_dist: 'label distance (pt)', size_pt: 'text size (pt)', stroke: 'stroke colour', 'class': 'class', text: 'text', kind: 'kind', font: 'font', angle: 'angle (°)',
     zone_num: 'map number', zone: 'zone', number: 'number', locality: 'locality (table)', codes_raw: 'codes as printed', minerals: 'minerals',
     min_conf: 'code confidence', match: 'table join', tbl_flags: 'table flags', pos_src: 'point position', snap_pt: 'snap distance (pt)',
-    sym_colour: 'symbol colour', sym_cands: 'symbol candidates', label_lon: 'number printed at lon', label_lat: 'number printed at lat',
-    colour: 'colour class', w_px: 'width (px)', h_px: 'height (px)', body_w: 'body width (px)', body_h: 'body height (px)', candidates: 'candidate minerals',
+    sym_colour: 'symbol colour', symbol: 'symbol identified as', sym_method: 'how the symbol was identified',
+    sym_score: 'template-match score', sym_evid: 'evidence for the identification',
+    label_lon: 'number printed at lon', label_lat: 'number printed at lat',
+    colour: 'colour class', w_px: 'width (px)', h_px: 'height (px)', body_w: 'body width (px)', body_h: 'body height (px)',
+    mineral: 'identified as', ident_mth: 'how it was identified', ident_scr: 'template-match score', ident_evid: 'evidence for the identification',
     link: 'link to a number', near_num: 'nearest number', near_dist: 'distance (pt)', near_loc: 'its locality', near_mins: 'its minerals',
     tbl_rows: 'table rows', labels: 'numbers on the map', src: 'position source', vp_value: 'GeoPDF value (°)', printed: 'printed label (°)',
     n_glyphs: 'glyphs', meaning: 'meaning', symbol: 'symbol',
@@ -492,7 +495,7 @@
     group_1: 'commodity group (first)', groups: 'commodity groups', n_unknown: 'unknown codes', n_printed: 'number printed on map (times)', geo_code: 'host unit code (2011 map)',
     geo_unit: 'host unit', geo_form: 'host formation', geo_era: 'host era', geo_period: 'host period', geo_epoch: 'host epoch / stage',
     geo_src: 'host geology source', w_pt: 'width (pt)', h_pt: 'height (pt)', w_mm: 'width on paper (mm)', h_mm: 'height on paper (mm)',
-    w_km: 'width on the ground (km)', h_km: 'height on the ground (km)', n_cands: 'candidate count', near_grps: 'its commodity groups',
+    w_km: 'width on the ground (km)', h_km: 'height on the ground (km)', near_grps: 'its commodity groups',
     n_local: 'localities', n_symbols: 'raster symbols', top_grps: 'main commodity groups', zones: 'zones separated', n_vert: 'vertices',
     len_pt: 'length on page (pt)', offset_deg: 'VP minus printed (°)', width_deg: 'width (°)', height_deg: 'height (°)', width_pt: 'width (pt)',
     height_pt: 'height (pt)', scale: 'scale', near_km: 'distance (km)', ref_lon: 'reference lon', ref_lat: 'reference lat',
@@ -547,8 +550,13 @@
         : '<span class="pill warn">position = printed number (symbol not matched)</span>';
       if (p.match !== 'exact') flags += '<span class="pill warn">' + esc(p.match) + '</span>';
       if (/unknown/.test(p.min_conf || '')) flags += '<span class="pill warn">code not in legend</span>';
+      if (p.symbol && p.symbol !== 'no symbol printed at its number') flags += '<span class="pill">symbol = ' + esc(p.symbol) + '</span>';
+      if (/resolved|symbol on map/.test(p.min_conf || '')) flags += '<span class="pill">code resolved this pass</span>';
       if (p.tbl_flags) flags += '<span class="pill warn">table row flagged</span>';
     }
+    if (def.id === 'minerals:mineral_symbols_raster') flags += '<span class="pill">' + esc(p.mineral) + '</span>' +
+        '<span class="pill' + (/template match/.test(p.ident_mth || '') ? ' warn" title="visual match only">' : '">') + esc(p.ident_mth) +
+        (p.ident_scr && p.ident_scr !== 'n/a' ? ' ' + esc(p.ident_scr) : '') + '</span>';
     if (def.id === 'minerals:state_capitals') flags += '<span class="pill">' + esc(p.src) + '</span>';
     if (def.id === 'minerals:towns' && p.kind !== 'town marker') flags += '<span class="pill warn">' + esc(p.kind) + '</span>';
     let strip = '';
@@ -799,6 +807,7 @@
         '<div class="stat"><b>' + fmt(nl.labels) + '</b><span>numbers printed on the map · ' + fmt(nl.matched) + ' joined to the table</span></div>' +
         '<div class="stat"><b>' + fmt(rs.labels_snapped_to_colour_consistent_symbol_within_25pt) + '</b><span>numbers placed on their raster symbol (of ' + fmt(rs.labels_whose_minerals_have_a_legend_symbol) + ' with a legend symbol)</span></div>' +
         '<div class="stat"><b>' + fmt(rs.blobs) + '</b><span>symbol blobs detected · ' + fmt(rs.symbols_without_any_label_within_14pt) + ' without a number</span></div>' +
+        '<div class="stat"><b>' + fmt((m.qa.symbol_identification || {}).blobs || 0) + '</b><span>symbols identified, one mineral each · ' + fmt((m.qa.symbol_identification || {}).not_a_mineral_symbol || 0) + ' are map furniture, not symbols</span></div>' +
         '<div class="stat"><b>' + fmt(total) + '</b><span>features in the ' + m.layers.length + ' extracted layers</span></div>' +
         '<div class="stat"><b>' + (cc.VP_affine ? cc.VP_affine.mean_dx_km + ' / ' + cc.VP_affine.mean_dy_km : '–') + '</b><span>km mean E / N offset of 33 capitals vs reference</span></div></div>';
       if (nl.unmatched && nl.unmatched.length) h += '<p class="muted">Numbers on the map without a table row: ' + nl.unmatched.map(u => esc(u[0] + u[1])).join(', ') + ' (F110, G53, G86 are missing from the printed list; D256 is a misprint). ' + fmt(nl.table_entries_without_label) + ' table rows have no number on the map.</p>';

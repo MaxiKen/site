@@ -47,6 +47,7 @@ Requires: pikepdf, pymupdf, shapely, pyshp, numpy, pillow, scipy (pyogrio
 optional for the GeoPackage bundle).
 """
 import collections
+import glob
 import csv
 import json
 import math
@@ -198,7 +199,7 @@ SYMBOL_PALETTE = {
     'purple': (151, 69, 120), 'light green': (132, 194, 37), 'grey': (130, 130, 130), 'dark grey': (96, 93, 92),
     'blue grey': (102, 122, 179), 'brown': (192, 128, 64), 'bright green': (0, 255, 0), 'orange': (231, 120, 23),
     'tan': (187, 130, 91), 'green 2': (0, 160, 64), 'dark tan': (149, 127, 102), 'violet': (132, 0, 168),
-    'dark blue': (0, 77, 168), 'purple 2': (169, 0, 230), 'magenta': (224, 32, 128),
+    'dark blue': (0, 77, 168), 'blue violet': (102, 119, 205), 'purple 2': (169, 0, 230), 'magenta': (224, 32, 128),
 }
 WATER_LINE_RGB = (80, 100, 235)          # river / lake outlines drawn in the raster - excluded from symbol detection
 SYMBOL_OUTLINE_RGB = (31, 26, 23)        # outline / letter colour of the symbols (line-work is pure black)
@@ -500,18 +501,26 @@ def fix_name_glitches(name):
 
 
 def expand_codes(codes):
+    """Code -> legend mineral name.  Codes the map legend does not define but that
+    this project has resolved (symbol_decisions.CODE_RESOLUTIONS, i.e. read off the
+    symbol the cartographer printed at the locality's number, or off the printed
+    cell plus single-glyph confusion) come back as resolved minerals, never as
+    'unknown code'."""
+    import symbol_decisions as dec
     names, unknown, conf = [], [], []
     for c in codes:
+        if c in dec.CODE_RESOLUTIONS:
+            names.append(dec.CODE_RESOLUTIONS[c][0])
+            conf.append(dec.CODE_RESOLUTIONS[c][1])
+            continue
         key = c if c in CODE_DICT else (c.capitalize() if c.capitalize() in CODE_DICT else None)
-        if key is None:
+        if key is None or CODE_DICT[key][1] == 'unknown':
             unknown.append(c)
             names.append(c + ' (?)')
             conf.append('unknown')
         else:
             names.append(CODE_DICT[key][0])
             conf.append(CODE_DICT[key][1])
-            if CODE_DICT[key][1] == 'unknown':
-                unknown.append(c)
     return names, unknown, conf
 
 
@@ -1011,6 +1020,7 @@ def main(pdf_path, out_dir):
     arr = np.array(base).astype(int)
     R, G, B = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2]
     symbol_blobs = []
+    qa_split_merged = 0
 
     def components(mask, min_px):
         lab, n = ndimage.label(mask, structure=np.ones((3, 3)))
@@ -1022,12 +1032,80 @@ def main(pdf_path, out_dir):
                 continue
             out.append((sl[1].start, sl[0].start, sl[1].stop, sl[0].stop, int(sizes[i])))
         return out
+    # the largest ink area any legend symbol of a colour occupies at map scale:
+    # a colour component well above it is several symbols touching (or a fill)
+    leg_max_ink, leg_max_box = {}, {}
+    pal_arr = np.array([SYMBOL_PALETTE[k] for k in SYMBOL_PALETTE])
+    for lf in sorted(glob.glob(os.path.join(out_dir, 'legend_symbols', 'symbol_*.png'))):
+        larr = np.array(Image.open(lf).convert('RGB')).astype(int)
+        mk = larr.sum(2) < 720
+        rs, cs = np.where(mk)
+        if not len(rs):
+            continue
+        wm = max(2, int(round((cs.max() - cs.min() + 1) / 3.125 * 1.0417)))
+        hm = max(2, int(round((rs.max() - rs.min() + 1) / 3.125 * 1.0417)))
+        imr = np.array(Image.fromarray(larr[rs.min():rs.max() + 1, cs.min():cs.max() + 1]
+                                       .astype('uint8')).resize((wm, hm), Image.LANCZOS)).astype(int)
+        mmk = imr.sum(2) < 720
+        px = imr[:, :, :3][mmk]
+        if not len(px):
+            continue
+        dist = np.abs(px[:, None, :] - pal_arr[None, :, :]).sum(2)
+        near, ok = dist.argmin(1), dist.min(1) < 150
+        if ok.any():
+            k = int(np.bincount(near[ok], minlength=len(pal_arr)).argmax())
+            leg_max_ink[list(SYMBOL_PALETTE)[k]] = max(leg_max_ink.get(list(SYMBOL_PALETTE)[k], 0), int(mmk.sum()))
+            leg_max_box[list(SYMBOL_PALETTE)[k]] = max(leg_max_box.get(list(SYMBOL_PALETTE)[k], 0), wm * hm)
+
+    def split_component(mask, x0, y0, x1, y1, min_px=6, max_side=30):
+        """Erode the 1 px bridges of a merged colour component and return the
+        symbol-sized parts (two touching symbols of the same colour, a symbol
+        merged with a twin, ...).  [] when the component does not split."""
+        sub = mask[y0:y1, x0:x1]
+        # close the 1-2 px glyph strokes first: a symbol body with a letter inside
+        # would otherwise erode into ring arcs instead of staying one solid part
+        sub = ndimage.binary_closing(sub, structure=np.ones((3, 3)))
+        orig = int(sub.sum())
+        for it in (1, 2, 3, 4):          # deeper erosion cuts wider contact necks
+            er = ndimage.binary_erosion(sub, structure=np.ones((3, 3)), iterations=it)
+            lab, n = ndimage.label(er, structure=np.ones((3, 3)))
+            if n < 2:
+                continue
+            outs = []
+            for i in range(1, n + 1):
+                part = ndimage.binary_dilation(lab == i, iterations=it) & sub
+                ys, xs = np.where(part)
+                xa, xb, ya, yb = xs.min(), xs.max() + 1, ys.min(), ys.max() + 1
+                gate = max(12, orig // 5)
+                if len(ys) < gate or not (5 <= xb - xa <= 24 and 5 <= yb - ya <= 24):
+                    continue
+                if len(ys) / float((xb - xa) * (yb - ya)) < 0.5:
+                    continue      # an arc or a line, not a symbol body
+                outs.append((x0 + xa, y0 + ya, x0 + xb, y0 + yb, int(len(ys))))
+            if len(outs) >= 2:
+                return outs
+        return []
+
     for cname, (r, g, bb) in SYMBOL_PALETTE.items():
-        m = (abs(R - r) <= 8) & (abs(G - g) <= 8) & (abs(B - bb) <= 8)
+        if cname == 'blue violet':
+            # the Calcite triangle prints with an R gradient (102..135) but fixed G, B;
+            # a wide all-channel tolerance would swallow antialiased river edges
+            m = (abs(R - 102) <= 33) & (abs(G - 119) <= 6) & (abs(B - 205) <= 20)
+        else:
+            m = (abs(R - r) <= 8) & (abs(G - g) <= 8) & (abs(B - bb) <= 8)
         for x0, y0, x1, y1, npx in components(m, 6):
             w, h = x1 - x0, y1 - y0
-            if w > 30 or h > 30:
-                continue                     # water bodies / fills, not symbols
+            if (w > 30 or h > 30 or npx >= 1.6 * leg_max_ink.get(cname, 10 ** 9)
+                    or w * h >= 1.6 * leg_max_box.get(cname, 10 ** 9)):   # e.g. two touching Kaolin K squares
+                parts = split_component(m, x0, y0, x1, y1)
+                if parts:
+                    qa_split_merged += len(parts)
+                    for qx0, qy0, qx1, qy1, qn in parts:
+                        symbol_blobs.append({'colour': cname, 'x0': qx0, 'y0': qy0,
+                                             'x1': qx1, 'y1': qy1, 'npx': qn})
+                    continue
+                if w > 30 or h > 30:
+                    continue                 # water bodies / fills, not symbols
             symbol_blobs.append({'colour': cname, 'x0': x0, 'y0': y0, 'x1': x1, 'y1': y1, 'npx': npx})
     r, g, bb = WATER_LINE_RGB
     m = (abs(R - r) <= 8) & (abs(G - g) <= 8) & (abs(B - bb) <= 8)
@@ -1133,7 +1211,7 @@ def main(pdf_path, out_dir):
             dd = np.hypot(lab_pts[:, 0] - s['pt'][0], lab_pts[:, 1] - s['pt'][1])
             i = int(np.argmin(dd))
             if dd[i] <= HINT_R:
-                s['near_label'], s['near_dist'], s['link'] = i, float(dd[i]), 'nearest only (unverified)'
+                s['near_label'], s['near_dist'], s['link'] = i, float(dd[i]), 'nearest printed number (colour not consistent)'
     snapped = sum(1 for l in num_labels if l['sym'] is not None)
     with_entry = [l for l in num_labels if l['entry']]
     symbol_expected = [l for l in with_entry if any(not n.endswith('(no legend symbol)') and '(?)' not in n and 'not in legend' not in n for n in l['entry']['minerals'])]
@@ -1150,6 +1228,37 @@ def main(pdf_path, out_dir):
     print('labels snapped to a colour-consistent symbol within %.0f pt: %d / %d (of %d whose minerals have a legend symbol)' % (
         SNAP_R, snapped, len(num_labels), len(symbol_expected)))
 
+    # ---- definitive identification of every symbol blob (symbol_identify.py).
+    # One mineral per blob, never a candidate list: signature determinations read
+    # off the raster, the EXPLANATIONS-table row at the blob's number, fragment /
+    # furniture tests, and - last - a size- and colour-gated template match against
+    # the 66 legend symbols, with its score kept as the confidence.
+    import symbol_identify as sid
+    matcher = sid.Matcher(os.path.join(out_dir, 'map_raster', 'mineral_map_base_75dpi.png'),
+                          os.path.join(out_dir, 'legend_symbols'))
+    idents = sid.identify_all(symbols, num_labels, matcher)
+    for s, ident in zip(symbols, idents):
+        s['ident'] = ident
+    qa['symbol_identification'] = {
+        'blobs': len(idents),
+        'by_method': dict(collections.Counter(i['method'].split(' (')[0] for i in idents).most_common()),
+        'not_a_mineral_symbol': sum(1 for i in idents if i['mineral'].startswith('not a mineral symbol')),
+        'minerals_identified': len({i['mineral'] for i in idents if not i['mineral'].startswith('not a mineral')}),
+        'decisions_file': 'symbol_decisions.py (GROUP_DECISIONS / CODE_RESOLUTIONS)',
+        'merged_components_split': qa_split_merged,
+    }
+    print('symbol identification: %d blobs, %d methods, %d not-a-symbol' % (
+        len(idents), len(qa['symbol_identification']['by_method']), qa['symbol_identification']['not_a_mineral_symbol']))
+    with open(os.path.join(out_dir, 'symbol_identification.csv'), 'w', newline='') as f:
+        wr = csv.writer(f)
+        wr.writerow(['blob', 'colour', 'body_w_px', 'body_h_px', 'fill', 'lon', 'lat', 'mineral', 'method', 'score',
+                     'margin', 'evidence'])
+        for j, (s, ident) in enumerate(zip(symbols, idents)):
+            lon, lat = ll(*s['pt'])
+            wr.writerow([j, s['colour'], s['bw'], s['bh'], s['fill'], round(float(lon), 6), round(float(lat), 6), ident['mineral'],
+                         ident['method'], 'n/a' if ident['score'] is None else ident['score'],
+                         'n/a' if ident['margin'] is None else ident['margin'], ident['evidence']])
+
     if os.environ.get('MINERAL_DEBUG'):
         import pickle
         pickle.dump({'symbols': symbols, 'labels': num_labels, 'table': table}, open(os.path.join(out_dir, '_debug.pkl'), 'wb'))
@@ -1165,17 +1274,22 @@ def main(pdf_path, out_dir):
     GEO_SRC = 'geological map extraction (1:2 M), +-10 km' if host else 'shapefiles/geology_units.shp not found'
 
     def host_fields(lon, lat):
+        """Host rock from the 2011 map; every field carries an explicit value."""
         rec = host(lon, lat) if host else None
         if not rec:
-            return ['', '', '', '', '', '', 'outside mapped units' if host else GEO_SRC]
-        return [rec.get('code') or '', (rec.get('unit') or '')[:64], (rec.get('formation') or '')[:48],
-                (rec.get('era') or '')[:48], (rec.get('period') or '')[:40], (rec.get('epoch') or '')[:48], GEO_SRC]
+            return ['outside', 'outside mapped units', 'not applicable', 'not applicable', 'not applicable',
+                    'not applicable', 'outside mapped units' if host else GEO_SRC]
+        return [rec.get('code') or 'uncoded', (rec.get('unit') or 'unit not named')[:64],
+                (rec.get('formation') or 'formation not named in the 2011 legend')[:48],
+                (rec.get('era') or 'era not stated')[:48], (rec.get('period') or 'period not subdivided')[:40],
+                (rec.get('epoch') or 'epoch not subdivided')[:48], GEO_SRC]
 
     o = ShpOut(os.path.join(out_dir, 'mineral_localities'), shapefile.POINT, [
         ('zone', 'C', 1, 0), ('number', 'N', 5, 0), ('zone_num', 'C', 6, 0), ('locality', 'C', 80, 0),
         ('codes_raw', 'C', 40, 0), ('minerals', 'C', 254, 0), ('min_conf', 'C', 40, 0), ('match', 'C', 80, 0),
         ('tbl_flags', 'C', 200, 0), ('pos_src', 'C', 36, 0), ('snap_pt', 'N', 6, 1), ('sym_colour', 'C', 24, 0),
-        ('sym_cands', 'C', 254, 0), ('label_lon', 'N', 12, 6), ('label_lat', 'N', 12, 6),
+        ('symbol', 'C', 64, 0), ('sym_method', 'C', 44, 0), ('sym_score', 'C', 16, 0), ('sym_evid', 'C', 200, 0),
+        ('label_lon', 'N', 12, 6), ('label_lat', 'N', 12, 6),
         # added attributes: coordinates, commodity summary, host rock unit from the geological map
         ('lon', 'N', 12, 6), ('lat', 'N', 12, 6), ('n_minerals', 'N', 3, 0), ('mineral_1', 'C', 60, 0),
         ('group_1', 'C', 24, 0), ('groups', 'C', 120, 0), ('n_unknown', 'N', 3, 0), ('n_printed', 'N', 2, 0),
@@ -1183,35 +1297,55 @@ def main(pdf_path, out_dir):
         ('geo_period', 'C', 40, 0), ('geo_epoch', 'C', 48, 0), ('geo_src', 'C', 60, 0)])
     loc_rows = []
     group_count = collections.Counter()
+    sym_pts = np.array([s['pt'] for s in symbols]) if symbols else np.zeros((0, 2))
     for l in sorted(num_labels, key=lambda l: (l['zone'] or 'Z', l['number'])):
         e = l['entry']
+        j = l['sym'] if l['sym'] is not None else l.get('hint')
         if l['sym'] is not None:
             px_, py_ = symbols[l['sym']]['pt']
             pos_src, snap_d = 'raster symbol (colour-consistent)', round(l['sym_dist'], 1)
-            scol, scand = symbols[l['sym']]['colour'], ' | '.join(symbols[l['sym']]['candidates'])
+        elif j is not None:
+            px_, py_ = l['cx'], l['cy']
+            pos_src, snap_d = 'label centre', round(l['hint_dist'], 1)
         else:
             px_, py_ = l['cx'], l['cy']
-            pos_src, snap_d, scol, scand = 'label centre', None, '', ''
-            if l.get('hint') is not None:
-                scol = 'nearest: ' + symbols[l['hint']]['colour']
-                scand = 'nearest symbol %.0f pt away (unverified): ' % l['hint_dist'] + (' | '.join(symbols[l['hint']]['candidates']) or 'no rule')
+            pos_src = 'label centre'
+            dd = np.hypot(sym_pts[:, 0] - l['cx'], sym_pts[:, 1] - l['cy']) if len(sym_pts) else np.array([9e9])
+            snap_d = round(float(dd.min()), 1)
+        scol = symbols[j]['colour'] if j is not None else 'no symbol within 25 pt'
+        ident = symbols[j]['ident'] if j is not None else None
+        symbol_name = ident['mineral'] if ident else 'no symbol printed at its number'
+        sym_method = ident['method'] if ident else 'no symbol at its number'
+        sym_score = ('%.2f' % ident['score']) if ident and ident['score'] is not None else 'n/a'
+        sym_evid = (ident['evidence'] if ident else 'no raster symbol within 25 pt of the printed number')[:200]
         lon, lat = ll(px_, py_)
         llon, llat = ll(l['cx'], l['cy'])
         mins = e['minerals'] if e else []
+        conf = list(e['code_conf']) if e else []
+        if not mins and ident and not symbol_name.startswith('not a mineral symbol'):
+            # the table prints no usable code for this number: the symbol the cartographer
+            # put at the number is the identification
+            mins, conf = [symbol_name], ['symbol on map']
         groups = sorted({commodity_group(m) for m in mins})
         if not groups:
-            groups = ['no code printed' if e else 'not in table']
+            groups = [symbol_name if symbol_name.startswith('not a mineral symbol')
+                      else ('no code printed' if e else 'not in table')]
         group_count.update(groups)
         rec = [l['zone'] or '', l['number'], '%s%d' % (l['zone'] or '?', l['number']),
-               e['locality'] if e else '', e['minerals_raw'] if e else '', ' | '.join(mins),
-               ' '.join(e['code_conf']) if e else '', l['match'], '; '.join(e['flags'])[:200] if e else '',
-               pos_src, snap_d, scol, scand[:254], deg(llon), deg(llat),
-               deg(lon), deg(lat), len(mins), (mins[0] if mins else '')[:60],
+               (e['locality'] if e and e['locality'] else 'unnamed in the table') if e else 'not in the EXPLANATIONS table',
+               (e['minerals_raw'] if e and e['minerals_raw'] else 'no code printed') if e else 'no code printed',
+               ' | '.join(mins) if mins else 'no mineral printed',
+               ' '.join(conf) if conf else 'no code printed', l['match'],
+               ('; '.join(e['flags']) if e and e['flags'] else 'none')[:200],
+               pos_src, snap_d, scol, symbol_name[:64], sym_method[:44], sym_score, sym_evid,
+               deg(llon), deg(llat),
+               deg(lon), deg(lat), len(mins), (mins[0] if mins else 'no mineral printed')[:60],
                commodity_group(mins[0]) if mins else groups[0], ' | '.join(groups)[:120],
                len(e['unknown_codes']) if e else 0, l['n_printed']] + host_fields(lon, lat)
         o.add(Point(deg(lon), deg(lat)), rec)
         loc_rows.append(dict(zip(['zone', 'number', 'zone_num', 'locality', 'codes_raw', 'minerals', 'code_conf', 'match',
-                                  'table_flags', 'position_source', 'snap_dist_pt', 'symbol_colour', 'symbol_candidates',
+                                  'table_flags', 'position_source', 'snap_dist_pt', 'symbol_colour', 'symbol',
+                                  'symbol_method', 'symbol_score', 'symbol_evidence',
                                   'label_lon', 'label_lat', 'lon', 'lat', 'n_minerals', 'mineral_1', 'group_1', 'groups',
                                   'n_unknown_codes', 'n_printed', 'geo_code', 'geo_unit', 'geo_formation', 'geo_era', 'geo_period',
                                   'geo_epoch', 'geo_source'], rec)))
@@ -1227,38 +1361,60 @@ def main(pdf_path, out_dir):
     with open(os.path.join(out_dir, 'explanations_table.csv'), 'w', newline='') as f:
         wr = csv.writer(f)
         wr.writerow(['zone', 'number', 'number_printed', 'locality', 'codes_raw', 'codes', 'minerals', 'commodity_groups',
-                     'code_confidence', 'unknown_codes', 'on_map', 'flags', 'table_column', 'raw_text'])
+                     'code_confidence', 'unknown_codes', 'resolved_as', 'resolution_evidence', 'on_map', 'flags',
+                     'table_column', 'raw_text'])
+        import symbol_decisions as dec
         for e in sorted(table, key=lambda e: (e['zone'], e['number'], -e['y'])):
+            res = [dec.CODE_RESOLUTIONS[c][0] for c in e['unknown_codes'] if c in dec.CODE_RESOLUTIONS]
+            ev = [dec.CODE_RESOLUTIONS[c][2] for c in e['unknown_codes'] if c in dec.CODE_RESOLUTIONS]
             wr.writerow([e['zone'], e['number'], e['number_printed'], e['locality'], e['minerals_raw'], ' '.join(e['codes']),
                          ' | '.join(e['minerals']), ' | '.join(sorted({commodity_group(m) for m in e['minerals']})),
                          ' '.join(e['code_conf']), ' '.join(e['unknown_codes']),
+                         ' | '.join(res) if res else ('no unresolved code' if not e['unknown_codes'] else 'unresolved'),
+                         ' | '.join(ev) if ev else 'no unresolved code',
                          'yes' if (e['zone'], e['number']) in lab_keys else 'no', '; '.join(e['flags']), e['block'], e['raw']])
 
     # ---- raster symbol blobs
     o = ShpOut(os.path.join(out_dir, 'mineral_symbols_raster'), shapefile.POINT, [
         ('colour', 'C', 16, 0), ('w_px', 'N', 4, 0), ('h_px', 'N', 4, 0), ('body_w', 'N', 4, 0), ('body_h', 'N', 4, 0),
-        ('fill', 'C', 8, 0), ('candidates', 'C', 254, 0), ('link', 'C', 40, 0), ('near_num', 'C', 8, 0), ('near_dist', 'N', 6, 1),
+        ('fill', 'C', 8, 0), ('mineral', 'C', 64, 0), ('ident_mth', 'C', 44, 0), ('ident_scr', 'C', 16, 0),
+        ('ident_evid', 'C', 200, 0), ('link', 'C', 40, 0), ('near_num', 'C', 8, 0), ('near_dist', 'N', 6, 1),
         ('near_loc', 'C', 80, 0), ('near_mins', 'C', 200, 0),
         ('lon', 'N', 12, 6), ('lat', 'N', 12, 6), ('w_pt', 'N', 6, 2), ('h_pt', 'N', 6, 2), ('w_mm', 'N', 6, 2),
-        ('h_mm', 'N', 6, 2), ('w_km', 'N', 7, 2), ('h_km', 'N', 7, 2), ('n_cands', 'N', 3, 0), ('group_1', 'C', 24, 0),
+        ('h_mm', 'N', 6, 2), ('w_km', 'N', 7, 2), ('h_km', 'N', 7, 2), ('group_1', 'C', 24, 0),
         ('near_grps', 'C', 120, 0)])
     km_per_pt_x = a * 111.32 * math.cos(math.radians(9.0))     # at the map's mid-latitude
     km_per_pt_y = c * 110.57
+    lab_pts2 = np.array([(l['cx'], l['cy']) for l in num_labels]) if num_labels else np.zeros((0, 2))
     for j, s in enumerate(symbols):
         lon, lat = ll(*s['pt'])
         nl = num_labels[s['near_label']] if s['near_label'] is not None else None
         e = nl['entry'] if nl else None
+        if nl is None and len(lab_pts2):
+            dd = np.hypot(lab_pts2[:, 0] - s['pt'][0], lab_pts2[:, 1] - s['pt'][1])
+            k = int(np.argmin(dd))
+            near_num, near_dist = '%s%d' % (num_labels[k]['zone'] or '?', num_labels[k]['number']), round(float(dd[k]), 1)
+            ne = num_labels[k].get('entry')
+            near_loc = (ne.get('locality') or 'unnamed in the table') if ne else 'no table row'
+        else:
+            near_num = ('%s%d' % (nl['zone'] or '?', nl['number'])) if nl else 'none on the map'
+            near_dist = round(s['near_dist'], 1) if nl else 999.9
+            near_loc = (e['locality'] or 'unnamed in the table') if e else 'no table row'
+        ident = s['ident']
         wpx, hpx = s['x1'] - s['x0'], s['y1'] - s['y0']
         wpt, hpt = wpx / sx, hpx / sx
         o.add(Point(deg(lon), deg(lat)), [s['colour'], wpx, hpx, s['bw'], s['bh'],
-                                         s['fill'], ' | '.join(s['candidates'])[:254], s['link'][:40],
-                                         ('%s%d' % (nl['zone'] or '?', nl['number'])) if nl else '',
-                                         round(s['near_dist'], 1) if nl else None, e['locality'] if e else '',
-                                         e['minerals_raw'] if e else '',
+                                         s['fill'], ident['mineral'][:64], ident['method'][:44],
+                                         ('%.2f' % ident['score']) if ident['score'] is not None else 'n/a',
+                                         ident['evidence'][:200], (s['link'] or 'no number within 14 pt')[:40],
+                                         near_num, near_dist, near_loc,
+                                         (e['minerals_raw'] or 'no code printed') if e else 'no table row',
                                          deg(lon), deg(lat), round(wpt, 2), round(hpt, 2), round(wpt * 25.4 / 72, 2),
                                          round(hpt * 25.4 / 72, 2), round(wpt * km_per_pt_x, 2), round(hpt * km_per_pt_y, 2),
-                                         len(s['candidates']), commodity_group(s['candidates'][0]) if s['candidates'] else '',
-                                         ' | '.join(sorted({commodity_group(m) for m in e['minerals']}))[:120] if e else ''])
+                                         commodity_group(ident['mineral']) if not ident['mineral'].startswith('not a mineral')
+                                         else 'not a mineral',
+                                         (' | '.join(sorted({commodity_group(m) for m in e['minerals']}))[:120]
+                                          if e and e['minerals'] else 'no group')])
     print('mineral_symbols_raster:', o.close())
 
     # ---- zones (A-G) polygons + division lines
