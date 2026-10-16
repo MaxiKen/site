@@ -267,12 +267,12 @@
     "table_entries_without_label": 213
   },
   "raster_symbols": {
-    "blobs": 1593,
+    "blobs": 1609,
     "water_line_fragments_excluded": 54,
     "by_colour": {
       "green": 183,
-      "red": 194,
-      "yellow": 422,
+      "red": 204,
+      "yellow": 426,
       "khaki": 116,
       "orange": 26,
       "purple": 81,
@@ -280,32 +280,33 @@
       "light green": 27,
       "green 2": 7,
       "bright green": 11,
-      "dark grey": 50,
+      "dark grey": 49,
       "tan": 8,
       "grey": 31,
       "purple 2": 2,
       "magenta": 3,
       "dark tan": 8,
-      "brown": 40,
+      "blue violet": 4,
+      "brown": 39,
       "violet": 5,
       "dark blue": 9,
       "outline": 351
     },
-    "with_candidate_rule": 1350,
+    "with_candidate_rule": 1358,
     "labels_total": 999,
     "labels_with_table_entry": 995,
     "labels_whose_minerals_have_a_legend_symbol": 916,
-    "labels_snapped_to_colour_consistent_symbol_within_25pt": 684,
-    "symbols_linked_to_a_label": 638,
+    "labels_snapped_to_colour_consistent_symbol_within_25pt": 686,
+    "symbols_linked_to_a_label": 640,
     "symbols_claimed_by_several_labels": 44,
-    "symbols_without_any_label_within_14pt": 516,
+    "symbols_without_any_label_within_14pt": 521,
     "snap_distance_pt_quartiles": [
-      9.840213422211205,
-      12.811539469088967,
-      15.440042828239484
+      9.863967736526973,
+      12.82455267839123,
+      15.44596570454923
     ],
     "snapped_by_colour": {
-      "yellow": 230,
+      "yellow": 232,
       "green": 64,
       "outline": 154,
       "khaki": 51,
@@ -320,34 +321,35 @@
     }
   },
   "symbol_identification": {
-    "blobs": 1593,
+    "blobs": 1609,
     "by_method": {
-      "signature determination": 1019,
-      "table row at its number": 198,
-      "template match within family": 138,
-      "visual template match": 113,
-      "sliver signature": 53,
-      "table row at nearest number": 32,
-      "fragment of a symbol of the same colour": 12,
-      "cluster signature": 11,
-      "no legend symbol matches": 9,
-      "half of a symbol cut by an overprint": 8
+      "signature determination": 1023,
+      "table row at its number": 201,
+      "template match within family": 137,
+      "visual template match": 121,
+      "sliver signature": 56,
+      "table row at nearest number": 33,
+      "fragment of a symbol of the same colour": 15,
+      "half of a symbol cut by an overprint": 8,
+      "no legend symbol matches": 8,
+      "cluster signature": 5,
+      "merged pair of touching symbols": 2
     },
-    "not_a_mineral_symbol": 99,
-    "minerals_identified": 65,
-    "decisions_file": "symbol_decisions.py (GROUP_DECISIONS / CODE_RESOLUTIONS)"
+    "not_a_mineral_symbol": 95,
+    "minerals_identified": 66,
+    "decisions_file": "symbol_decisions.py (GROUP_DECISIONS / CODE_RESOLUTIONS)",
+    "merged_components_split": 19
   },
   "commodity_groups": {
     "industrial minerals": 312,
-    "construction materials": 294,
+    "construction materials": 295,
     "rare metals": 135,
     "precious metals": 78,
     "gemstones": 77,
     "ferrous metals": 48,
     "energy": 47,
     "base metals": 36,
-    "no code printed": 1,
-    "not in table": 1
+    "no code printed": 1
   },
   "capital_check_km": {
     "n": 33,

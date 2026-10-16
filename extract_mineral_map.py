@@ -47,6 +47,7 @@ Requires: pikepdf, pymupdf, shapely, pyshp, numpy, pillow, scipy (pyogrio
 optional for the GeoPackage bundle).
 """
 import collections
+import glob
 import csv
 import json
 import math
@@ -198,7 +199,7 @@ SYMBOL_PALETTE = {
     'purple': (151, 69, 120), 'light green': (132, 194, 37), 'grey': (130, 130, 130), 'dark grey': (96, 93, 92),
     'blue grey': (102, 122, 179), 'brown': (192, 128, 64), 'bright green': (0, 255, 0), 'orange': (231, 120, 23),
     'tan': (187, 130, 91), 'green 2': (0, 160, 64), 'dark tan': (149, 127, 102), 'violet': (132, 0, 168),
-    'dark blue': (0, 77, 168), 'purple 2': (169, 0, 230), 'magenta': (224, 32, 128),
+    'dark blue': (0, 77, 168), 'blue violet': (102, 119, 205), 'purple 2': (169, 0, 230), 'magenta': (224, 32, 128),
 }
 WATER_LINE_RGB = (80, 100, 235)          # river / lake outlines drawn in the raster - excluded from symbol detection
 SYMBOL_OUTLINE_RGB = (31, 26, 23)        # outline / letter colour of the symbols (line-work is pure black)
@@ -1019,6 +1020,7 @@ def main(pdf_path, out_dir):
     arr = np.array(base).astype(int)
     R, G, B = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2]
     symbol_blobs = []
+    qa_split_merged = 0
 
     def components(mask, min_px):
         lab, n = ndimage.label(mask, structure=np.ones((3, 3)))
@@ -1030,12 +1032,80 @@ def main(pdf_path, out_dir):
                 continue
             out.append((sl[1].start, sl[0].start, sl[1].stop, sl[0].stop, int(sizes[i])))
         return out
+    # the largest ink area any legend symbol of a colour occupies at map scale:
+    # a colour component well above it is several symbols touching (or a fill)
+    leg_max_ink, leg_max_box = {}, {}
+    pal_arr = np.array([SYMBOL_PALETTE[k] for k in SYMBOL_PALETTE])
+    for lf in sorted(glob.glob(os.path.join(out_dir, 'legend_symbols', 'symbol_*.png'))):
+        larr = np.array(Image.open(lf).convert('RGB')).astype(int)
+        mk = larr.sum(2) < 720
+        rs, cs = np.where(mk)
+        if not len(rs):
+            continue
+        wm = max(2, int(round((cs.max() - cs.min() + 1) / 3.125 * 1.0417)))
+        hm = max(2, int(round((rs.max() - rs.min() + 1) / 3.125 * 1.0417)))
+        imr = np.array(Image.fromarray(larr[rs.min():rs.max() + 1, cs.min():cs.max() + 1]
+                                       .astype('uint8')).resize((wm, hm), Image.LANCZOS)).astype(int)
+        mmk = imr.sum(2) < 720
+        px = imr[:, :, :3][mmk]
+        if not len(px):
+            continue
+        dist = np.abs(px[:, None, :] - pal_arr[None, :, :]).sum(2)
+        near, ok = dist.argmin(1), dist.min(1) < 150
+        if ok.any():
+            k = int(np.bincount(near[ok], minlength=len(pal_arr)).argmax())
+            leg_max_ink[list(SYMBOL_PALETTE)[k]] = max(leg_max_ink.get(list(SYMBOL_PALETTE)[k], 0), int(mmk.sum()))
+            leg_max_box[list(SYMBOL_PALETTE)[k]] = max(leg_max_box.get(list(SYMBOL_PALETTE)[k], 0), wm * hm)
+
+    def split_component(mask, x0, y0, x1, y1, min_px=6, max_side=30):
+        """Erode the 1 px bridges of a merged colour component and return the
+        symbol-sized parts (two touching symbols of the same colour, a symbol
+        merged with a twin, ...).  [] when the component does not split."""
+        sub = mask[y0:y1, x0:x1]
+        # close the 1-2 px glyph strokes first: a symbol body with a letter inside
+        # would otherwise erode into ring arcs instead of staying one solid part
+        sub = ndimage.binary_closing(sub, structure=np.ones((3, 3)))
+        orig = int(sub.sum())
+        for it in (1, 2, 3, 4):          # deeper erosion cuts wider contact necks
+            er = ndimage.binary_erosion(sub, structure=np.ones((3, 3)), iterations=it)
+            lab, n = ndimage.label(er, structure=np.ones((3, 3)))
+            if n < 2:
+                continue
+            outs = []
+            for i in range(1, n + 1):
+                part = ndimage.binary_dilation(lab == i, iterations=it) & sub
+                ys, xs = np.where(part)
+                xa, xb, ya, yb = xs.min(), xs.max() + 1, ys.min(), ys.max() + 1
+                gate = max(12, orig // 5)
+                if len(ys) < gate or not (5 <= xb - xa <= 24 and 5 <= yb - ya <= 24):
+                    continue
+                if len(ys) / float((xb - xa) * (yb - ya)) < 0.5:
+                    continue      # an arc or a line, not a symbol body
+                outs.append((x0 + xa, y0 + ya, x0 + xb, y0 + yb, int(len(ys))))
+            if len(outs) >= 2:
+                return outs
+        return []
+
     for cname, (r, g, bb) in SYMBOL_PALETTE.items():
-        m = (abs(R - r) <= 8) & (abs(G - g) <= 8) & (abs(B - bb) <= 8)
+        if cname == 'blue violet':
+            # the Calcite triangle prints with an R gradient (102..135) but fixed G, B;
+            # a wide all-channel tolerance would swallow antialiased river edges
+            m = (abs(R - 102) <= 33) & (abs(G - 119) <= 6) & (abs(B - 205) <= 20)
+        else:
+            m = (abs(R - r) <= 8) & (abs(G - g) <= 8) & (abs(B - bb) <= 8)
         for x0, y0, x1, y1, npx in components(m, 6):
             w, h = x1 - x0, y1 - y0
-            if w > 30 or h > 30:
-                continue                     # water bodies / fills, not symbols
+            if (w > 30 or h > 30 or npx >= 1.6 * leg_max_ink.get(cname, 10 ** 9)
+                    or w * h >= 1.6 * leg_max_box.get(cname, 10 ** 9)):   # e.g. two touching Kaolin K squares
+                parts = split_component(m, x0, y0, x1, y1)
+                if parts:
+                    qa_split_merged += len(parts)
+                    for qx0, qy0, qx1, qy1, qn in parts:
+                        symbol_blobs.append({'colour': cname, 'x0': qx0, 'y0': qy0,
+                                             'x1': qx1, 'y1': qy1, 'npx': qn})
+                    continue
+                if w > 30 or h > 30:
+                    continue                 # water bodies / fills, not symbols
             symbol_blobs.append({'colour': cname, 'x0': x0, 'y0': y0, 'x1': x1, 'y1': y1, 'npx': npx})
     r, g, bb = WATER_LINE_RGB
     m = (abs(R - r) <= 8) & (abs(G - g) <= 8) & (abs(B - bb) <= 8)
@@ -1141,7 +1211,7 @@ def main(pdf_path, out_dir):
             dd = np.hypot(lab_pts[:, 0] - s['pt'][0], lab_pts[:, 1] - s['pt'][1])
             i = int(np.argmin(dd))
             if dd[i] <= HINT_R:
-                s['near_label'], s['near_dist'], s['link'] = i, float(dd[i]), 'nearest only (unverified)'
+                s['near_label'], s['near_dist'], s['link'] = i, float(dd[i]), 'nearest printed number (colour not consistent)'
     snapped = sum(1 for l in num_labels if l['sym'] is not None)
     with_entry = [l for l in num_labels if l['entry']]
     symbol_expected = [l for l in with_entry if any(not n.endswith('(no legend symbol)') and '(?)' not in n and 'not in legend' not in n for n in l['entry']['minerals'])]
@@ -1175,6 +1245,7 @@ def main(pdf_path, out_dir):
         'not_a_mineral_symbol': sum(1 for i in idents if i['mineral'].startswith('not a mineral symbol')),
         'minerals_identified': len({i['mineral'] for i in idents if not i['mineral'].startswith('not a mineral')}),
         'decisions_file': 'symbol_decisions.py (GROUP_DECISIONS / CODE_RESOLUTIONS)',
+        'merged_components_split': qa_split_merged,
     }
     print('symbol identification: %d blobs, %d methods, %d not-a-symbol' % (
         len(idents), len(qa['symbol_identification']['by_method']), qa['symbol_identification']['not_a_mineral_symbol']))
@@ -1184,8 +1255,9 @@ def main(pdf_path, out_dir):
                      'margin', 'evidence'])
         for j, (s, ident) in enumerate(zip(symbols, idents)):
             lon, lat = ll(*s['pt'])
-            wr.writerow([j, s['colour'], s['bw'], s['bh'], s['fill'], round(lon, 6), round(lat, 6), ident['mineral'],
-                         ident['method'], ident['score'], ident['margin'], ident['evidence']])
+            wr.writerow([j, s['colour'], s['bw'], s['bh'], s['fill'], round(float(lon), 6), round(float(lat), 6), ident['mineral'],
+                         ident['method'], 'n/a' if ident['score'] is None else ident['score'],
+                         'n/a' if ident['margin'] is None else ident['margin'], ident['evidence']])
 
     if os.environ.get('MINERAL_DEBUG'):
         import pickle

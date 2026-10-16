@@ -164,6 +164,12 @@ GROUP_DECISIONS = {
     ('red', 20, 10, 'sparse'):    ('Tourmaline', 'red right-pointing triangle (legend 61), large render'),
     ('red', 21, 11, 'sparse'):    ('Tourmaline', 'red right-pointing triangle (legend 61), large render'),
     ('blue grey', 11, 11, 'sparse'): ('Uranium', 'blue-grey octagon with the U (legend 63)'),
+    ('blue violet', 12, 7, 'sparse'): ('Calcite',
+        'the triangle body before its black outline merges in; same determination as the 14x9 signature'),
+    ('blue violet', 14, 9, 'sparse'): ('Calcite',
+        'blue-violet triangle with a white C, printed at raster px (240,732) and (986,866); legend cell 67 (Calcite) '
+        'prints no artwork, so the template was cut from the map face; the EXPLANATIONS code Ca of six localities '
+        'maps to Calcite through that legend row'),
     ('outline', 12, 15, 'sparse'): ('Glass Sand', 'yellow bucket with black border (legend 25)'),
     ('outline', 6, 7, 'sparse'):  ('Clay / Pottery Clay', 'yellow rectangle with C (legend 12), small render'),
     ('yellow', 17, 20, 'round'):  ('Clay / Pottery Clay', 'two touching Clay rectangles merged by the blob detector'),

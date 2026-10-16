@@ -48,7 +48,7 @@ SYMBOL_PALETTE = {
     'purple': (151, 69, 120), 'light green': (132, 194, 37), 'grey': (130, 130, 130), 'dark grey': (96, 93, 92),
     'blue grey': (102, 122, 179), 'brown': (192, 128, 64), 'bright green': (0, 255, 0), 'orange': (231, 120, 23),
     'tan': (187, 130, 91), 'green 2': (0, 160, 64), 'dark tan': (149, 127, 102), 'violet': (132, 0, 168),
-    'dark blue': (0, 77, 168), 'purple 2': (169, 0, 230), 'magenta': (224, 32, 128),
+    'dark blue': (0, 77, 168), 'blue violet': (102, 119, 205), 'purple 2': (169, 0, 230), 'magenta': (224, 32, 128),
 }
 INK = 720          # RGB sum below this = ink (same threshold as the legend crops)
 PAL_NAMES = list(SYMBOL_PALETTE)
@@ -127,12 +127,15 @@ class Matcher:
         xb, yb = min(W, x1 + pad), min(H, y1 + pad)
         return self.base[ya:yb, xa:xb]
 
-    def rank(self, patch):
+    SIGNATURE_ONLY = {67}      # Calcite: legend cell empty, template cut from the map face
+
+    def rank(self, patch, exclude=()):
         """Score every legend symbol against the patch; return a ranked list of
         (score, template, parts) with the best first."""
         pm = ink_mask(patch)
         if not pm.any():
             return []
+        exclude = set(exclude) | self.SIGNATURE_ONLY
         # tighten to the ink box so the +-1 px pad does not bias the size
         rs, cs = np.where(pm)
         patch = patch[rs.min():rs.max() + 1, cs.min():cs.max() + 1]
@@ -142,6 +145,8 @@ class Matcher:
         h, w = patch.shape[:2]
         out = []
         for t in self.templates:
+            if t['no'] in exclude:
+                continue
             _ta, tm0, th, tg0 = self._tpl_at(t['no'], w, h)
             best, parts = 0.0, {}
             for dy in (-1, 0, 1):
@@ -185,8 +190,7 @@ def mineral_of_file(fn):
     if not LEGEND_MINERAL:
         with open(os.path.join(SHP, 'mineral_legend.csv')) as f:
             for row in csv.DictReader(f):
-                if row['symbol_png']:
-                    LEGEND_MINERAL[int(os.path.basename(row['symbol_png']).split('_')[1])] = row['mineral']
+                LEGEND_MINERAL[int(row['legend_no'])] = row['mineral']
     return LEGEND_MINERAL.get(int(fn.split('_')[1]), fn)
 
 
@@ -233,6 +237,7 @@ def identify_all(symbols, labels, matcher=None, towns=None):
     cent = np.array([[(s['x0'] + s['x1']) / 2, (s['y0'] + s['y1']) / 2] for s in symbols])
 
     out = [None] * len(symbols)
+    TCOLOUR = {n: c for c, ns in matcher.by_colour.items() for n in ns}
     SIG_KNOWN = {}
     for sig, gd in dec.GROUP_DECISIONS.items():
         if not gd[0].startswith('family:'):
@@ -316,12 +321,26 @@ def identify_all(symbols, labels, matcher=None, towns=None):
                       'overprint' % (s['bw'], s['bh'], s['bw'] * s['bh']), 'score': None, 'margin': None, 'family': None}
             continue
         # a blob much larger than every known signature of its colour is several symbols touching
-        known_area = [dw_ * dh_ for (cl, dw_, dh_, _fl) in SIG_KNOWN if cl == s['colour']]
-        if known_area and s['bw'] * s['bh'] >= 1.8 * max(known_area):
+        known_area = [t['pt_w'] * 1.0417 * t['pt_h'] * 1.0417 for t in matcher.templates
+                      if TCOLOUR.get(t['no']) == s['colour']]
+        if known_area and s['bw'] * s['bh'] >= 1.6 * max(known_area):
             cols_ = colour_hist(patch if patch is not None else
                                 matcher.patch(s['x0'], s['y0'], s['x1'], s['y1']), ink_mask(patch if patch is not None
                                 else matcher.patch(s['x0'], s['y0'], s['x1'], s['y1'])))
             present = [PAL_NAMES[k] for k in range(len(PAL_NAMES)) if cols_[k] >= 0.15]
+            # two touching copies of the SAME symbol: one determination covers both
+            patch = patch if patch is not None else matcher.patch(s['x0'], s['y0'], s['x1'], s['y1'])
+            pr = matcher.rank_within(patch, [mineral_of_file(t['file']) for t in matcher.templates
+                                             if TCOLOUR.get(t['no']) == s['colour']]) or matcher.rank(patch)
+            if pr and pr[0][0] >= 0.55 and (pr[0][0] - (pr[1][0] if len(pr) > 1 else 0.0)) >= 0.05:
+                pm_ = mineral_of_file(pr[0][1]['file'])
+                out[i] = {'mineral': pm_, 'method': 'merged pair of touching symbols',
+                          'evidence': 'two touching copies of the same %s symbol printed as one ink body; template '
+                                      'score %.2f, margin %.2f over the next legend symbol'
+                                      % (pm_, pr[0][0], pr[0][0] - (pr[1][0] if len(pr) > 1 else 0.0)),
+                          'score': round(pr[0][0], 3), 'margin': round(pr[0][0] - (pr[1][0] if len(pr) > 1 else 0.0), 3),
+                          'family': None}
+                continue
             out[i] = {'mineral': 'not a mineral symbol: merged cluster of touching symbols',
                       'method': 'cluster signature', 'evidence': '%dx%d px is %.1fx the largest known %s signature; '
                       'ink colours present: %s' % (s['bw'], s['bh'], s['bw'] * s['bh'] / max(known_area), s['colour'],
