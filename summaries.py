@@ -85,7 +85,7 @@ def minerals():
                 d['groups'][g] += 1
         d['zones'][l['zone']] += 1
     with open(os.path.join(MIN, 'summary_localities_by_host_geology.csv'), 'w', newline='') as f:
-        wr = csv.writer(f)
+        wr = csv.writer(f, lineterminator='\n')
         wr.writerow(['host_unit_code', 'host_unit', 'host_formation', 'host_era', 'host_period', 'localities', 'pct',
                      'top_minerals', 'commodity_groups', 'zones'])
         for k, d in sorted(per.items(), key=lambda kv: -kv[1]['n']):
@@ -114,7 +114,7 @@ def minerals():
             if g:
                 ztab[g][l['zone']] += 1
     with open(os.path.join(MIN, 'summary_localities_by_group.csv'), 'w', newline='') as f:
-        wr = csv.writer(f)
+        wr = csv.writer(f, lineterminator='\n')
         wr.writerow(['commodity_group', 'localities'] + [f'host era: {e}' for e in eras] + [f'zone {z}' for z in zones])
         for g in sorted(groups, key=lambda g: -sum(tab[g].values())):
             wr.writerow([g, sum(tab[g].values())] + [tab[g].get(e, 0) for e in eras] + [ztab[g].get(z, 0) for z in zones])
