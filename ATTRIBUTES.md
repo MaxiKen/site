@@ -7,6 +7,23 @@ fill rate of every field as measured on the delivered files (section 4, generate
 ellipsoid-free sphere (111.32 km per degree of longitude at the equator × cos(lat), 110.57 km per degree of latitude),
 which is accurate to well under 1 % at this scale.
 
+## 0. Coordinate conventions (both datasets)
+
+* **CRS:** EPSG:4326 (WGS 84 geographic, degrees, Greenwich, north-positive) — every `.prj`, every geometry column in the
+  GeoPackages, the GeoJSON exports and the viewer tiles. Details and the source-PDF CRS: **[ACCURACY.md](ACCURACY.md)**.
+* `lon` / `lat` are the coordinates **of the feature in the delivered file**. On the 2023 map the raster-derived layers
+  (`rivers`, `roads`, `railway`, `mineral_symbols_raster`, 686 of 999 `mineral_localities`, 14 of 33 `state_capitals`)
+  carry the latitude calibration of `calibrate_maps.py`; the rest are as printed.
+* `label_lon` / `label_lat` (`mineral_localities`) are the position of the **printed number**. For the 686 localities
+  placed on their raster symbol, `label_*` is the number and `lon`/`lat` the symbol; for the 313 label-centred ones the
+  two pairs are identical.
+* `snap_pt` (`mineral_localities`) and `near_dist` (`mineral_symbols_raster`) are **extraction QA metrics in PDF points,
+  measured before the calibration**; they describe the source document, not the delivered geometry.
+* `length_km`, `mid_lon/lat`, `start_*`, `end_*`, `ref_dx_km`, `ref_dy_km`, `w_km`, `h_km` are re-derived from the
+  calibrated geometry (`fix_derived_fields.py`), so they are consistent with `lon`/`lat`.
+* The sheets' **topographic overlay** (towns, roads, railway, capital squares) has a 0.66 % scale error inherited from
+  the source base map; `shapefiles*/towns_true_wgs84.csv` carries model-corrected true positions for the towns.
+
 ## 1. Geology (2011 map) – stratigraphy of the rock units
 
 The PDF has no attribute tables.  The age of each unit was **read from the printed EXPLANATIONS panel itself**:
@@ -643,63 +660,68 @@ Size fields: -
 | `zone` | C1 | 999 | 100 |
 | `number` | N5 | 999 | 100 |
 | `zone_num` | C6 | 999 | 100 |
-| `locality` | C80 | 994 | 99 |
-| `codes_raw` | C40 | 991 | 99 |
-| `minerals` | C254 | 991 | 99 |
-| `min_conf` | C40 | 991 | 99 |
+| `locality` | C80 | 999 | 100 |
+| `codes_raw` | C40 | 999 | 100 |
+| `minerals` | C254 | 999 | 100 |
+| `min_conf` | C40 | 999 | 100 |
 | `match` | C80 | 999 | 100 |
-| `tbl_flags` | C200 | 179 | 18 |
+| `tbl_flags` | C200 | 999 | 100 |
 | `pos_src` | C36 | 999 | 100 |
-| `snap_pt` | N6.1 | 675 | 68 |
-| `sym_colour` | C24 | 849 | 85 |
-| `sym_cands` | C254 | 849 | 85 |
+| `snap_pt` | N6.1 | 999 | 100 |
+| `sym_colour` | C24 | 999 | 100 |
+| `symbol` | C64 | 999 | 100 |
+| `sym_method` | C44 | 999 | 100 |
+| `sym_score` | C16 | 999 | 100 |
+| `sym_evid` | C200 | 999 | 100 |
 | `label_lon` | N12.6 | 999 | 100 |
 | `label_lat` | N12.6 | 999 | 100 |
 | `lon` | N12.6 | 999 | 100 |
 | `lat` | N12.6 | 999 | 100 |
 | `n_minerals` | N3 | 999 | 100 |
-| `mineral_1` | C60 | 991 | 99 |
+| `mineral_1` | C60 | 999 | 100 |
 | `group_1` | C24 | 999 | 100 |
 | `groups` | C120 | 999 | 100 |
 | `n_unknown` | N3 | 999 | 100 |
 | `n_printed` | N2 | 999 | 100 |
-| `geo_code` | C8 | 995 | 100 |
-| `geo_unit` | C64 | 995 | 100 |
-| `geo_form` | C48 | 475 | 48 |
-| `geo_era` | C48 | 995 | 100 |
-| `geo_period` | C40 | 662 | 66 |
-| `geo_epoch` | C48 | 478 | 48 |
+| `geo_code` | C8 | 999 | 100 |
+| `geo_unit` | C64 | 999 | 100 |
+| `geo_form` | C48 | 999 | 100 |
+| `geo_era` | C48 | 999 | 100 |
+| `geo_period` | C40 | 999 | 100 |
+| `geo_epoch` | C48 | 999 | 100 |
 | `geo_src` | C60 | 999 | 100 |
 
-### mineral_symbols_raster  (Point, 1593 features)
+### mineral_symbols_raster  (Point, 1609 features)
 
 Size fields: -
 
 | field | type | filled | % |
 |---|---|---:|---:|
-| `colour` | C16 | 1593 | 100 |
-| `w_px` | N4 | 1593 | 100 |
-| `h_px` | N4 | 1593 | 100 |
-| `body_w` | N4 | 1593 | 100 |
-| `body_h` | N4 | 1593 | 100 |
-| `fill` | C8 | 1593 | 100 |
-| `candidates` | C254 | 1350 | 85 |
-| `link` | C40 | 1077 | 68 |
-| `near_num` | C8 | 1077 | 68 |
-| `near_dist` | N6.1 | 1077 | 68 |
-| `near_loc` | C80 | 1073 | 67 |
-| `near_mins` | C200 | 1069 | 67 |
-| `lon` | N12.6 | 1593 | 100 |
-| `lat` | N12.6 | 1593 | 100 |
-| `w_pt` | N6.2 | 1593 | 100 |
-| `h_pt` | N6.2 | 1593 | 100 |
-| `w_mm` | N6.2 | 1593 | 100 |
-| `h_mm` | N6.2 | 1593 | 100 |
-| `w_km` | N7.2 | 1593 | 100 |
-| `h_km` | N7.2 | 1593 | 100 |
-| `n_cands` | N3 | 1593 | 100 |
-| `group_1` | C24 | 1350 | 85 |
-| `near_grps` | C120 | 1069 | 67 |
+| `colour` | C16 | 1609 | 100 |
+| `w_px` | N4 | 1609 | 100 |
+| `h_px` | N4 | 1609 | 100 |
+| `body_w` | N4 | 1609 | 100 |
+| `body_h` | N4 | 1609 | 100 |
+| `fill` | C8 | 1609 | 100 |
+| `mineral` | C64 | 1609 | 100 |
+| `ident_mth` | C44 | 1609 | 100 |
+| `ident_scr` | C16 | 1609 | 100 |
+| `ident_evid` | C200 | 1609 | 100 |
+| `link` | C40 | 1609 | 100 |
+| `near_num` | C8 | 1609 | 100 |
+| `near_dist` | N6.1 | 1609 | 100 |
+| `near_loc` | C80 | 1609 | 100 |
+| `near_mins` | C200 | 1609 | 100 |
+| `lon` | N12.6 | 1609 | 100 |
+| `lat` | N12.6 | 1609 | 100 |
+| `w_pt` | N6.2 | 1609 | 100 |
+| `h_pt` | N6.2 | 1609 | 100 |
+| `w_mm` | N6.2 | 1609 | 100 |
+| `h_mm` | N6.2 | 1609 | 100 |
+| `w_km` | N7.2 | 1609 | 100 |
+| `h_km` | N7.2 | 1609 | 100 |
+| `group_1` | C24 | 1609 | 100 |
+| `near_grps` | C120 | 1609 | 100 |
 
 ### pegmatite_marks  (Point, 23 features)
 

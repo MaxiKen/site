@@ -13,3 +13,6 @@ shapefiles_minerals/by_layer/
 # GDAL side-car files written next to the cwd when a GPKG raster is opened for statistics
 GPKG:*.aux.xml
 _scratch/
+
+# Natural Earth reference layers downloaded by calibrate_maps.py (cached, re-fetched on demand)
+reference_data/

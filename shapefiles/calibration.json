@@ -1,0 +1,100 @@
+{
+ "crs": {
+  "output": "EPSG:4326",
+  "output_datum": "WGS84",
+  "input_declared": null,
+  "input_georeference": "fitted printed graticule (12 meridians, 10 parallels); the PDF has no /VP, /LGIDict or /Measure object and no projection statement",
+  "input_units": "degrees",
+  "points_per_degree": [
+   157.6121,
+   157.6072
+  ],
+  "fit_max_residual_deg": 0.0010540699994834313,
+  "datum_shift_applied": "none",
+  "note": "No CRS object is embedded.  The graticule fit is the georeference; its values are treated as WGS84 degrees.  If the printed graticule was on the Minna datum (Clarke 1880), the WGS84 difference is ~0.1-0.2 km, below the ~1 km accuracy of the sheet."
+ },
+ "reference": {
+  "source": "Natural Earth 1:50m (public domain), github.com/nvkelso/natural-earth-vector",
+  "features": [
+   "national boundary (ne_50m_admin_0_countries)",
+   "coastline / sea edge (raster of the map sheet)",
+   "city coordinates (CAPITAL_REFERENCE in extract_mineral_map.py)"
+  ]
+ },
+ "measured_as_extracted": {
+  "geology_border_km": [
+   0.10372020384663244,
+   -0.026382278284671917,
+   42970
+  ],
+  "geology_coast_km": [
+   -0.44043006242768423,
+   23
+  ],
+  "geology_capitals_km": [
+   -0.4694151685516301,
+   -0.9651102449999662,
+   32
+  ]
+ },
+ "model": {
+  "A_km": 5.44,
+  "B_km_per_deg": -0.569,
+  "lat0": 9.0,
+  "km_per_deg": 110.57,
+  "note": "dlat = (A + B*(lat-lat0)) / km_per_deg degrees, north positive; dlon = 0"
+ },
+ "applied": true,
+ "layers_corrected": [],
+ "layers_verified_correct": [
+  "all"
+ ],
+ "notes": [
+  "The 2011 geological sheet agrees with Natural Earth to ~1 km",
+  "(border +0.1/-0.0 km, coastline -0.4 km): no correction applied."
+ ],
+ "topographic_overlay": {
+  "model": {
+   "dE = a*lon + b*lat + c": [
+    0.7157,
+    -0.1419,
+    -9.7763
+   ],
+   "dN = a*lon + b*lat + c": [
+    -0.1266,
+    0.7357,
+    -13.7793
+   ]
+  },
+  "rms_after_km": [
+   2.01,
+   1.95
+  ],
+  "rms_before_km": [
+   6.79,
+   8.51
+  ],
+  "n": 54,
+  "excluded": [
+   "Ogoja"
+  ],
+  "applied": false,
+  "note": "The sheets' topographic overlay (towns, roads, railway, capital squares) was plotted with a ~0.66 % scale error relative to the graticule.  This model measures that displacement; it is NOT applied to the layers. Corrected town coordinates are in towns_true_wgs84.csv.  See ACCURACY.md section 4.3."
+ },
+ "verified_after": {
+  "coast_tiles_km": [
+   -0.29,
+   23
+  ],
+  "rivers_vs_ne10m_km": [
+   -0.38,
+   0.12,
+   1506
+  ],
+  "border_vs_ne50m_km": [
+   0.12,
+   0.01,
+   39525
+  ]
+ }
+}

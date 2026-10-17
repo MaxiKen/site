@@ -3,6 +3,11 @@
 Source file: `ilide.info-geological-map-of-nigeria-pr_a0987e407d194cb02682ac479336acb1.pdf`
 (44 × 24.5 in, single page, created with **ESRI ArcMap 9.2.0.1324** on 2011‑01‑30).
 
+> **CRS & coordinate accuracy:** outputs are **EPSG:4326**; the 2011 PDF declares no CRS and the 2023 GeoPDF
+> declares an ArcGIS placeholder (NAD 27 / Clarke 1866). The raster, rivers and national boundary are on the true
+> WGS 84 grid to ≤1 km; the two sheets' topographic overlay (towns, roads, capitals) carries a 0.66 % scale error.
+> Details and the attribute-by-attribute audit: **[ACCURACY.md](ACCURACY.md)**.
+
 ## 1. Is it a GeoPDF?
 
 **No.** It is a *layered vector PDF*, not a georeferenced one:
@@ -64,6 +69,115 @@ python extract_shapefiles.py ilide.info-geological-map-of-nigeria-pr_a0987e407d1
 
 The script parses the PDF content stream itself (paths, text and Optional‑Content tags), fits the graticule, rebuilds polygons/lines/points and writes the shapefiles; it runs in ~10 s.
 
+## 3b. Register between the two sheets – external calibration (`calibrate_maps.py`)
+
+The 2011 and 2023 sheets are two independent compilations, each georeferenced from its own
+page (graticule fit vs GeoPDF `/VP`). Their **frames** agree with Natural Earth, but their
+**content** does not:
+
+| measured against Natural Earth 1:50m | 2011 sheet | 2023 sheet |
+|---|---|---|
+| national boundary (vector layer) | +0.1 / −0.0 km | +0.4 / +0.1 km |
+| coastline (raster sea edge, median N–S, 23 longitudes) | **−0.4 km** | **−7.6 km** |
+| 33 state capitals vs reference city coordinates | −0.5 / −1.0 km | **−6.3 / −6.8 km** |
+| 2023 rivers+roads+railway vs the 2011 ones (74 tiles) | – | **+2.5 / −5.0 km** |
+| 2023 town markers vs the 2011 ones (387 towns) | – | 0.0 / +0.5 km |
+
+So on the 2023 sheet the **raster basemap and the linework traced over it** (rivers, roads,
+railway, the mineral symbols and the capitals' raster squares) sit several km south of its own
+frame, while the **text, the international boundary and the town markers** – the GIS-native
+parts of the source ArcMap document – are in register *with each other* (text against text:
+2023 − 2011 = +0.1 km E / +1.1 km N; their absolute accuracy is a separate question —
+see **§3c**). Overlaid on the 2011 map, every raster-derived feature therefore
+appeared *below* the 2011 feature for the same place ("geology above minerals").
+
+`calibrate_maps.py` downloads the three Natural Earth layers it needs (public domain, from
+`nvkelso/natural-earth-vector`; cached in `reference_data/`, git‑ignored), measures the
+features above, and applies a latitude‑only affine fit to the three independent checks
+(coastline at 23 longitudes, the 2023‑vs‑2011 linework at 74 tiles, the capital squares):
+
+```
+dlat = (5.44 − 0.569·(lat − 9°)) / 110.57   degrees   (north positive; 8.0 km at 4.5°N … 3.2 km at 13°N)
+```
+
+Longitude needs no correction (the boundary, the towns and the full‑width raster strips are
+already in register). The correction is applied to the layers traced from the 2023 raster (`rivers`, `roads`,
+`railway`, `mineral_symbols_raster`, and per feature: the 686 of 999 `mineral_localities` placed
+on their raster symbol, and the 14 of 33 `state_capitals` located on the raster square) and,
+when the viewer builds its tiles, to the matching layers of the 2023 PDF itself
+(`viewer/build_data.py → patch_pdf_layers` wraps the basemap and the rivers/roads/railway in a
+nested `cm` transform). The text, the graticule, the international boundary and the town
+markers are left in place, so the picture moves with the vectors and stays on its labels. The national boundary, the towns and
+the whole 2011 sheet are left untouched. Both datasets carry the measurement and the model in
+`calibration.json`; the viewer shows them under *Compare ▸ Alignment*.
+
+```bash
+python calibrate_maps.py --report    # measure both sheets, print the table (no writes)
+python calibrate_maps.py --apply     # write calibration.json + shift the 2023 content layers
+python calibrate_maps.py --apply --force   # re-apply if the layers were rebuilt
+python calibrate_maps.py --verify    # measure the calibrated output, record it in calibration.json
+```
+
+`extract_mineral_map.py` applies the calibration automatically when a `shapefiles_minerals/calibration.json`
+exists, so a fresh extraction is calibrated even when this script is run on its own. `--report` measures the raw sheets (the 2023 linework still 5 km south of
+the 2011 one), `--verify` the calibrated output (tiles + shapefiles):
+
+| after the correction (`--verify`) | value |
+|---|---|
+| 2023 coastline vs Natural Earth (viewer tiles) | −0.2 km (2011: −0.3 km) |
+| 2023 linework minus 2011 linework | 0.0 km in latitude (was −5.0 km) |
+| 2023 capitals vs reference coordinates | −1.1 km in latitude (was −6.7 km) |
+| 2023 town markers (left uncorrected, already in register) | +0.5 km |
+| 2023 text vs 2011 text (left uncorrected, already in register) | +0.1 / +1.1 km |
+
+![before / after](alignment_before_after.png)
+
+*Niger–Benue confluence area on the same lon/lat grid: left, 2023 rivers as extracted (blue)
+against the 2011 rivers (red); right, after the calibration. After the correction the 2023
+linework is 0.0 km from the 2011 linework (median) and both coastlines agree with Natural Earth
+to ≈0.2 km in the viewer tiles; on the raw vectors the residual is the ±2–3 km drawing noise of
+the two 1:2 M compilations (`python calibrate_maps.py --verify`).*
+
+## 3c. Absolute accuracy – what the register check does **not** say
+
+§3b is a *register* check: it proves that the same feature is drawn in the same place on
+both sheets. It does not prove that either sheet is on the true WGS 84 graticule.
+
+Measured against **external** coordinates (English Wikipedia + Natural Earth 1:10 m, none of
+them derived from these PDFs; `accuracy_check.py`):
+
+| layer | 2011 | 2023 (calibrated) |
+|---|---|---|
+| rivers vs NE 1:10 m (median) | −0.38 / +0.12 km | −0.90 / +0.50 km |
+| national boundary vs NE 1:50 m | +0.12 / +0.01 km | +0.25 / +0.04 km |
+| **28 town markers vs Wikipedia** | **−6.22 / −8.18 km** | **−6.16 / −7.63 km** |
+| median radial error of the towns | **11.5 km** | **11.1 km** |
+| towns inside 5 km | 0 / 28 | 0 / 28 |
+
+So the raster, the hydrography and the boundary are on the WGS 84 graticule, but the
+**topographic overlay** (towns, roads, railway, capital squares) is not: it was plotted with a
+**0.66 % scale error**, which displaces it by ~5 km in the north-east and ~15 km in the
+south-west. Because both sheets share the same base, the error cancels in the §3b register
+check — the 2023 towns are 0.5 km from the 2011 towns — and survives in every absolute
+comparison. The giveaway is Idah, whose marker is printed on the **west** bank of the Niger
+while the town is on the **east** bank, 10 km upstream.
+
+The affine field fitted to 54 control points (both sheets) is
+
+```
+dE = 0.716·lon − 0.142·lat − 9.78  km      dN = −0.127·lon + 0.736·lat − 13.78 km
+```
+
+with 2.0 km rms after the fit (6.8 / 8.5 km before). `accuracy_check.py --true-csv` applies
+its inverse to every named town marker and writes `shapefiles*/towns_true_wgs84.csv`
+(`lon_map/lat_map` as printed, `lon/lat` corrected, `de_km/dn_km` applied). Residual on the
+control points: **median 2.3 km, p90 4.5 km**. The shapefiles and the rendered tiles keep the
+topographic overlay as printed; the CSV is the version to use when a town coordinate has to be
+within a couple of km.
+
+Full details, including the CRS of the two source PDFs and the attribute-by-attribute
+coordinate audit: **[ACCURACY.md](ACCURACY.md)**.
+
 ## Project GeoPackage – everything in one file
 
 `nigeria_maps.gpkg` (20.6 MB, EPSG:4326) bundles the whole project for QGIS / ArcGIS / GDAL:
@@ -111,8 +225,9 @@ What the viewer offers (designed for a phone screen, works on desktop too):
 * **Layers** – the 17 geological-map layers and the 16 mineral-map layers (plus the printed mineral
   numbers drawn as text) are listed in two groups, each with its own on/off switch, group-level
   *All on / All off* and a *Units only* / *Minerals only* shortcut. Both maps share one lon/lat
-  grid, so e.g. mineral localities can be switched on over the 2011 geology units (the two maps'
-  state-capital markers agree to a median 8 km, within the 2011 label-centre tolerance).
+  grid, so e.g. mineral localities can be switched on over the 2011 geology units (the 2023
+  content is calibrated to the 2011 sheet and to Natural Earth – see §3b – so features overlay:
+  the residual is the ±2–3 km drawing noise of the two 1:2 M compilations).
 * Tap any extracted feature for its full attribute table; a rock unit opens with its stratigraphy
   strip (era · period · epoch · Ma · the words printed in the legend, with an "inferred" flag when a
   fall-back was used); a mineral locality shows its EXPLANATIONS-table row, its commodity groups,
@@ -199,10 +314,11 @@ Every point layer carries `lon`/`lat` (+ `zone`), every line layer `length_km`, 
 | Towns | names matched by distance to the label box (median 1.2 pt, max 10.7 pt); checked on overlays in three regions |
 | Roads / rivers / railway / boundary | overlays on the faded PDF in two regions – centrelines sit inside the double‑line road symbol, railway and boundary follow their bands, rivers coincide |
 | Georeference | parallels on whole degrees to < 0.001°; meridian labels vs `/VP` discrepancy 0.172° resolved with the capital check (see §1) |
+| Register with the 2011 sheet | frame and national boundary agree with Natural Earth to ≤0.5 km, but the raster basemap and the linework traced over it sat 5–8 km south of the frame; calibrated against Natural Earth (coastline, linework, capitals) – see §3b |
 
 ### Caveats
 
-* **Positions**: 1 pt ≈ 0.7 km; a snapped point is the symbol centre (±1–2 px), an unsnapped one is the number's centre, which is typically 3–10 km from the deposit symbol. The `/VP` georeference itself is ≈7 km off true positions in both axes (capital check), consistent with a 1:2 M compilation.
+* **Positions**: 1 pt ≈ 0.7 km; a snapped point is the symbol centre (±1–2 px), an unsnapped one is the number's centre, which is typically 3–10 km from the deposit symbol. The `/VP` georeference places the frame correctly (the boundary agrees with Natural Earth to 0.4 km), but the content of the sheet was registered ~5–8 km south of that frame; the extracted layers are calibrated against Natural Earth (see §3b), which brings the capitals to within ≈1 km in latitude (the residual is the ±2–3 km drawing noise of a 1:2 M compilation).
 * **Minerals come from codes typed by the map compiler**, with inconsistent spelling (`CI`/`Cl`, `MI`/`mi`, `PbS`/`Pbs`); confidence is recorded per code and 19 codes could not be resolved at all.
 * Mineral symbols without a number are identified in the same pass as the numbered ones (§4): by their rendering signature, by fragment/furniture tests, and – where neither applies – by a size‑ and colour‑gated template match against the 66 legend symbols, whose score is kept in `ident_scr` so the strength of each single determination stays visible.
 * Background geology, lakes and the large rivers exist only as raster.

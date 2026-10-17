@@ -1799,6 +1799,16 @@ def main(pdf_path, out_dir):
     with open(os.path.join(out_dir, 'qa_report.json'), 'w') as f:
         json.dump(qa, f, indent=2, default=float)
 
+    # ---- register the content layers with the 2011 sheet (Natural Earth calibration, see
+    #      calibrate_maps.py / README section 3b).  Skipped when no calibration.json was written.
+    try:
+        import calibrate_maps
+        if os.path.exists(os.path.join(out_dir, 'calibration.json')):
+            n = calibrate_maps.apply_dataset('minerals', force=True, quiet=True)
+            print('calibration applied to %d layers (calibrate_maps.py)' % n)
+    except Exception as ex:
+        print('calibration skipped:', ex)
+
     # ---- GeoPackage bundle
     try:
         from pyogrio.raw import read as ogr_read, write as ogr_write
