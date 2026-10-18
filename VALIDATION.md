@@ -89,9 +89,9 @@ metric reference.
 > than the separation distance, and understated the rivers mismatch. The table above is measured
 > point-to-line and is the number to quote.
 
-For scale: a hairline on a 1:2 M sheet is ≈0.2 mm ≈ **400 m** on the ground, and one raster pixel
-is ≈1.2 km on the ground. The border difference (66 m) is below what the sheets can express; the
-river difference (3.7 km) is three line widths and plainly visible.
+For scale: a hairline on a 1:2 M sheet is ≈0.2 mm ≈ **400 m** on the ground. The border
+difference (66 m) is below what the sheets can express; the river difference (3.7 km) is nine line
+widths and plainly visible.
 
 ![sheet to sheet](alignment_reality.png)
 
