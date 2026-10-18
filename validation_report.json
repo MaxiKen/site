@@ -1,12 +1,12 @@
 {
- "generated": "2026-10-18 05:41",
+ "generated": "2026-10-18 05:58",
  "verdict": "PASS",
  "counts": {
   "PASS": 26,
   "WARN": 3,
   "FAIL": 0
  },
- "seconds": 5.6,
+ "seconds": 12.1,
  "checks": [
   {
    "check": "CRS .prj",
@@ -326,18 +326,20 @@
   {
    "check": "Sheet-to-sheet: national border",
    "status": "PASS",
-   "detail": "same feature, 2023 minus 2011: median -17 m E / +34 m N, p90 231 m, n=22559",
-   "median_dE_km": -0.017,
-   "median_dN_km": 0.034,
-   "p90_km": 0.231
+   "detail": "same feature on both sheets: median separation 66 m, p90 161 m; systematic bias -21 m E / +45 m N; max 1260 m",
+   "median_separation_m": 66.1,
+   "p90_m": 161.0,
+   "bias_dE_m": -21.4,
+   "bias_dN_m": 44.6
   },
   {
    "check": "Sheet-to-sheet: rivers",
    "status": "PASS",
-   "detail": "same feature, 2023 minus 2011: median -65 m E / -178 m N, p90 4629 m, n=128567",
-   "median_dE_km": -0.065,
-   "median_dN_km": -0.178,
-   "p90_km": 4.629
+   "detail": "same feature on both sheets: median separation 3.7 km, p90 14.6 km; systematic bias -117 m E / -225 m N; median is stable in both directions (3.6 / 3.8 km)",
+   "median_separation_m": 3689.7,
+   "p90_m": 14577.7,
+   "bias_dE_m": -116.9,
+   "bias_dN_m": -225.1
   },
   {
    "check": "Frame: scale",

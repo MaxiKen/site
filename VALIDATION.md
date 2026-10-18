@@ -39,8 +39,8 @@ python3 validate_coordinates.py           # the table below
 | `Capitals: geology/state_capitals_wgs84` | **PASS** | 32 capitals vs reference coordinates: median 7.27 km, 11 within 5 km (label placement on a 1:2 M sheet sets this floor) |
 | `Capitals: minerals/state_capitals` | **PASS** | 33 capitals vs reference coordinates: median 9.18 km, 5 within 5 km (label placement on a 1:2 M sheet sets this floor) |
 | `Capitals: minerals/state_capitals_wgs84` | **PASS** | 33 capitals vs reference coordinates: median 6.63 km, 11 within 5 km (label placement on a 1:2 M sheet sets this floor) |
-| `Sheet-to-sheet: national border` | **PASS** | same feature, 2023 minus 2011: median -17 m E / +34 m N, p90 231 m, n=22559 |
-| `Sheet-to-sheet: rivers` | **PASS** | same feature, 2023 minus 2011: median -65 m E / -178 m N, p90 4629 m, n=128567 |
+| `Sheet-to-sheet: national border` | **PASS** | same feature on both sheets: median separation 66 m, p90 161 m; systematic bias -21 m E / +45 m N; max 1260 m |
+| `Sheet-to-sheet: rivers` | **PASS** | same feature on both sheets: median separation 3.7 km, p90 14.6 km; systematic bias -117 m E / -225 m N; median is stable in both directions (3.6 / 3.8 km) |
 | `Frame: scale` | **PASS** | 2011 157.6121 / 157.6072 pt per deg, 2023 157.5864 / 157.5888; relative difference +0.01628% E-W, +0.01166% N-S = 185 m E-W / 163 m N-S accumulated across the whole 10.21 x 12.55 deg map face (zero at the anchor) |
 | `Frame: projection` | **PASS** | both Plate Carree (equirectangular): meridians and parallels are straight, constant 157.60 pt/deg spacing, no rotation |
 | `Frame: rotation` | **PASS** | meridian/parallel tilt 0.0000 deg on both sheets (measured on the graticule layer) |
@@ -54,28 +54,46 @@ positions, `n_printed = 2`), and five town names occur twice. Both are propertie
 not extraction errors. If a calculation needs one row per place, group on `locality` /
 `name`, not on `zone_num`.
 
-**Sheet-to-sheet mismatch.** Two checks measure the *same physical feature* on both sheets
-rather than one sheet against a model — this is the number that matters when you take a point
-from one extraction and the same point from the other:
+**Sheet-to-sheet mismatch.** Two checks measure the *same physical feature* on both sheets.
+There are two different questions here and they must not be confused:
 
-| feature | systematic bias | median mismatch | p90 | p95 |
-|---|---|---|---|---|
-| national border (22 559 vertices) | **38 m** (−17 E / +34 N) | **97 m** | 231 m | 2.3 km |
-| rivers (128 567 vertices) | 189 m (−65 E / −178 N) | 2.2 km | 4.6 km | — |
+* **bias** — the median (dE, dN) offset. Does one sheet sit systematically shifted?
+* **separation** — how far a point on one sheet's line is from the other sheet's line.
+  This is what you see when you plot both, and what you get when you measure between them.
 
-The border is the cleanest test because it is GIS-native on both sheets: the two independent
-compilations put the same line within **97 m (median)** of each other, and 90 % of it within 231 m.
-The tail (p95 = 2.3 km) is where one sheet generalises a bend the other keeps — cartography, not
-georeferencing. The rivers mismatch by 2.2 km (median) and 4.6 km at p90, but with only a 189 m *bias* — i.e. no
-systematic shift, just two compilations drawing different tributaries, different meanders and
-different generalisation at 1:2 M. The bias (189 m) is what a coordinate transform would have to
-explain; the spread is the draughtsmanship. Use the rivers for topology (on which side of the
-Niger a point lies), not for a metric distance to a channel, unless you pick the sheet you trust.
+The bias is small for both features (tens to a few hundred metres), which proves there is no
+registration error left. The *separation* is the number that answers "do they line up":
 
-For scale: one printed line at 1:2 M is ~0.2 mm = **400 m**; one raster pixel is **1.2 km**. A
-97 m median mismatch is a quarter of a line width — below what the sheets can express.
+| feature | systematic bias (median dE / dN) | median separation | p90 |
+|---|---|---|---|
+| national border (2023 line against the 2011 lines) | **48 m** (−21 E / +45 N) | **66 m** | 161 m |
+| rivers (both directions) | **254 m** (−117 E / −225 N) | **3.7 km** | 14.6 km |
 
-![sheet to sheet](sheet_to_sheet.png)
+**The border lines up.** Measured on the one unambiguous line (2023's international boundary)
+against every 2011 state-boundary segment, the median separation is 66 m, 90 % is within 161 m,
+and the worst point on the whole border is 1.3 km. At 1:2 M that is a fraction of the printed
+line width: at any plotting scale the two borders sit on top of each other.
+
+**The rivers do not line up.** The median separation is 3.7 km, stable in both directions
+(3.6 km 2011→2023, 3.8 km 2023→2011), with a p90 of 14.6 km. Their *bias* is only ~250 m, so this
+is not a shift — an affine transform cannot close a 3.7 km gap that changes sign from place to
+place. The two sheets are two hand-drawn 1:2 M river networks: different tributaries, different
+meanders, different generalisation. Calibration improved them (3.9 → 3.7 km) but cannot reconcile
+them. Against an independent reference (Natural Earth 10 m Niger + Benue) the 2023 rivers are
+3.1 km off and the 2011 rivers 3.6 km — i.e. each sheet is roughly as far from the other as it is
+from reality. **Use the rivers for topology** (which side of which channel a point is on), not as a
+metric reference.
+
+> Correction: earlier versions of this file quoted 97 m / 231 m for the border and 2.2 km for the
+> rivers. Those figures came from a vertex-pair estimator that reported the *average offset* rather
+> than the separation distance, and understated the rivers mismatch. The table above is measured
+> point-to-line and is the number to quote.
+
+For scale: a hairline on a 1:2 M sheet is ≈0.2 mm ≈ **400 m** on the ground, and one raster pixel
+is ≈1.2 km on the ground. The border difference (66 m) is below what the sheets can express; the
+river difference (3.7 km) is three line widths and plainly visible.
+
+![sheet to sheet](alignment_reality.png)
 
 **"As printed" town layers.** `towns` and `state_capitals` keep the coordinates as printed on
 the sheets, which carry the source's 0.66 % topographic scale error (see §4.3 of

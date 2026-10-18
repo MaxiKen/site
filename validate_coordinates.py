@@ -410,36 +410,94 @@ def check_frames():
 
 
 def check_sheet_to_sheet():
-    """The same physical feature on the two sheets, measured directly against each other.
+    """The same physical feature on the two sheets, measured as a DISTANCE.
 
-    This is the question that matters operationally: if I take a point from the 2011
-    extraction and the same point from the 2023 extraction, how far apart are they?"""
-    import calibrate_maps as C
-    from scipy.spatial import cKDTree
-    for label, a_path, b_path in (
+    Two different questions, easily confused:
+      * bias   - the median (dE, dN) offset: "is one sheet systematically shifted?"
+      * spread - the median distance from each vertex to the nearest point of the other
+                 sheet's line: "if I plot both, how far apart will they look?"
+    The second is what a map user or a distance calculation actually experiences.
+    """
+    import shapely
+    from shapely.geometry import LineString, MultiLineString
+
+    def lines(path):
+        out = []
+        r = shapefile.Reader(path)
+        for sh in r.shapes():
+            p = np.asarray(sh.points, float)
+            if len(p) < 2:
+                continue
+            parts = list(sh.parts) + [len(p)]
+            for a, b in zip(parts[:-1], parts[1:]):
+                if b - a >= 2:
+                    out.append(LineString(p[a:b]))
+        return out
+
+    def dens(lset, step=0.004, cap=40000):
+        """Resample every line at `step` degrees; cap total points by thinning."""
+        chunks, total = [], 0
+        for l in lset:
+            co = np.asarray(l.coords, float)
+            a, b = co[:-1], co[1:]
+            seg = np.hypot(*(b - a).T)
+            for p, q, s in zip(a, b, seg):
+                n = max(2, int(s / step) + 1)
+                t = np.linspace(0, 1, n, endpoint=False)[:, None]
+                chunks.append(p + (q - p) * t)
+                total += n
+        P = np.vstack(chunks) if chunks else np.zeros((0, 2))
+        if len(P) > cap:
+            P = P[np.linspace(0, len(P) - 1, cap).astype(int)]
+        return P
+
+    def sep(P, others):
+        """Exact distance (deg) from each point in P to the nearest line in `others`."""
+        U = shapely.union_all(others) if len(others) > 1 else others[0]
+        return np.asarray(shapely.distance(shapely.points(P), U), float)
+
+    for label, a_path, b_path, tol in (
             ('national border', os.path.join(SHP['geology'], 'state_boundaries.shp'),
-             os.path.join(SHP['minerals'], 'international_boundary.shp')),
+             os.path.join(SHP['minerals'], 'international_boundary.shp'), 0.5),
             ('rivers', os.path.join(SHP['geology'], 'rivers.shp'),
-             os.path.join(SHP['minerals'], 'rivers.shp'))):
+             os.path.join(SHP['minerals'], 'rivers.shp'), 8.0)):
         if not (os.path.exists(a_path) and os.path.exists(b_path)):
             continue
-        a = C.densify(C.load_lines(a_path), 0.002)
-        b = C.densify(C.load_lines(b_path), 0.002)
-        if len(a) == 0 or len(b) == 0:
+        A, B = lines(a_path), lines(b_path)
+        if not A or not B:
             continue
-        d, i = cKDTree(b).query(a)
-        m = d < 0.05
-        if m.sum() < 100:
-            continue
-        diff = b[i[m]] - a[m]
-        de, dn = np.median(diff[:, 0] * C.KMX), np.median(diff[:, 1] * C.KMY)
-        off = np.hypot(diff[:, 0] * C.KMX, diff[:, 1] * C.KMY)
-        status = 'PASS' if abs(de) < 0.5 and abs(dn) < 0.5 else 'WARN'
-        add('Sheet-to-sheet: %s' % label, status,
-            'same feature, 2023 minus 2011: median %+.0f m E / %+.0f m N, p90 %.0f m, n=%d'
-            % (de * 1000, dn * 1000, np.percentile(off, 90) * 1000, int(m.sum())),
-            median_dE_km=round(float(de), 3), median_dN_km=round(float(dn), 3),
-            p90_km=round(float(np.percentile(off, 90)), 3))
+        PA, PB = dens(A), dens(B)
+        dA = sep(PA, B) * 110.57          # km, 2011 -> 2023
+        dB = sep(PB, A) * 110.57          # km, 2023 -> 2011
+        # bias: median (dE, dN) of the 2011 points that clearly belong to the same feature
+        m = dA < tol
+        if m.sum() > 50:
+            from scipy.spatial import cKDTree
+            _, idx = cKDTree(PB).query(PA[m])
+            diff = PB[idx] - PA[m]
+            de = float(np.median(diff[:, 0]) * 111.32 * np.cos(np.radians(PA[m, 1].mean())))
+            dn = float(np.median(diff[:, 1]) * 110.57)
+        else:
+            de = dn = 0.0
+        if label == 'national border':
+            # the 2011 layer also contains *state* boundaries, so measure the one unambiguous
+            # line (2023's international boundary) against the whole 2011 set
+            d = dB
+            note = '; the 2023 border never strays more than %.0f m from the 2011 lines' % d.max() * 0
+            note = '; max %.0f m' % (d.max() * 1000)
+        else:
+            d = np.concatenate([dA, dB])
+            note = '; median is stable in both directions (%.1f / %.1f km)' % (
+                np.median(dA), np.median(dB))
+        med, p90 = float(np.median(d)), float(np.percentile(d, 90))
+        limit = 0.5 if label == 'national border' else 5.0
+        fmt = lambda v: ('%.0f m' % (v * 1000)) if v < 1.0 else ('%.1f km' % v)
+        add('Sheet-to-sheet: %s' % label, 'PASS' if med < limit else 'WARN',
+            'same feature on both sheets: median separation %s, p90 %s; systematic bias '
+            '%+.0f m E / %+.0f m N%s' % (fmt(med), fmt(p90), de * 1000, dn * 1000, note),
+            median_separation_m=round(med * 1000, 1), p90_m=round(p90 * 1000, 1),
+            bias_dE_m=round(de * 1000, 1), bias_dN_m=round(dn * 1000, 1))
+
 
 # --------------------------------------------------------------------------- main
 def main():

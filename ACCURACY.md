@@ -42,10 +42,14 @@ per degree of longitude and 13 m per degree of latitude. They differ in the fift
 scale, i.e. in nothing that could produce the 5–8 km offset you saw: that came from a displaced
 raster layer *inside* the 2023 PDF.
 
-Measured directly, **the same national-border line on the two sheets sits 38 m apart (systematic
-bias), median 97 m, p90 231 m** over 22 559 vertices — a quarter of one printed line width
-(0.2 mm at 1:2 M = 400 m). That is the real "same point on both maps" distance; the 185 m is the
-worst-case frame term at the far edge and is included in it.
+Measured point-to-line, **the same national-border line on the two sheets is 66 m apart (median),
+161 m at p90, 1.3 km at worst** — a fraction of one printed line width (0.2 mm at 1:2 M = 400 m),
+so at any plotting scale the two borders coincide. Its systematic bias is 48 m (−21 E / +45 N).
+That is the real "same point on both maps" distance and it includes the 185 m worst-case frame term
+at the far edge. The rivers are a different story: median separation **3.7 km** (3.6 km one way,
+3.8 km the other), p90 14.6 km, with a bias of only 254 m — two different drawings, not a shift.
+See the correction note in [VALIDATION.md](VALIDATION.md): earlier text in this section quoted
+97 m/231 m and 2.2 km from a vertex-pair estimator that reported the average offset instead.
 
 One quirk worth knowing: on the 2023 sheet the **printed meridian labels sit 0.172° (≈19 km) west of the graticule lines** in the `/VP` frame. The `/VP` values are the ones used, and they are confirmed independently: with them the national boundary agrees with Natural Earth to +0.25/+0.04 km and the rivers to −0.90/+0.50 km. The labels are a typographic offset, not a second georeference.
 
