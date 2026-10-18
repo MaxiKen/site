@@ -1,0 +1,365 @@
+{
+ "generated": "2026-10-18 05:59",
+ "verdict": "PASS",
+ "counts": {
+  "PASS": 26,
+  "WARN": 3,
+  "FAIL": 0
+ },
+ "seconds": 11.7,
+ "checks": [
+  {
+   "check": "CRS .prj",
+   "status": "PASS",
+   "detail": "37 .prj files, one distinct WKT: GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\"..."
+  },
+  {
+   "check": "CRS GeoPackage",
+   "status": "PASS",
+   "detail": "74 geometry columns in 3 files, all srs_id = 4326"
+  },
+  {
+   "check": "CRS viewer meta",
+   "status": "PASS",
+   "detail": "both meta.json files declare crs = EPSG:4326"
+  },
+  {
+   "check": "Geometry integrity",
+   "status": "PASS",
+   "detail": "37 layers, 15072 features; invalid polygons 0, unclosed rings 0, short lines 0, empty 0",
+   "invalid": [],
+   "unclosed": [],
+   "short": [],
+   "empty": []
+  },
+  {
+   "check": "Attribute = geometry",
+   "status": "PASS",
+   "detail": "point lon/lat equals the geometry to <1e-6 deg",
+   "failures": []
+  },
+  {
+   "check": "Derived length/area",
+   "status": "PASS",
+   "detail": "length_km and area_km2 match a WGS84 geodesic computation (median <1%, max <3%)",
+   "failures": []
+  },
+  {
+   "check": "Duplicate keys",
+   "status": "WARN",
+   "detail": "geology/towns: 5 duplicate name; geology/towns_wgs84: 5 duplicate name; minerals/mineral_localities: 39 duplicate zone_num; minerals/river_labels: 6 duplicate name; minerals/towns: 5 duplicate name; minerals/towns_wgs84: 5 duplicate name (mineral numbers printed twice on the sheet keep one row per printed number, n_printed = 2)",
+   "notes": [
+    "geology/towns: 5 duplicate name",
+    "geology/towns_wgs84: 5 duplicate name",
+    "minerals/mineral_localities: 39 duplicate zone_num",
+    "minerals/river_labels: 6 duplicate name",
+    "minerals/towns: 5 duplicate name",
+    "minerals/towns_wgs84: 5 duplicate name"
+   ]
+  },
+  {
+   "check": "Land: geology/towns",
+   "status": "WARN",
+   "detail": "481 of 486 on land; 1 within 2.0 km of the coast; 4 offshore: Cotonou 6.5 km, Iddo 3.7 km, Bori 2.7 km, Ete 2.7 km - known 0.66% source scale error, use towns_wgs84",
+   "water": [
+    [
+     "Cotonou",
+     2.3289109617548047,
+     6.273983852255708,
+     6.52
+    ],
+    [
+     "Iddo",
+     3.3110773871867774,
+     6.358497309281973,
+     3.7
+    ],
+    [
+     "Ogoni",
+     7.178072201015668,
+     4.624829138426951,
+     0.68
+    ],
+    [
+     "Bori",
+     7.305982249479252,
+     4.574577883419623,
+     2.71
+    ],
+    [
+     "Ete",
+     7.616620952200865,
+     4.496916841417596,
+     2.67
+    ]
+   ],
+   "offshore": [
+    [
+     "Cotonou",
+     2.3289109617548047,
+     6.273983852255708,
+     6.52
+    ],
+    [
+     "Iddo",
+     3.3110773871867774,
+     6.358497309281973,
+     3.7
+    ],
+    [
+     "Bori",
+     7.305982249479252,
+     4.574577883419623,
+     2.71
+    ],
+    [
+     "Ete",
+     7.616620952200865,
+     4.496916841417596,
+     2.67
+    ]
+   ]
+  },
+  {
+   "check": "Land: geology/state_capitals",
+   "status": "PASS",
+   "detail": "32 of 32 on land",
+   "water": [],
+   "offshore": []
+  },
+  {
+   "check": "Land: geology/towns_wgs84",
+   "status": "PASS",
+   "detail": "484 of 486 on land; 2 within 2.0 km of the coast",
+   "water": [
+    [
+     "Forcados",
+     5.424537163267826,
+     5.364099256596268,
+     0.11
+    ],
+    [
+     "Degema",
+     6.758138428146832,
+     4.743896363724517,
+     0.02
+    ]
+   ],
+   "offshore": []
+  },
+  {
+   "check": "Land: geology/state_capitals_wgs84",
+   "status": "PASS",
+   "detail": "32 of 32 on land",
+   "water": [],
+   "offshore": []
+  },
+  {
+   "check": "Land: geology/volcanic_plugs",
+   "status": "PASS",
+   "detail": "68 of 68 on land",
+   "water": [],
+   "offshore": []
+  },
+  {
+   "check": "Land: minerals/towns",
+   "status": "WARN",
+   "detail": "479 of 483 on land; 1 within 2.0 km of the coast; 3 offshore: Iddo 3.3 km, Bori 2.4 km, Ete 2.1 km - known 0.66% source scale error, use towns_wgs84",
+   "water": [
+    [
+     "Iddo",
+     3.309915,
+     6.361789,
+     3.34
+    ],
+    [
+     "Ogoni",
+     7.176221,
+     4.629668,
+     0.66
+    ],
+    [
+     "Bori",
+     7.306181,
+     4.578903,
+     2.4
+    ],
+    [
+     "Ete",
+     7.616866,
+     4.501739,
+     2.14
+    ]
+   ],
+   "offshore": [
+    [
+     "Iddo",
+     3.309915,
+     6.361789,
+     3.34
+    ],
+    [
+     "Bori",
+     7.306181,
+     4.578903,
+     2.4
+    ],
+    [
+     "Ete",
+     7.616866,
+     4.501739,
+     2.14
+    ]
+   ]
+  },
+  {
+   "check": "Land: minerals/state_capitals",
+   "status": "PASS",
+   "detail": "32 of 33 on land; 1 within 2.0 km of the coast",
+   "water": [
+    [
+     "PORT HARCOURT",
+     6.96222,
+     4.698775,
+     0.3
+    ]
+   ],
+   "offshore": []
+  },
+  {
+   "check": "Land: minerals/towns_wgs84",
+   "status": "PASS",
+   "detail": "480 of 483 on land; 3 within 2.0 km of the coast",
+   "water": [
+    [
+     "Iddo",
+     3.384667133107491,
+     6.447385970147663,
+     0.29
+    ],
+    [
+     "Forcados",
+     5.4229380592351895,
+     5.368484432442488,
+     0.59
+    ],
+    [
+     "Degema",
+     6.7577484784460555,
+     4.748705583077569,
+     0.1
+    ]
+   ],
+   "offshore": []
+  },
+  {
+   "check": "Land: minerals/state_capitals_wgs84",
+   "status": "PASS",
+   "detail": "33 of 33 on land",
+   "water": [],
+   "offshore": []
+  },
+  {
+   "check": "Land: minerals/mineral_localities",
+   "status": "PASS",
+   "detail": "996 of 999 on land; 3 within 2.0 km of the coast",
+   "water": [
+    [
+     "Ipepe",
+     4.567702,
+     6.247516,
+     1.81
+    ],
+    [
+     "Badagry",
+     2.699529,
+     6.3592,
+     0.96
+    ],
+    [
+     "Bomu",
+     7.217665,
+     4.566161,
+     1.18
+    ]
+   ],
+   "offshore": []
+  },
+  {
+   "check": "Land: minerals/pegmatite_marks",
+   "status": "PASS",
+   "detail": "23 of 23 on land",
+   "water": [],
+   "offshore": []
+  },
+  {
+   "check": "Surface coverage",
+   "status": "PASS",
+   "detail": "1542 geology polygons, union 903680 km2, sum 924922 km2 (overlap 2.3%); the union covers 98.8% of Nigeria",
+   "overlap_pct": 2.3,
+   "cover_pct": 98.84
+  },
+  {
+   "check": "Capitals: geology/state_capitals",
+   "status": "PASS",
+   "detail": "32 capitals vs reference coordinates: median 7.27 km, 11 within 5 km (label placement on a 1:2 M sheet sets this floor)",
+   "median_km": 7.27
+  },
+  {
+   "check": "Capitals: geology/state_capitals_wgs84",
+   "status": "PASS",
+   "detail": "32 capitals vs reference coordinates: median 7.27 km, 11 within 5 km (label placement on a 1:2 M sheet sets this floor)",
+   "median_km": 7.27
+  },
+  {
+   "check": "Capitals: minerals/state_capitals",
+   "status": "PASS",
+   "detail": "33 capitals vs reference coordinates: median 9.18 km, 5 within 5 km (label placement on a 1:2 M sheet sets this floor)",
+   "median_km": 9.18
+  },
+  {
+   "check": "Capitals: minerals/state_capitals_wgs84",
+   "status": "PASS",
+   "detail": "33 capitals vs reference coordinates: median 6.63 km, 11 within 5 km (label placement on a 1:2 M sheet sets this floor)",
+   "median_km": 6.63
+  },
+  {
+   "check": "Sheet-to-sheet: national border",
+   "status": "PASS",
+   "detail": "same feature on both sheets: median separation 66 m, p90 161 m; systematic bias -21 m E / +45 m N; max 1260 m",
+   "median_separation_m": 66.1,
+   "p90_m": 161.0,
+   "bias_dE_m": -21.4,
+   "bias_dN_m": 44.6
+  },
+  {
+   "check": "Sheet-to-sheet: rivers",
+   "status": "PASS",
+   "detail": "same feature on both sheets: median separation 3.7 km, p90 14.6 km; systematic bias -117 m E / -225 m N; median is stable in both directions (3.6 / 3.8 km)",
+   "median_separation_m": 3689.7,
+   "p90_m": 14577.7,
+   "bias_dE_m": -116.9,
+   "bias_dN_m": -225.1
+  },
+  {
+   "check": "Frame: scale",
+   "status": "PASS",
+   "detail": "2011 157.6121 / 157.6072 pt per deg, 2023 157.5864 / 157.5888; relative difference +0.01628% E-W, +0.01166% N-S = 185 m E-W / 163 m N-S accumulated across the whole 10.21 x 12.55 deg map face (zero at the anchor)"
+  },
+  {
+   "check": "Frame: projection",
+   "status": "PASS",
+   "detail": "both Plate Carree (equirectangular): meridians and parallels are straight, constant 157.60 pt/deg spacing, no rotation"
+  },
+  {
+   "check": "Frame: rotation",
+   "status": "PASS",
+   "detail": "meridian/parallel tilt 0.0000 deg on both sheets (measured on the graticule layer)"
+  },
+  {
+   "check": "Frame: datum",
+   "status": "PASS",
+   "detail": "2011 declares none, 2023 declares the ArcGIS placeholder NAD27/Clarke 1866; no datum shift applied - the boundary of the two sheets differs by 0.15 km, so any real datum difference is <0.2 km"
+  }
+ ]
+}

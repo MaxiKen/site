@@ -1,0 +1,664 @@
+{
+ "reference": {
+  "wikipedia": "English Wikipedia coordinates (MediaWiki action=query&prop=coordinates), fetched 2026-10-17",
+  "natural_earth": "Natural Earth 1:10m populated places + rivers, 1:50m admin boundary (public domain)",
+  "crs": "EPSG:4326 (WGS84 geographic, degrees)"
+ },
+ "towns": {
+  "geology": {
+   "stats": {
+    "n": 28,
+    "median_dE_km": -6.22,
+    "median_dN_km": -8.18,
+    "median_km": 11.53,
+    "p90_km": 13.41,
+    "within_5km": 0,
+    "within_2km": 0
+   },
+   "points": [
+    {
+     "name": "Aba, Nigeria",
+     "map_name": "Aba",
+     "lon": 7.36666667,
+     "lat": 5.11666667,
+     "map_lon": 7.335675656985812,
+     "map_lat": 5.001713535119682,
+     "dE_km": -3.407445334034937,
+     "dN_km": -12.710368123716698
+    },
+    {
+     "name": "Nsukka",
+     "map_name": "Nsukka",
+     "lon": 7.39583333,
+     "lat": 6.85666667,
+     "map_lon": 7.337959777456874,
+     "map_lat": 6.765075652460444,
+     "dE_km": -6.363166201983169,
+     "dN_km": -10.127218809348683
+    },
+    {
+     "name": "Ogbomosho",
+     "map_name": "Ogbomosho",
+     "lon": 4.25,
+     "lat": 8.13333333,
+     "map_lon": 4.181322544005706,
+     "map_lat": 8.069324012124369,
+     "dE_km": -7.551049617965416,
+     "dN_km": -7.077510277508436
+    },
+    {
+     "name": "Kontagora",
+     "map_name": "Kontagora",
+     "lon": 5.473,
+     "lat": 10.403,
+     "map_lon": 5.442150144181667,
+     "map_lat": 10.303220573561624,
+     "dE_km": -3.391925175717961,
+     "dN_km": -11.032611181291234
+    },
+    {
+     "name": "Kaura Namoda",
+     "map_name": "Kaura Namoda",
+     "lon": 6.58972222,
+     "lat": 12.6,
+     "map_lon": 6.522533210570664,
+     "map_lat": 12.54396959760977,
+     "dE_km": -7.387395712866986,
+     "dN_km": -6.195281592287663
+    },
+    {
+     "name": "Wukari",
+     "map_name": "Wukari",
+     "lon": 9.78333333,
+     "lat": 7.85,
+     "map_lon": 9.768250650679784,
+     "map_lat": 7.77695312004456,
+     "dE_km": -1.6583325382389227,
+     "dN_km": -8.076793516672977
+    },
+    {
+     "name": "Okene",
+     "map_name": "Okene",
+     "lon": 6.24111111,
+     "lat": 7.56194444,
+     "map_lon": 6.152507724559388,
+     "map_lat": 7.484582212102532,
+     "dE_km": -9.741894921637199,
+     "dN_km": -8.553941538623128
+    },
+    {
+     "name": "Jebba",
+     "map_name": "Jebba",
+     "lon": 4.81194444,
+     "lat": 9.15388889,
+     "map_lon": 4.759201850839442,
+     "map_lat": 9.04465514992295,
+     "dE_km": -5.799019517619204,
+     "dN_km": -12.077974640319418
+    },
+    {
+     "name": "Sapele, Nigeria",
+     "map_name": "Sapele",
+     "lon": 5.66666667,
+     "lat": 5.9,
+     "map_lon": 5.645435755785455,
+     "map_lat": 5.82857503566288,
+     "dE_km": -2.334327682174432,
+     "dN_km": -7.897458306755442
+    },
+    {
+     "name": "Warri",
+     "map_name": "Warri",
+     "lon": 5.75,
+     "lat": 5.51666667,
+     "map_lon": 5.668276833602277,
+     "map_lat": 5.4174284210889905,
+     "dE_km": -8.985418511392211,
+     "dN_km": -10.972773182090346
+    },
+    {
+     "name": "Ogoja",
+     "map_name": "Ogoja",
+     "lon": 8.66666667,
+     "lat": 6.5,
+     "map_lon": 8.717560991797345,
+     "map_lat": 6.6417316744331645,
+     "dE_km": 5.595803507869971,
+     "dN_km": 15.671271242074996
+    },
+    {
+     "name": "Idah",
+     "map_name": "Idah",
+     "lon": 6.74333333,
+     "lat": 7.09777778,
+     "map_lon": 6.677852561931472,
+     "map_lat": 7.016331879910421,
+     "dE_km": -7.199575487318871,
+     "dN_km": -9.005473172904782
+    },
+    {
+     "name": "Eket",
+     "map_name": "Eket",
+     "lon": 7.93333333,
+     "lat": 4.65,
+     "map_lon": 7.895282126944853,
+     "map_lat": 4.5357473624186095,
+     "dE_km": -4.183709459426773,
+     "dN_km": -12.632914137374382
+    },
+    {
+     "name": "Iseyin",
+     "map_name": "Iseyin",
+     "lon": 3.6,
+     "lat": 7.96666667,
+     "map_lon": 3.509794805433618,
+     "map_lat": 7.907149560682733,
+     "dE_km": -9.918012979769792,
+     "dN_km": -6.580806777210292
+    },
+    {
+     "name": "Iwo, Osun State",
+     "map_name": "Iwo",
+     "lon": 4.18333333,
+     "lat": 7.63333333,
+     "map_lon": 4.099094651175765,
+     "map_lat": 7.559959094613522,
+     "dE_km": -9.26199775959233,
+     "dN_km": -8.112989206682936
+    },
+    {
+     "name": "Ede, Osun State",
+     "map_name": "Ede",
+     "lon": 4.43611111,
+     "lat": 7.73888889,
+     "map_lon": 4.3617670777926705,
+     "map_lat": 7.653609126155062,
+     "dE_km": -8.174086647062223,
+     "dN_km": -9.429383488334826
+    },
+    {
+     "name": "Shaki, Oyo State",
+     "map_name": "Shaki",
+     "lon": 3.4,
+     "lat": 8.66666667,
+     "map_lon": 3.3042250574970398,
+     "map_lat": 8.606098764216576,
+     "dE_km": -10.530403791569151,
+     "dN_km": -6.6969933424732
+    },
+    {
+     "name": "Ilaro",
+     "map_name": "Ilaro",
+     "lon": 3.017,
+     "lat": 6.89,
+     "map_lon": 2.920494927968016,
+     "map_lat": 6.815326907467771,
+     "dE_km": -10.610681143450952,
+     "dN_km": -8.256603841288534
+    },
+    {
+     "name": "Kabba",
+     "map_name": "Kabba",
+     "lon": 6.06666667,
+     "lat": 7.83333333,
+     "map_lon": 6.006324823359384,
+     "map_lat": 7.760964067056172,
+     "dE_km": -6.634553820118376,
+     "dN_km": -8.00186940369913
+    },
+    {
+     "name": "Keffi",
+     "map_name": "Keffi",
+     "lon": 7.8733,
+     "lat": 8.8464,
+     "map_lon": 7.838179416541072,
+     "map_lat": 8.770557406873689,
+     "dE_km": -3.861489399553428,
+     "dN_km": -8.385915521976148
+    },
+    {
+     "name": "Wudil",
+     "map_name": "Wudil",
+     "lon": 8.85,
+     "lat": 11.81666667,
+     "map_lon": 8.79293655493755,
+     "map_lat": 11.73766542145038,
+     "dE_km": -6.274095317019402,
+     "dN_km": -8.735168052131469
+    },
+    {
+     "name": "Gaya, Nigeria",
+     "map_name": "Gaya",
+     "lon": 9.01111111,
+     "lat": 11.86805556,
+     "map_lon": 8.955108220126366,
+     "map_lat": 11.81304230396137,
+     "dE_km": -6.157487840265899,
+     "dN_km": -6.082815720191423
+    },
+    {
+     "name": "Gumel",
+     "map_name": "Gumel",
+     "lon": 9.38972222,
+     "lat": 12.62833333,
+     "map_lon": 9.33655426090778,
+     "map_lat": 12.575947655999888,
+     "dE_km": -5.845788714489636,
+     "dN_km": -5.792283974192367
+    },
+    {
+     "name": "Azare",
+     "map_name": "Azare",
+     "lon": 10.19111111,
+     "lat": 11.67416667,
+     "map_lon": 10.13142382286305,
+     "map_lat": 11.630310496411488,
+     "dE_km": -6.562585352175803,
+     "dN_km": -4.84917711368181
+    },
+    {
+     "name": "Nguru, Nigeria",
+     "map_name": "Nguru",
+     "lon": 10.4525,
+     "lat": 12.87916667,
+     "map_lon": 10.407800892997702,
+     "map_lat": 12.856897861660043,
+     "dE_km": -4.9146429489342465,
+     "dN_km": -2.4622621381490615
+    },
+    {
+     "name": "Argungu",
+     "map_name": "Argungu",
+     "lon": 4.51666667,
+     "lat": 12.73333333,
+     "map_lon": 4.4759724668767795,
+     "map_lat": 12.69472336263175,
+     "dE_km": -4.474305905747777,
+     "dN_km": -4.269104091907458
+    },
+    {
+     "name": "Zungeru",
+     "map_name": "Zungeru",
+     "lon": 6.15583333,
+     "lat": 9.81277778,
+     "map_lon": 6.102257359707071,
+     "map_lat": 9.723047044935203,
+     "dE_km": -5.890649328160328,
+     "dN_km": -9.921527376114494
+    },
+    {
+     "name": "Wamba, Nigeria",
+     "map_name": "Wamba",
+     "lon": 8.6,
+     "lat": 8.93333333,
+     "map_lon": 8.571378074735614,
+     "map_lat": 8.850502608366753,
+     "dE_km": -3.1469654008591736,
+     "dN_km": -9.158592890988109
+    }
+   ]
+  },
+  "minerals": {
+   "stats": {
+    "n": 28,
+    "median_dE_km": -6.16,
+    "median_dN_km": -7.63,
+    "median_km": 11.07,
+    "p90_km": 13.31,
+    "within_5km": 0,
+    "within_2km": 0
+   },
+   "points": [
+    {
+     "name": "Aba, Nigeria",
+     "map_name": "Aba",
+     "lon": 7.36666667,
+     "lat": 5.11666667,
+     "map_lon": 7.33664,
+     "map_lat": 5.007364,
+     "dE_km": -3.301416334511723,
+     "dN_km": -12.085596221899992
+    },
+    {
+     "name": "Nsukka",
+     "map_name": "Nsukka",
+     "lon": 7.39583333,
+     "lat": 6.85666667,
+     "map_lon": 7.338671,
+     "map_lat": 6.767914,
+     "dE_km": -6.28496766310592,
+     "dN_km": -9.813382721899984
+    },
+    {
+     "name": "Ogbomosho",
+     "map_name": "Ogbomosho",
+     "lon": 4.25,
+     "lat": 8.13333333,
+     "map_lon": 4.179021,
+     "map_lat": 8.073604,
+     "dE_km": -7.804103152541065,
+     "dN_km": -6.604272018099966
+    },
+    {
+     "name": "Kontagora",
+     "map_name": "Kontagora",
+     "lon": 5.473,
+     "lat": 10.403,
+     "map_lon": 5.442069,
+     "map_lat": 10.307289,
+     "dE_km": -3.4008469351673747,
+     "dN_km": -10.582765269999962
+    },
+    {
+     "name": "Kaura Namoda",
+     "map_name": "Kaura Namoda",
+     "lon": 6.58972222,
+     "lat": 12.6,
+     "map_lon": 6.522361,
+     "map_lat": 12.549096,
+     "dE_km": -7.406330173163981,
+     "dN_km": -5.628455279999908
+    },
+    {
+     "name": "Wukari",
+     "map_name": "Wukari",
+     "lon": 9.78333333,
+     "lat": 7.85,
+     "map_lon": 9.767296,
+     "map_lat": 7.781194,
+     "dE_km": -1.7632958707693525,
+     "dN_km": -7.607879419999942
+    },
+    {
+     "name": "Okene",
+     "map_name": "Okene",
+     "lon": 6.24111111,
+     "lat": 7.56194444,
+     "map_lon": 6.152787,
+     "map_lat": 7.488785,
+     "dE_km": -9.711188736054082,
+     "dN_km": -8.089239280800046
+    },
+    {
+     "name": "Jebba",
+     "map_name": "Jebba",
+     "lon": 4.81194444,
+     "lat": 9.15388889,
+     "map_lon": 4.757749,
+     "map_lat": 9.050333,
+     "dE_km": -5.958759691702544,
+     "dN_km": -11.4501747572999
+    },
+    {
+     "name": "Sapele, Nigeria",
+     "map_name": "Sapele",
+     "lon": 5.66666667,
+     "lat": 5.9,
+     "map_lon": 5.645131,
+     "map_lat": 5.831797,
+     "dE_km": -2.36783541806844,
+     "dN_km": -7.5412057100000505
+    },
+    {
+     "name": "Warri",
+     "map_name": "Warri",
+     "lon": 5.75,
+     "lat": 5.51666667,
+     "map_lon": 5.669499,
+     "map_lat": 5.421611,
+     "dE_km": -8.851041968507651,
+     "dN_km": -10.51030543189998
+    },
+    {
+     "name": "Ogoja",
+     "map_name": "Ogoja",
+     "lon": 8.66666667,
+     "lat": 6.5,
+     "map_lon": 8.717464,
+     "map_lat": 6.646076,
+     "dE_km": 5.585139311538154,
+     "dN_km": 16.151623319999985
+    },
+    {
+     "name": "Idah",
+     "map_name": "Idah",
+     "lon": 6.74333333,
+     "lat": 7.09777778,
+     "map_lon": 6.678719,
+     "map_lat": 7.021741,
+     "dE_km": -7.104311084297078,
+     "dN_km": -8.407386764600089
+    },
+    {
+     "name": "Eket",
+     "map_name": "Eket",
+     "lon": 7.93333333,
+     "lat": 4.65,
+     "map_lon": 7.897092,
+     "map_lat": 4.53829,
+     "dE_km": -3.9847148833497386,
+     "dN_km": -12.351774700000046
+    },
+    {
+     "name": "Iseyin",
+     "map_name": "Iseyin",
+     "lon": 3.6,
+     "lat": 7.96666667,
+     "map_lon": 3.508916,
+     "map_lat": 7.913185,
+     "dE_km": -10.014637167979915,
+     "dN_km": -5.913468251900004
+    },
+    {
+     "name": "Iwo, Osun State",
+     "map_name": "Iwo",
+     "lon": 4.18333333,
+     "lat": 7.63333333,
+     "map_lon": 4.097796,
+     "map_lat": 7.565948,
+     "dE_km": -9.40478376298544,
+     "dN_km": -7.450795938100051
+    },
+    {
+     "name": "Ede, Osun State",
+     "map_name": "Ede",
+     "lon": 4.43611111,
+     "lat": 7.73888889,
+     "map_lon": 4.361777,
+     "map_lat": 7.657326,
+     "dE_km": -8.172995705664054,
+     "dN_km": -9.018408747299981
+    },
+    {
+     "name": "Shaki, Oyo State",
+     "map_name": "Shaki",
+     "lon": 3.4,
+     "lat": 8.66666667,
+     "map_lon": 3.303823,
+     "map_lat": 8.611719,
+     "dE_km": -10.57460979870015,
+     "dN_km": -6.0755638718998775
+    },
+    {
+     "name": "Ilaro",
+     "map_name": "Ilaro",
+     "lon": 3.017,
+     "lat": 6.89,
+     "map_lon": 2.920035,
+     "map_lat": 6.82071,
+     "dE_km": -10.661249977967291,
+     "dN_km": -7.661395299999959
+    },
+    {
+     "name": "Kabba",
+     "map_name": "Kabba",
+     "lon": 6.06666667,
+     "lat": 7.83333333,
+     "map_lon": 6.004552,
+     "map_lat": 7.764949,
+     "dE_km": -6.829474801927939,
+     "dN_km": -7.561255368100072
+    },
+    {
+     "name": "Keffi",
+     "map_name": "Keffi",
+     "lon": 7.8733,
+     "lat": 8.8464,
+     "map_lon": 7.836174,
+     "map_lat": 8.774169,
+     "dE_km": -4.081983877502406,
+     "dN_km": -7.986581669999845
+    },
+    {
+     "name": "Wudil",
+     "map_name": "Wudil",
+     "lon": 8.85,
+     "lat": 11.81666667,
+     "map_lon": 8.792597,
+     "map_lat": 11.742939,
+     "dE_km": -6.311429201106026,
+     "dN_km": -8.152068471900026
+    },
+    {
+     "name": "Gaya, Nigeria",
+     "map_name": "Gaya",
+     "lon": 9.01111111,
+     "lat": 11.86805556,
+     "map_lon": 8.957078,
+     "map_lat": 11.816041,
+     "dE_km": -5.9409115948745574,
+     "dN_km": -5.751249899199992
+    },
+    {
+     "name": "Gumel",
+     "map_name": "Gumel",
+     "lon": 9.38972222,
+     "lat": 12.62833333,
+     "map_lon": 9.334774,
+     "map_lat": 12.581586,
+     "dE_km": -6.041527450774423,
+     "dN_km": -5.168852278100059
+    },
+    {
+     "name": "Azare",
+     "map_name": "Azare",
+     "lon": 10.19111111,
+     "lat": 11.67416667,
+     "map_lon": 10.130778,
+     "map_lat": 11.635316,
+     "dE_km": -6.633593231147326,
+     "dN_km": -4.295718581900046
+    },
+    {
+     "name": "Nguru, Nigeria",
+     "map_name": "Nguru",
+     "lon": 10.4525,
+     "lat": 12.87916667,
+     "map_lon": 10.408973,
+     "map_lat": 12.861812,
+     "dE_km": -4.785770409848841,
+     "dN_km": -1.9189058618999526
+    },
+    {
+     "name": "Argungu",
+     "map_name": "Argungu",
+     "lon": 4.51666667,
+     "lat": 12.73333333,
+     "map_lon": 4.475492,
+     "map_lat": 12.699362,
+     "dE_km": -4.52713298231643,
+     "dN_km": -3.756209958099996
+    },
+    {
+     "name": "Zungeru",
+     "map_name": "Zungeru",
+     "lon": 6.15583333,
+     "lat": 9.81277778,
+     "map_lon": 6.102022,
+     "map_lat": 9.728561,
+     "dE_km": -5.916527002288389,
+     "dN_km": -9.311849364600024
+    },
+    {
+     "name": "Wamba, Nigeria",
+     "map_name": "Wamba",
+     "lon": 8.6,
+     "lat": 8.93333333,
+     "map_lon": 8.571259,
+     "map_lat": 8.806659,
+     "dE_km": -3.1600576044630473,
+     "dN_km": -14.006380668100018
+    }
+   ]
+  }
+ },
+ "topo_field": {
+  "dE = a*lon + b*lat + c": [
+   0.7157,
+   -0.1419,
+   -9.7763
+  ],
+  "dN = a*lon + b*lat + c": [
+   -0.1266,
+   0.7357,
+   -13.7793
+  ],
+  "rms_after_km": [
+   2.01,
+   1.95
+  ],
+  "rms_before_km": [
+   6.79,
+   8.51
+  ],
+  "n": 54,
+  "excluded": [
+   "Ogoja"
+  ],
+  "description": "displacement of the sheets' topographic overlay (towns, roads, railway, capital symbols) relative to true WGS84, in km, positive east/north"
+ },
+ "towns_corrected_vs_ne10m": {
+  "geology": {
+   "n": 22,
+   "printed_median_km": 11.21,
+   "printed_p90_km": 15.58,
+   "corrected_median_km": 2.63,
+   "corrected_p90_km": 6.81,
+   "corrected_within5_km": 18,
+   "corrected_within10_km": 20
+  },
+  "minerals": {
+   "n": 22,
+   "printed_median_km": 10.83,
+   "printed_p90_km": 15.21,
+   "corrected_median_km": 2.66,
+   "corrected_p90_km": 7.31,
+   "corrected_within5_km": 18,
+   "corrected_within10_km": 20
+  }
+ },
+ "rivers": {
+  "geology": {
+   "median_dE_km": -0.38,
+   "median_dN_km": 0.12,
+   "n": 1506
+  },
+  "minerals": {
+   "median_dE_km": -0.9,
+   "median_dN_km": 0.5,
+   "n": 1710
+  }
+ },
+ "border": {
+  "geology": {
+   "median_dE_km": 0.12,
+   "median_dN_km": 0.01,
+   "n": 39525
+  },
+  "minerals": {
+   "median_dE_km": 0.25,
+   "median_dN_km": 0.04,
+   "n": 31833
+  }
+ }
+}

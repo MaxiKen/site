@@ -1,0 +1,140 @@
+{
+ "crs": {
+  "output": "EPSG:4326",
+  "output_datum": "WGS84",
+  "input_declared": "GCS_Assumed_Geographic_1 / D_North_American_1927 / Clarke_1866 (GeoPDF /VP /Measure /GCS)",
+  "input_georeference": "GeoPDF /VP /Measure: 4 corner GPTS + LPTS, Plate Carree data frame",
+  "input_bounds_deg": [
+   3.83671,
+   2.47619,
+   14.04668,
+   15.02138
+  ],
+  "input_units": "degrees",
+  "points_per_degree": [
+   157.5864,
+   157.5888
+  ],
+  "datum_shift_applied": "none",
+  "note": "The declared GCS is the ArcGIS \"assumed geographic\" placeholder (it even names NAD27, a North American datum).  The degrees it carries are the map graticule and are WGS84-consistent: the national boundary agrees with Natural Earth to +0.25/+0.04 km and the rivers to -0.9/+0.5 km.  A literal NAD27->WGS84 transform would be wrong here (NAD27 is not defined in Nigeria).  The printed meridian labels sit 0.172 deg west of the /VP graticule lines; the /VP values are used (the labels are a typographic offset, and the /VP choice is confirmed by the two checks above)."
+ },
+ "reference": {
+  "source": "Natural Earth 1:50m (public domain), github.com/nvkelso/natural-earth-vector",
+  "features": [
+   "national boundary (ne_50m_admin_0_countries)",
+   "coastline / sea edge (raster of the map sheet)",
+   "city coordinates (CAPITAL_REFERENCE in extract_mineral_map.py)"
+  ]
+ },
+ "measured_as_extracted": {
+  "minerals_border_km": [
+   0.4088819361956072,
+   0.07266153634039646,
+   32962
+  ],
+  "minerals_coast_km": [
+   -7.559792549576774,
+   23
+  ],
+  "minerals_capitals_km": [
+   -6.262861194262178,
+   -6.747091970000024,
+   33
+  ],
+  "minerals_vs_geology_linework_km": [
+   2.5,
+   -5.0,
+   74
+  ],
+  "towns_2023_minus_2011_km": [
+   -0.00307858505014112,
+   0.48805598000006456,
+   387
+  ]
+ },
+ "model": {
+  "A_km": 5.44,
+  "B_km_per_deg": -0.569,
+  "lat0": 9.0,
+  "km_per_deg": 110.57,
+  "note": "dlat = (A + B*(lat-lat0)) / km_per_deg degrees, north positive; dlon = 0"
+ },
+ "applied": true,
+ "verified_after": {
+  "geology_coast_tiles_km": [
+   -0.29311336561907436,
+   23
+  ],
+  "minerals_coast_tiles_km": [
+   -0.19170500952021138,
+   23
+  ],
+  "minerals_vs_geology_linework_km": [
+   2.5,
+   0.0,
+   74
+  ],
+  "towns_2023_minus_2011_km": [
+   -0.00307858505014112,
+   0.48805598000006456,
+   387
+  ],
+  "minerals_capitals_km": [
+   -6.262861194262178,
+   -2.838884749999963,
+   33
+  ]
+ },
+ "layers_corrected": [
+  "rivers",
+  "roads",
+  "railway",
+  "mineral_symbols_raster",
+  "mineral_localities",
+  "state_capitals"
+ ],
+ "layers_verified_correct": [
+  "international_boundary",
+  "towns",
+  "map_labels",
+  "state_name_labels",
+  "river_labels"
+ ],
+ "notes": [
+  "The 2023 sheet is a GeoPDF whose raster basemap (and the rivers/roads/railway/symbols",
+  "drawn over it) is out of register with its own /VP frame by several km, while its text",
+  "(towns, states, river names, mineral numbers), the national boundary and the town",
+  "markers are in register -- text-to-text against the 2011 sheet: +0.1 km E, +1.1 km N.",
+  "The 2011 sheet agrees with Natural Earth to ~1 km everywhere, so only the raster-derived",
+  "content of the 2023 sheet is corrected.  Measured against NE: 2023 coastline 7.6 km south",
+  "(2011: 0.4 km), capitals 6.8 km south (2011: 1.0 km), linework 5.0 km south of 2011."
+ ],
+ "topographic_overlay": {
+  "model": {
+   "dE = a*lon + b*lat + c": [
+    0.7157,
+    -0.1419,
+    -9.7763
+   ],
+   "dN = a*lon + b*lat + c": [
+    -0.1266,
+    0.7357,
+    -13.7793
+   ]
+  },
+  "rms_after_km": [
+   2.01,
+   1.95
+  ],
+  "rms_before_km": [
+   6.79,
+   8.51
+  ],
+  "n": 54,
+  "excluded": [
+   "Ogoja"
+  ],
+  "applied": false,
+  "note": "The sheets' topographic overlay (towns, roads, railway, capital squares) was plotted with a ~0.66 % scale error relative to the graticule.  This model measures that displacement; it is NOT applied to the layers. Corrected town coordinates are in towns_true_wgs84.csv.  See ACCURACY.md section 4.3."
+ }
+}

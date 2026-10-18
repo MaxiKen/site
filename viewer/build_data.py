@@ -41,10 +41,12 @@ MINERALS_PDF = os.path.join(ROOT, 'Mineral_Resources_Map_of_Nigeria_2023.pdf')
 
 GEOLOGY_LAYERS = ['geology_units', 'major_rivers_poly', 'geological_boundaries', 'younger_granite_outlines',
                   'faults', 'fold_axes', 'ridges', 'rivers', 'major_rivers_outline', 'state_boundaries',
-                  'roads', 'railway', 'graticule', 'towns', 'volcanic_plugs', 'state_capitals', 'labels']
+                  'roads', 'railway', 'graticule', 'towns', 'volcanic_plugs', 'state_capitals', 'labels',
+                  'towns_wgs84', 'state_capitals_wgs84']
 MINERAL_LAYERS = ['map_zones', 'division_lines', 'map_frame', 'international_boundary', 'rivers', 'roads', 'railway',
                   'graticule', 'mineral_symbols_raster', 'mineral_localities', 'towns', 'state_capitals',
-                  'state_name_labels', 'river_labels', 'pegmatite_marks', 'map_labels']
+                  'state_name_labels', 'river_labels', 'pegmatite_marks', 'map_labels',
+                  'towns_wgs84', 'state_capitals_wgs84']
 
 DATASETS = {
     'geology': {'pdf': GEOLOGY_PDF, 'shp_dir': os.path.join(ROOT, 'shapefiles'),
@@ -66,13 +68,108 @@ def load_georef(ds):
     return a, b, c, d, g
 
 
+def load_calibration(ds):
+    """External calibration of the dataset's content (see calibrate_maps.py), if any."""
+    p = os.path.join(DATASETS[ds]['shp_dir'], 'calibration.json')
+    if os.path.exists(p):
+        with open(p) as f:
+            return json.load(f)
+    return None
+
+
+def raster_correction(ds):
+    """(scale, dy_pt) applied to the raster image placements of the PDF, or None.
+
+    The calibration model is a latitude-only affine
+        lat' = (1 + B/K)*lat + (A - B*lat0)/K
+    (dlat = (A + B*(lat-lat0))/K degrees).  In page coordinates (lat = c*y + d,
+    y up) that is  y' = s*y + dy  with  s = 1 + B/K  and  dy = ((s-1)*d + t)/c,
+    t = (A - B*lat0)/K.  The vector layers were shifted with the same model when
+    calibrate_maps.py --apply rewrote the shapefiles; this function moves the
+    raster basemap of the 2023 sheet so the tiles match them.
+    """
+    cal = load_calibration(ds)
+    if not cal or not cal.get('layers_corrected'):
+        return None
+    m = cal['model']
+    s = 1.0 + m['B_km_per_deg'] / m['km_per_deg']
+    t = (m['A_km'] - m['B_km_per_deg'] * m['lat0']) / m['km_per_deg']
+    a, b, c, d, _ = load_georef(ds)
+    dy = ((s - 1.0) * d + t) / c
+    return s, dy
+
+
+def patch_pdf_layers(ds, out_path):
+    """Write a copy of the dataset PDF with the calibrated layers moved by the model.
+
+    The 2023 sheet is drawn in one marked-content block per layer
+    (`/OC /MCn BDC ... EMC`).  A layer that belongs to the displaced content
+    (the raster basemap, the rivers/roads/railway traced from it and the labels
+    that follow them) is wrapped in `q 1 0 0 s 0 dy cm ... Q`, which moves its
+    geometry, its images and its text together.  The layers that are already in
+    register (graticule, international boundary, towns, division lines) are left
+    alone -- see calibrate_maps.py for the measurements behind that list.
+    """
+    import re
+    import pikepdf
+    corr = raster_correction(ds)
+    if corr is None:
+        return DATASETS[ds]['pdf']
+    s, dy = corr
+    src = DATASETS[ds]['pdf']
+    pdf = pikepdf.open(src)
+    page = pdf.pages[0]
+    oc = {str(k).lstrip('/'): str(v.get('/Name', '')).rstrip('\x00')
+          for k, v in page.Resources.get('/Properties', {}).items()}
+    if isinstance(page.Contents, pikepdf.Array):
+        data = b''.join(c.read_bytes() for c in page.Contents)
+    else:
+        data = page.Contents.read_bytes()
+
+    shift_depth2 = {'Image', 'Rivers', 'Roads', 'Railway'}
+    shift_depth3 = set()   # text is in register and stays where it is
+    spans = []
+    stack = []
+    for m in re.finditer(rb'/(\w+)\s*(?:/OC\s*)?BDC|EMC', data):
+        if m.group(0) == b'EMC':
+            if stack:
+                depth, name, start = stack.pop()
+                if (depth == 2 and name in shift_depth2) or (depth == 3 and name in shift_depth3):
+                    spans.append((start, m.start(), m.end()))
+        else:
+            name = oc.get(m.group(1).decode(), m.group(1).decode())
+            stack.append((len(stack) + 1, name, m.start()))
+    if not spans:
+        print('  warning: no calibrated layers found in %s' % src)
+        return src
+    ins = 'q 1 0 0 %.8f 0 %.6f cm ' % (s, dy)
+    edits = []
+    for start, emc_start, emc_end in spans:
+        body_start = data.index(b'BDC', start) + 3
+        edits.append((body_start, body_start, b'\n' + ins.encode()))
+        edits.append((emc_start, emc_start, b'\nQ\n'))
+    for a, b, txt in sorted(edits, key=lambda t: -t[0]):
+        data = data[:a] + txt + data[b:]
+    page.Contents = pdf.make_stream(data)
+    pdf.save(out_path)
+    pdf.close()
+    print('  calibrated %d layers (y scale %.6f, dy %+.2f pt) -> %s'
+          % (len(spans), s, dy, os.path.basename(out_path)))
+    return out_path
+
+
 # --------------------------------------------------------------------------- tiles
 def build_tiles(ds, zmin=4, zmax=9):
     import pymupdf
     from PIL import Image
 
     a, b, c, d, _ = load_georef(ds)
-    doc = pymupdf.open(DATASETS[ds]['pdf'])
+    pdf_path = DATASETS[ds]['pdf']
+    temp_pdf = None
+    if raster_correction(ds) is not None:
+        temp_pdf = os.path.join(BUILD, '_%s_calibrated.pdf' % ds)
+        pdf_path = patch_pdf_layers(ds, temp_pdf)
+    doc = pymupdf.open(pdf_path)
     page = doc[0]
     W, H = page.rect.width, page.rect.height
     dl = page.get_displaylist()
@@ -121,7 +218,11 @@ def build_tiles(ds, zmin=4, zmax=9):
                 n_tiles += 1
         print(f'  zoom {z}: {ncols} x {ty1 - ty0 + 1} tiles ({time.time() - t0:.0f} s)', flush=True)
     print(f'tiles: {n_tiles} written to {out_root}')
-    return {'zmin': zmin, 'zmax': zmax, 'page_bounds': [[lat0, lon0], [lat1, lon1]]}
+    doc.close()
+    if temp_pdf and os.path.exists(temp_pdf):
+        os.remove(temp_pdf)
+    return {'zmin': zmin, 'zmax': zmax, 'page_bounds': [[lat0, lon0], [lat1, lon1]],
+            'calibrated': raster_correction(ds) is not None}
 
 
 # --------------------------------------------------------------------------- vectors
@@ -253,6 +354,8 @@ def build_meta_geology(tile_info, layers):
     meta = {
         'generated': time.strftime('%Y-%m-%d %H:%M'),
         'pdf': os.path.basename(GEOLOGY_PDF),
+        'crs': 'EPSG:4326',
+        'calibration': load_calibration('geology'),
         'tiles': tile_info,
         'map_face_bounds': face,
         'georef': {'a': a, 'b': b, 'c': c, 'd': d, 'points_per_degree': g['points_per_degree_x'],
@@ -293,6 +396,8 @@ def build_meta_minerals(tile_info, layers):
     meta = {
         'generated': time.strftime('%Y-%m-%d %H:%M'),
         'pdf': os.path.basename(MINERALS_PDF),
+        'crs': 'EPSG:4326',
+        'calibration': load_calibration('minerals'),
         'tiles': tile_info,
         'map_face_bounds': face,
         'table_bounds': [[tile_info['page_bounds'][0][0], a * bb['x1'] + b], [tile_info['page_bounds'][1][0], a * page_w + b]],
