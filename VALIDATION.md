@@ -115,6 +115,43 @@ The only points still in water after the correction are estuary/island settlemen
 waterfront of a delta whose coastline the 1:10 m reference cannot resolve. They are flagged
 per point with `on_land = 0` and `coast_km`.
 
+## Do the minerals sit on the right rocks?
+
+This is the question that matters for these two maps, and it does not depend on the rivers.
+It joins the two sheets: the mineral **position** comes from the 2023 sheet, the rock
+**unit under it** from the 2011 sheet. If the two products were badly registered, coal
+would land in granite.
+
+For 15 commodities whose host rock is not in doubt, the observed hit rate is compared
+with a **permutation null** (the same commodity labels given to randomly chosen localities
+elsewhere in the country):
+
+| commodity | on a rock that permits it | by chance | p |
+|---|---|---|---|
+| Gypsum | 39/40 = 98 % | 47 % | <0.001 |
+| Coal | 19/20 = 95 % | 47 % | <0.001 |
+| Limestone | 57/62 = 92 % | 48 % | <0.001 |
+| Beryl / emerald | 32/36 = 89 % | 52 % | <0.001 |
+| Tin / cassiterite | 66/75 = 88 % | 52 % | <0.001 |
+| Oil and gas | 7/8 = 88 % | 47 % | 0.03 |
+| Tantalite | 21/25 = 84 % | 51 % | <0.001 |
+| Brine | 25/30 = 83 % | 48 % | <0.001 |
+| Gold | 56/68 = 82 % | 52 % | <0.001 |
+| Glass sand | 21/27 = 78 % | 47 % | 0.003 |
+| Marble | 19/29 = 66 % | 35 % | 0.003 |
+| Columbite | 8/8 = 100 % | 51 % | 0.005 |
+
+**388 of 455 = 85 %**, against 48 % by chance. The small evaporite groups (salt 7/10,
+trona 4/8) are too few to separate from chance and are not claimed.
+
+The clusters also sit where Nigerian geology puts them: coal in the Enugu–Onyeama–Okaba
+belt and at Obi/Lafia, tin on the Jos Plateau, gold in the Zamfara–Kebbi–Niger schist
+belts, oil and gas in the delta, trona in the north-east.
+
+Reproduce with `python3 check_minerals_on_rocks.py` (writes `minerals_on_rocks.json`).
+One defect this test exposed — host-rock attributes left at the pre-correction position —
+is described in [ACCURACY.md](ACCURACY.md) and fixed by `fix_host_rock.py`.
+
 ## The two frames, compared
 
 You suspected the two PDFs might differ in more than registration. Measured:

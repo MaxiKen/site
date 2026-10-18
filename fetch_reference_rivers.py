@@ -33,18 +33,32 @@ BOX = (1.0, 2.0, 16.0, 15.0)          # lon_min, lat_min, lon_max, lat_max
 def wdbii():
     """Extract the WDBII river vertices inside the Nigeria window from basemap-data."""
     tmp = tempfile.mkdtemp()
-    print('downloading basemap-data ...')
-    subprocess.check_call([sys.executable, '-m', 'pip', 'download', 'basemap-data',
-                           '--no-deps', '-q', '-d', tmp])
-    whl = [f for f in os.listdir(tmp) if f.endswith('.whl')][0]
-    with zipfile.ZipFile(os.path.join(tmp, whl)) as z:
-        z.extract('mpl_toolkits/basemap_data/riversmeta_f.dat', tmp)
-        z.extract('mpl_toolkits/basemap_data/rivers_f.dat', tmp)
+    res = None
+    for pkg in ('basemap-data-hires', 'basemap-data'):
+        print('downloading %s ...' % pkg)
+        subprocess.check_call([sys.executable, '-m', 'pip', 'download', pkg,
+                               '--no-deps', '-q', '-d', tmp])
+    wheels = sorted((f for f in os.listdir(tmp) if f.endswith('.whl')),
+                    key=lambda f: (0 if 'hires' in f else 1, f))
+    for f in wheels:
+        with zipfile.ZipFile(os.path.join(tmp, f)) as z:
+            names = z.namelist()
+            for r in ('f', 'h', 'i', 'l'):
+                if 'mpl_toolkits/basemap_data/rivers_%s.dat' % r in names:
+                    res = r
+                    z.extract('mpl_toolkits/basemap_data/riversmeta_%s.dat' % r, tmp)
+                    z.extract('mpl_toolkits/basemap_data/rivers_%s.dat' % r, tmp)
+                    break
+        if res:
+            break
+    if not res:
+        raise SystemExit('no WDBII river file found in basemap-data')
+    print('using WDBII resolution "%s"' % res)
     base = os.path.join(tmp, 'mpl_toolkits/basemap_data')
 
     segs = []
-    with open(os.path.join(base, 'rivers_f.dat'), 'rb') as dat, \
-            open(os.path.join(base, 'riversmeta_f.dat')) as meta:
+    with open(os.path.join(base, 'rivers_%s.dat' % res), 'rb') as dat, \
+            open(os.path.join(base, 'riversmeta_%s.dat' % res)) as meta:
         for line in meta:
             p = line.split()
             npts, south, north = int(p[2]), float(p[3]), float(p[4])

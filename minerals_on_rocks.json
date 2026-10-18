@@ -1,0 +1,194 @@
+{
+ "Coal": {
+  "n": 20,
+  "hit": 19,
+  "pct": 95.0,
+  "null_pct": 47.2,
+  "p_value": 0.0,
+  "why": "coal measures are sedimentary; never basement",
+  "median_position": [
+   7.56,
+   7.29
+  ],
+  "within_150km_of_classic": [
+   14,
+   20
+  ]
+ },
+ "Oil and Gas": {
+  "n": 8,
+  "hit": 7,
+  "pct": 87.5,
+  "null_pct": 46.9,
+  "p_value": 0.0325,
+  "why": "delta and marine sediments",
+  "median_position": [
+   6.54,
+   5.46
+  ],
+  "within_150km_of_classic": [
+   6,
+   8
+  ]
+ },
+ "Brine": {
+  "n": 30,
+  "hit": 25,
+  "pct": 83.3,
+  "null_pct": 47.9,
+  "p_value": 0.0,
+  "why": "evaporite basins"
+ },
+ "Saltlake/ Potash (salt)": {
+  "n": 10,
+  "hit": 7,
+  "pct": 70.0,
+  "null_pct": 48.0,
+  "p_value": 0.1625,
+  "why": "evaporite basins"
+ },
+ "Trona": {
+  "n": 8,
+  "hit": 4,
+  "pct": 50.0,
+  "null_pct": 48.2,
+  "p_value": 0.6275,
+  "why": "evaporite basins",
+  "median_position": [
+   10.71,
+   11.48
+  ],
+  "within_150km_of_classic": [
+   0,
+   8
+  ]
+ },
+ "Limestone": {
+  "n": 62,
+  "hit": 57,
+  "pct": 91.9,
+  "null_pct": 47.8,
+  "p_value": 0.0,
+  "why": "carbonate platform",
+  "median_position": [
+   8.33,
+   7.18
+  ],
+  "within_150km_of_classic": [
+   4,
+   62
+  ]
+ },
+ "Gypsum": {
+  "n": 40,
+  "hit": 39,
+  "pct": 97.5,
+  "null_pct": 47.0,
+  "p_value": 0.0,
+  "why": "evaporite"
+ },
+ "Glass Sand": {
+  "n": 27,
+  "hit": 21,
+  "pct": 77.8,
+  "null_pct": 47.0,
+  "p_value": 0.0025,
+  "why": "unconsolidated sand"
+ },
+ "Bentonite": {
+  "n": 9,
+  "hit": 7,
+  "pct": 77.8,
+  "null_pct": 47.3,
+  "p_value": 0.065,
+  "why": "altered ash beds"
+ },
+ "Gold": {
+  "n": 68,
+  "hit": 56,
+  "pct": 82.4,
+  "null_pct": 51.8,
+  "p_value": 0.0,
+  "why": "orogenic / vein gold in the Basement Complex",
+  "median_position": [
+   6.19,
+   11.09
+  ],
+  "within_150km_of_classic": [
+   32,
+   68
+  ]
+ },
+ "Marble": {
+  "n": 29,
+  "hit": 19,
+  "pct": 65.5,
+  "null_pct": 34.9,
+  "p_value": 0.0025,
+  "why": "metamorphosed limestone",
+  "median_position": [
+   6.37,
+   7.99
+  ],
+  "within_150km_of_classic": [
+   15,
+   29
+  ]
+ },
+ "Tin / cassiterite (no legend symbol)": {
+  "n": 75,
+  "hit": 66,
+  "pct": 88.0,
+  "null_pct": 52.3,
+  "p_value": 0.0,
+  "why": "Younger Granite and Basement pegmatite",
+  "median_position": [
+   8.39,
+   9.64
+  ],
+  "within_150km_of_classic": [
+   37,
+   75
+  ]
+ },
+ "Columbite": {
+  "n": 8,
+  "hit": 8,
+  "pct": 100.0,
+  "null_pct": 50.7,
+  "p_value": 0.005,
+  "why": "pegmatite",
+  "median_position": [
+   8.05,
+   9.67
+  ],
+  "within_150km_of_classic": [
+   3,
+   8
+  ]
+ },
+ "Tantalite": {
+  "n": 25,
+  "hit": 21,
+  "pct": 84.0,
+  "null_pct": 51.4,
+  "p_value": 0.0,
+  "why": "pegmatite",
+  "median_position": [
+   7.07,
+   9.52
+  ],
+  "within_150km_of_classic": [
+   7,
+   25
+  ]
+ },
+ "Beryl, Aquamarine, Emerald": {
+  "n": 36,
+  "hit": 32,
+  "pct": 88.9,
+  "null_pct": 52.4,
+  "p_value": 0.0,
+  "why": "pegmatite"
+ }
+}

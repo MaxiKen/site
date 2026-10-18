@@ -215,6 +215,7 @@ which rule was used in its `corr` field.
 | reproducing what the sheet prints | `towns`, `state_capitals` (median 11 km off — not for coordinates) |
 | border, geology units | `international_boundary`, `geology_units` (≈1 km) |
 | rivers — topology only, which side of a channel | `rivers`, `major_rivers_*` (2–5 km of position; see [RIVERS_COMPARISON.md](RIVERS_COMPARISON.md)) |
+| mineral deposit + its host rock | `mineral_localities` (`lon`/`lat` + `geo_*` recomputed after the register fix; 85 % sit on a rock that permits the commodity, see [VALIDATION.md](VALIDATION.md)) |
 
 ## Project GeoPackage – everything in one file
 

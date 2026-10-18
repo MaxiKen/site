@@ -92,6 +92,17 @@ Checks that the attribute/geometry pairs stayed consistent after the shift:
 
 Two columns are deliberately **not** rewritten, because they are extraction QA metrics measured in PDF points on the *source* document, not coordinates of the delivered data: `mineral_localities.snap_pt` and `mineral_symbols_raster.near_dist`. They are labelled "at extraction" in the viewer.
 
+**The host-rock attributes were recomputed after the shift.** `geo_code`, `geo_unit`,
+`geo_form`, `geo_era`, `geo_period` and `geo_epoch` say which unit of the 2011 geological
+map lies under each locality. They were first written at extraction time, i.e. before the
+5 km correction, so for the 686 symbol-placed localities they described the old position.
+Measured: 495/686 (72 %) were still right, 307/310 (99 %) of the label-placed ones were.
+`fix_host_rock.py` recomputes all 999 from the final coordinates — **197 localities changed
+formation and 111 changed the class of rock** — and rewrites the shapefile, the CSV, both
+GeoPackages and the by-host-geology summary. `geo_src` now reads *"geology 1:2 M at the
+corrected position, +-2 km"*. After the fix every one of the 996 localities inside the
+mapped area names the unit that actually contains it.
+
 The correction itself (2023 sheet only):
 
 ```
