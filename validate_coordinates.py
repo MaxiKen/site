@@ -391,16 +391,55 @@ def check_frames():
         g[ds] = ppd
     rx = g['geology'][0] / g['minerals'][0] - 1
     ry = g['geology'][1] / g['minerals'][1] - 1
+    G = json.load(open(os.path.join(SHP['minerals'], 'georeferencing.json')))['GPTS']
+    span_x, span_y = G[4] - G[0], G[5] - G[1]          # the 2023 /VP map face
+    mm = 25.4 / 72.0
+    ex = abs(rx) * span_x * g['minerals'][0] * mm * 2e6 / 1000
+    ey = abs(ry) * span_y * g['minerals'][1] * mm * 2e6 / 1000
     add('Frame: scale', 'PASS',
-        '2011 %.4f / %.4f pt per deg, 2023 %.4f / %.4f; difference %+.4f%% E-W, %+.4f%% N-S '
-        '(<= %.0f m across the sheet)' % (g['geology'][0], g['geology'][1], g['minerals'][0], g['minerals'][1],
-                                           rx * 100, ry * 100, max(abs(rx), abs(ry)) * 12 * 157.6 * 25.4 / 72 * 2e6 / 1000))
+        '2011 %.4f / %.4f pt per deg, 2023 %.4f / %.4f; relative difference %+.5f%% E-W, %+.5f%% N-S = '
+        '%.0f m E-W / %.0f m N-S accumulated across the whole %.2f x %.2f deg map face (zero at the anchor)'
+        % (g['geology'][0], g['geology'][1], g['minerals'][0], g['minerals'][1], rx * 100, ry * 100, ex, ey,
+           span_x, span_y))
     add('Frame: projection', 'PASS', 'both Plate Carree (equirectangular): meridians and parallels are straight, '
         'constant %.2f pt/deg spacing, no rotation' % ((g['geology'][0] + g['minerals'][0]) / 2))
     add('Frame: rotation', 'PASS', 'meridian/parallel tilt 0.0000 deg on both sheets (measured on the graticule layer)')
     add('Frame: datum', 'PASS', '2011 declares none, 2023 declares the ArcGIS placeholder NAD27/Clarke 1866; '
         'no datum shift applied - the boundary of the two sheets differs by 0.15 km, so any real datum difference is <0.2 km')
 
+
+
+def check_sheet_to_sheet():
+    """The same physical feature on the two sheets, measured directly against each other.
+
+    This is the question that matters operationally: if I take a point from the 2011
+    extraction and the same point from the 2023 extraction, how far apart are they?"""
+    import calibrate_maps as C
+    from scipy.spatial import cKDTree
+    for label, a_path, b_path in (
+            ('national border', os.path.join(SHP['geology'], 'state_boundaries.shp'),
+             os.path.join(SHP['minerals'], 'international_boundary.shp')),
+            ('rivers', os.path.join(SHP['geology'], 'rivers.shp'),
+             os.path.join(SHP['minerals'], 'rivers.shp'))):
+        if not (os.path.exists(a_path) and os.path.exists(b_path)):
+            continue
+        a = C.densify(C.load_lines(a_path), 0.002)
+        b = C.densify(C.load_lines(b_path), 0.002)
+        if len(a) == 0 or len(b) == 0:
+            continue
+        d, i = cKDTree(b).query(a)
+        m = d < 0.05
+        if m.sum() < 100:
+            continue
+        diff = b[i[m]] - a[m]
+        de, dn = np.median(diff[:, 0] * C.KMX), np.median(diff[:, 1] * C.KMY)
+        off = np.hypot(diff[:, 0] * C.KMX, diff[:, 1] * C.KMY)
+        status = 'PASS' if abs(de) < 0.5 and abs(dn) < 0.5 else 'WARN'
+        add('Sheet-to-sheet: %s' % label, status,
+            'same feature, 2023 minus 2011: median %+.0f m E / %+.0f m N, p90 %.0f m, n=%d'
+            % (de * 1000, dn * 1000, np.percentile(off, 90) * 1000, int(m.sum())),
+            median_dE_km=round(float(de), 3), median_dN_km=round(float(dn), 3),
+            p90_km=round(float(np.percentile(off, 90)), 3))
 
 # --------------------------------------------------------------------------- main
 def main():
@@ -414,6 +453,7 @@ def main():
     check_land()
     check_coverage()
     check_capitals()
+    check_sheet_to_sheet()
     check_frames()
 
     n = {k: sum(1 for r in results if r['status'] == k) for k in ('PASS', 'WARN', 'FAIL')}

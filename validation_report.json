@@ -1,12 +1,12 @@
 {
- "generated": "2026-10-18 05:31",
+ "generated": "2026-10-18 05:41",
  "verdict": "PASS",
  "counts": {
-  "PASS": 24,
+  "PASS": 26,
   "WARN": 3,
   "FAIL": 0
  },
- "seconds": 2.2,
+ "seconds": 5.6,
  "checks": [
   {
    "check": "CRS .prj",
@@ -324,9 +324,25 @@
    "median_km": 6.63
   },
   {
+   "check": "Sheet-to-sheet: national border",
+   "status": "PASS",
+   "detail": "same feature, 2023 minus 2011: median -17 m E / +34 m N, p90 231 m, n=22559",
+   "median_dE_km": -0.017,
+   "median_dN_km": 0.034,
+   "p90_km": 0.231
+  },
+  {
+   "check": "Sheet-to-sheet: rivers",
+   "status": "PASS",
+   "detail": "same feature, 2023 minus 2011: median -65 m E / -178 m N, p90 4629 m, n=128567",
+   "median_dE_km": -0.065,
+   "median_dN_km": -0.178,
+   "p90_km": 4.629
+  },
+  {
    "check": "Frame: scale",
    "status": "PASS",
-   "detail": "2011 157.6121 / 157.6072 pt per deg, 2023 157.5864 / 157.5888; difference +0.0163% E-W, +0.0117% N-S (<= 217 m across the sheet)"
+   "detail": "2011 157.6121 / 157.6072 pt per deg, 2023 157.5864 / 157.5888; relative difference +0.01628% E-W, +0.01166% N-S = 185 m E-W / 163 m N-S accumulated across the whole 10.21 x 12.55 deg map face (zero at the anchor)"
   },
   {
    "check": "Frame: projection",

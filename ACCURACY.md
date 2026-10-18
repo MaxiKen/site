@@ -36,9 +36,16 @@ check fails and writes `validation_report.json`. The rest of this page explains 
 | datum | unstated | ArcGIS "assumed" (NAD 27 / Clarke 1866) | no shift applied — see §1 and VALIDATION.md |
 | embedded CRS | none | GeoPDF `/VP` | — |
 
-So the frames agree to **≤217 m across the whole sheet** (0.17 pt on paper). They differ in the
-fifth decimal of the scale, i.e. in nothing that could produce the 5–8 km offset you saw: that came
-from a displaced raster layer *inside* the 2023 PDF.
+So the frames agree to **185 m E-W / 163 m N-S accumulated across the whole 10.2 × 12.5° map face**
+(0.09 mm on paper), and to **zero at the shared anchor** — the difference is a pure scale term, 18 m
+per degree of longitude and 13 m per degree of latitude. They differ in the fifth decimal of the
+scale, i.e. in nothing that could produce the 5–8 km offset you saw: that came from a displaced
+raster layer *inside* the 2023 PDF.
+
+Measured directly, **the same national-border line on the two sheets sits 38 m apart (systematic
+bias), median 97 m, p90 231 m** over 22 559 vertices — a quarter of one printed line width
+(0.2 mm at 1:2 M = 400 m). That is the real "same point on both maps" distance; the 185 m is the
+worst-case frame term at the far edge and is included in it.
 
 One quirk worth knowing: on the 2023 sheet the **printed meridian labels sit 0.172° (≈19 km) west of the graticule lines** in the `/VP` frame. The `/VP` values are the ones used, and they are confirmed independently: with them the national boundary agrees with Natural Earth to +0.25/+0.04 km and the rivers to −0.90/+0.50 km. The labels are a typographic offset, not a second georeference.
 

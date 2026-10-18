@@ -1,10 +1,10 @@
 # Validation report — is this safe to calculate with?
 
-`python3 validate_coordinates.py` runs 27 checks over the delivered files and writes
+`python3 validate_coordinates.py` runs 29 checks over the delivered files and writes
 `validation_report.json`. Current verdict:
 
 ```
-VALIDATION PASS  (24 pass, 3 warn, 0 fail)
+VALIDATION PASS  (26 pass, 3 warn, 0 fail)
 ```
 
 Run it again after any rebuild; it exits non-zero on any FAIL, so it can be used as a gate:
@@ -39,7 +39,9 @@ python3 validate_coordinates.py           # the table below
 | `Capitals: geology/state_capitals_wgs84` | **PASS** | 32 capitals vs reference coordinates: median 7.27 km, 11 within 5 km (label placement on a 1:2 M sheet sets this floor) |
 | `Capitals: minerals/state_capitals` | **PASS** | 33 capitals vs reference coordinates: median 9.18 km, 5 within 5 km (label placement on a 1:2 M sheet sets this floor) |
 | `Capitals: minerals/state_capitals_wgs84` | **PASS** | 33 capitals vs reference coordinates: median 6.63 km, 11 within 5 km (label placement on a 1:2 M sheet sets this floor) |
-| `Frame: scale` | **PASS** | 2011 157.6121 / 157.6072 pt per deg, 2023 157.5864 / 157.5888; difference +0.0163% E-W, +0.0117% N-S (<= 217 m across the sheet) |
+| `Sheet-to-sheet: national border` | **PASS** | same feature, 2023 minus 2011: median -17 m E / +34 m N, p90 231 m, n=22559 |
+| `Sheet-to-sheet: rivers` | **PASS** | same feature, 2023 minus 2011: median -65 m E / -178 m N, p90 4629 m, n=128567 |
+| `Frame: scale` | **PASS** | 2011 157.6121 / 157.6072 pt per deg, 2023 157.5864 / 157.5888; relative difference +0.01628% E-W, +0.01166% N-S = 185 m E-W / 163 m N-S accumulated across the whole 10.21 x 12.55 deg map face (zero at the anchor) |
 | `Frame: projection` | **PASS** | both Plate Carree (equirectangular): meridians and parallels are straight, constant 157.60 pt/deg spacing, no rotation |
 | `Frame: rotation` | **PASS** | meridian/parallel tilt 0.0000 deg on both sheets (measured on the graticule layer) |
 | `Frame: datum` | **PASS** | 2011 declares none, 2023 declares the ArcGIS placeholder NAD27/Clarke 1866; no datum shift applied - the boundary of the two sheets differs by 0.15 km, so any real datum difference is <0.2 km |
@@ -51,6 +53,29 @@ python3 validate_coordinates.py           # the table below
 positions, `n_printed = 2`), and five town names occur twice. Both are properties of the source,
 not extraction errors. If a calculation needs one row per place, group on `locality` /
 `name`, not on `zone_num`.
+
+**Sheet-to-sheet mismatch.** Two checks measure the *same physical feature* on both sheets
+rather than one sheet against a model — this is the number that matters when you take a point
+from one extraction and the same point from the other:
+
+| feature | systematic bias | median mismatch | p90 | p95 |
+|---|---|---|---|---|
+| national border (22 559 vertices) | **38 m** (−17 E / +34 N) | **97 m** | 231 m | 2.3 km |
+| rivers (128 567 vertices) | 189 m (−65 E / −178 N) | 2.2 km | 4.6 km | — |
+
+The border is the cleanest test because it is GIS-native on both sheets: the two independent
+compilations put the same line within **97 m (median)** of each other, and 90 % of it within 231 m.
+The tail (p95 = 2.3 km) is where one sheet generalises a bend the other keeps — cartography, not
+georeferencing. The rivers mismatch by 2.2 km (median) and 4.6 km at p90, but with only a 189 m *bias* — i.e. no
+systematic shift, just two compilations drawing different tributaries, different meanders and
+different generalisation at 1:2 M. The bias (189 m) is what a coordinate transform would have to
+explain; the spread is the draughtsmanship. Use the rivers for topology (on which side of the
+Niger a point lies), not for a metric distance to a channel, unless you pick the sheet you trust.
+
+For scale: one printed line at 1:2 M is ~0.2 mm = **400 m**; one raster pixel is **1.2 km**. A
+97 m median mismatch is a quarter of a line width — below what the sheets can express.
+
+![sheet to sheet](sheet_to_sheet.png)
 
 **"As printed" town layers.** `towns` and `state_capitals` keep the coordinates as printed on
 the sheets, which carry the source's 0.66 % topographic scale error (see §4.3 of
