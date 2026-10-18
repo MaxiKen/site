@@ -617,6 +617,26 @@
   ],
   "description": "displacement of the sheets' topographic overlay (towns, roads, railway, capital symbols) relative to true WGS84, in km, positive east/north"
  },
+ "towns_corrected_vs_ne10m": {
+  "geology": {
+   "n": 22,
+   "printed_median_km": 11.21,
+   "printed_p90_km": 15.58,
+   "corrected_median_km": 2.63,
+   "corrected_p90_km": 6.81,
+   "corrected_within5_km": 18,
+   "corrected_within10_km": 20
+  },
+  "minerals": {
+   "n": 22,
+   "printed_median_km": 10.83,
+   "printed_p90_km": 15.21,
+   "corrected_median_km": 2.66,
+   "corrected_p90_km": 7.31,
+   "corrected_within5_km": 18,
+   "corrected_within10_km": 20
+  }
+ },
  "rivers": {
   "geology": {
    "median_dE_km": -0.38,

@@ -69,15 +69,21 @@
       style: () => ({ color: '#000', weight: 1.6, dashArray: '6 3' }), name: () => 'Railway' },
     { file: 'graticule', title: 'Fitted graticule (QA)', kind: 'line', on: false, swatch: '#999',
       style: () => ({ color: '#999', weight: 0.7 }), name: p => p.axis + ' ' + p.value + '°' },
-    { file: 'towns', title: 'Towns', kind: 'point', on: true, swatch: '#000',
+    { file: 'towns', title: 'Towns (as printed – 11 km SW of true)', kind: 'point', on: false, swatch: '#777',
+      point: (f, ll) => L.circleMarker(ll, { radius: 3.5, color: '#777', weight: 1, fillColor: '#999', fillOpacity: 0.9 }),
+      name: p => (p.name || '(unnamed town)') + ' · as printed' },
+    { file: 'towns_wgs84', title: 'Towns (true WGS 84)', kind: 'point', on: true, swatch: '#000',
       point: (f, ll) => L.circleMarker(ll, { radius: 3.5, color: '#000', weight: 1, fillColor: '#000', fillOpacity: 1 }),
-      name: p => p.name || '(unnamed town)' },
+      name: p => (p.name || '(unnamed town)') + ' · corrected ' + (p.move_km != null ? p.move_km + ' km' : '') },
     { file: 'volcanic_plugs', title: 'Volcanic plugs & pipes', kind: 'point', on: true, swatch: '#000',
       point: (f, ll) => L.circleMarker(ll, { radius: 4, color: '#000', weight: 1.3, fill: false }),
       name: () => 'Volcanic plug / pipe' },
-    { file: 'state_capitals', title: 'State capitals (approx.)', kind: 'point', on: true, swatch: '#e53935',
+    { file: 'state_capitals', title: 'State capitals (as printed)', kind: 'point', on: false, swatch: '#f59e0b',
+      point: (f, ll) => L.circleMarker(ll, { radius: 5.5, color: '#fff', weight: 1.5, fillColor: '#f59e0b', fillOpacity: 1 }),
+      name: p => p.name + ' · as printed' },
+    { file: 'state_capitals_wgs84', title: 'State capitals (true WGS 84)', kind: 'point', on: true, swatch: '#e53935',
       point: (f, ll) => L.circleMarker(ll, { radius: 5.5, color: '#fff', weight: 1.5, fillColor: '#e53935', fillOpacity: 1 }),
-      name: p => p.name },
+      name: p => p.name + ' · corrected ' + (p.move_km != null ? p.move_km + ' km' : '') },
     { file: 'labels', title: 'Map text (unit codes, names)', kind: 'labels', on: true, swatch: '#fff', anchor: 'origin',
       name: p => p.text },
   ];
@@ -115,12 +121,18 @@
       derive: fc => fc.features.map(f => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [f.properties.label_lon, f.properties.label_lat] },
         properties: { text: String(f.properties.number), size_pt: 6.72, font: 'ArialMT', angle: 0, kind: 'mineral number' } })),
       name: p => p.text },
-    { file: 'towns', title: 'Towns (2023 map)', kind: 'point', on: false, swatch: '#000',
+    { file: 'towns', title: 'Towns (2023, as printed – 11 km SW of true)', kind: 'point', on: false, swatch: '#777',
+      point: (f, ll) => L.circleMarker(ll, { radius: 3, color: '#777', weight: 1, fillColor: f.properties.kind === 'town marker' ? '#999' : '#fff', fillOpacity: 1 }),
+      name: p => (p.name || '(unnamed town)') + ' · as printed' },
+    { file: 'towns_wgs84', title: 'Towns (2023, true WGS 84)', kind: 'point', on: false, swatch: '#000',
       point: (f, ll) => L.circleMarker(ll, { radius: 3, color: '#000', weight: 1, fillColor: f.properties.kind === 'town marker' ? '#000' : '#fff', fillOpacity: 1 }),
-      name: p => p.name || '(unnamed town)' },
-    { file: 'state_capitals', title: 'State capitals (2023 map)', kind: 'point', on: true, swatch: '#b91c1c',
+      name: p => (p.name || '(unnamed town)') + ' · corrected ' + (p.move_km != null ? p.move_km + ' km' : '') },
+    { file: 'state_capitals', title: 'State capitals (2023, as printed)', kind: 'point', on: false, swatch: '#f59e0b',
+      point: (f, ll) => L.circleMarker(ll, { radius: 5.5, color: '#fff', weight: 1.5, fillColor: '#f59e0b', fillOpacity: 1 }),
+      name: p => p.name + ' · as printed' },
+    { file: 'state_capitals_wgs84', title: 'State capitals (2023, true WGS 84)', kind: 'point', on: true, swatch: '#b91c1c',
       point: (f, ll) => L.circleMarker(ll, { radius: 5.5, color: '#fff', weight: 1.5, fillColor: '#b91c1c', fillOpacity: 1 }),
-      name: p => p.name },
+      name: p => p.name + ' · corrected ' + (p.move_km != null ? p.move_km + ' km' : '') },
     { file: 'map_labels', title: 'Map text (towns, states, rivers)', kind: 'labels', on: true, swatch: '#fff', anchor: 'centre',
       name: p => p.text },
     { file: 'river_labels', title: 'River names (points)', kind: 'point', on: false, swatch: '#1d4ed8',
@@ -499,7 +511,9 @@
     n_local: 'localities', n_symbols: 'raster symbols', top_grps: 'main commodity groups', zones: 'zones separated', n_vert: 'vertices',
     len_pt: 'length on page (pt)', offset_deg: 'VP minus printed (°)', width_deg: 'width (°)', height_deg: 'height (°)', width_pt: 'width (pt)',
     height_pt: 'height (pt)', scale: 'scale', near_km: 'distance (km)', ref_lon: 'reference lon', ref_lat: 'reference lat',
-    ref_dx_km: 'offset E (km)', ref_dy_km: 'offset N (km)', capital: 'state capital', in_frame: 'inside map frame', mid_lon: 'midpoint lon',
+    ref_dx_km: 'offset E (km)', ref_dy_km: 'offset N (km)', lon_map: 'lon as printed', lat_map: 'lat as printed',
+    de_km: 'correction E (km)', dn_km: 'correction N (km)', move_km: 'position corrected by (km)',
+    on_land: 'on land (1/0)', coast_km: 'distance to coast (km)', capital: 'state capital', in_frame: 'inside map frame', mid_lon: 'midpoint lon',
     mid_lat: 'midpoint lat', start_lon: 'start lon', start_lat: 'start lat', end_lon: 'end lon', end_lat: 'end lat', closed: 'closed ring' };
   const SKIP = { layer: 1 };
   function stratStrip(p) {
@@ -908,7 +922,7 @@
       '<h3>Known limits</h3>' +
       '<p>• 2011: no attribute tables in the PDF; unit codes come from legend colours + layer names. Datum not stated (WGS 84 assumed). Dashed symbols were re-assembled from fragments. State capitals are label centres. Source topology inherited.<br>' +
       '• 2023: the GeoPDF declares an “assumed” geographic CRS; its printed meridian labels are 0.17° off the embedded georeference (the georeference is used). Mineral names come from the compiler’s codes – 19 codes are unresolved; 4 numbers of the printed list are missing (F 110, G 53, G 86, G 111) and D 256 is a misprint. Unnumbered symbols only carry candidate minerals. The geology background of the 2023 map is raster only.<br>' +
-      '• Both sheets: the topographic overlay (towns, roads, railway, capital squares) was plotted with a ~0.66 % scale error, so town markers sit a median <b>11 km south-west</b> of their true WGS 84 position; the raster, the rivers and the national boundary are within ~1 km. For calculations use <code>towns_true_wgs84.csv</code> (model-corrected, ~2 km rms) – see <code>ACCURACY.md</code>.</p>' +
+      '• Both sheets: the topographic overlay (towns, roads, railway, capital squares) was plotted with a ~0.66 % scale error, so town markers sit a median <b>11 km south-west</b> of their true WGS 84 position; the raster, the rivers and the national boundary are within ~1 km. The <b>“true WGS 84”</b> town and capital layers (on by default) are model-corrected to ~2 km rms; the “as printed” layers keep the source positions. For calculations use the <code>*_wgs84</code> layers or <code>towns_true_wgs84.csv</code>; every check is in <code>VALIDATION.md</code>.</p>' +
       '<h3>Files</h3><p><code>shapefiles/</code>, <code>shapefiles_minerals/</code>, the two <code>georeferencing.json</code>, <code>shapefiles_minerals/qa_report.json</code>, <code>README.md</code>. ' +
       'Viewer data built ' + esc((m || g).generated) + '.</p>';
   }

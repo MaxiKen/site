@@ -22,7 +22,12 @@ which is accurate to well under 1 % at this scale.
 * `length_km`, `mid_lon/lat`, `start_*`, `end_*`, `ref_dx_km`, `ref_dy_km`, `w_km`, `h_km` are re-derived from the
   calibrated geometry (`fix_derived_fields.py`), so they are consistent with `lon`/`lat`.
 * The sheets' **topographic overlay** (towns, roads, railway, capital squares) has a 0.66 % scale error inherited from
-  the source base map; `shapefiles*/towns_true_wgs84.csv` carries model-corrected true positions for the towns.
+  the source base map. Two calculation-ready versions exist: `shapefiles*/towns_true_wgs84.csv` (every named town) and
+  the **`towns_wgs84` / `state_capitals_wgs84`** layers (same correction, with the extra fields below). The
+  `towns` / `state_capitals` layers keep the positions **as printed** (11 km off) for reproducing the map.
+* `*_wgs84` extra fields: `lon_map`, `lat_map` (as printed), `de_km`, `dn_km` (correction applied, model value),
+  `move_km` (magnitude), `on_land` (1/0 against Natural Earth 10 m land), `coast_km` (distance to the shoreline
+  when in water, 0 on land). See [ACCURACY.md](ACCURACY.md) §4–6 and [VALIDATION.md](VALIDATION.md).
 
 ## 1. Geology (2011 map) – stratigraphy of the rock units
 

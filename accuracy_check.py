@@ -27,6 +27,7 @@ and the fraction of points inside 5 km, because a single number would hide the
 spread that the source cartography actually has.
 """
 import argparse
+import csv
 import glob
 import json
 import os
@@ -133,9 +134,87 @@ def stats(pairs):
 
 
 # --------------------------------------------------------------------------- Natural Earth helpers
+NE_EXTRA = ['ne_10m_rivers_lake_centerlines', 'ne_10m_populated_places', 'ne_10m_land']
+
+
+def ensure_ne(names):
+    """Fetch the extra Natural Earth layers once (GitHub API, else raw URL)."""
+    import base64
+    import subprocess
+    import urllib.request
+    os.makedirs(REF_DIR, exist_ok=True)
+    repo = 'nvkelso/natural-earth-vector'
+    for name in names:
+        dst = os.path.join(REF_DIR, name + '.geojson')
+        if os.path.exists(dst) and os.path.getsize(dst) > 1000:
+            continue
+        path = 'geojson/%s.geojson' % name
+        try:
+            sha = subprocess.check_output(['gh', 'api', 'repos/%s/contents/%s' % (repo, path),
+                                           '--jq', '.sha'], stderr=subprocess.DEVNULL).decode().strip()
+            blob = subprocess.check_output(['gh', 'api', 'repos/%s/git/blobs/%s' % (repo, sha),
+                                            '--jq', '.content'], stderr=subprocess.DEVNULL).decode()
+            data = base64.b64decode(blob)
+        except Exception:
+            url = 'https://raw.githubusercontent.com/%s/master/%s' % (repo, path)
+            data = urllib.request.urlopen(url, timeout=180).read()
+        open(dst, 'wb').write(data)
+        print('fetched', dst)
+
+
 def ne_features(path):
+    ensure_ne([os.path.basename(path)[:-len('.geojson')]])
     d = json.load(open(path))
     return d['features']
+
+
+def ne_places_ng():
+    """Natural Earth 1:10m populated places in Nigeria (independent of Wikipedia)."""
+    ensure_ne(['ne_10m_populated_places'])
+    p = os.path.join(REF_DIR, 'ne_10m_populated_places.geojson')
+    if not os.path.exists(p):
+        return {}
+    d = json.load(open(p))
+    out = {}
+    for f in d['features']:
+        if (f['properties'].get('ADM0NAME') or '').lower() != 'nigeria':
+            continue
+        lon, lat = f['geometry']['coordinates'][:2]
+        out[f['properties'].get('NAME')] = (lat, lon)
+    return out
+
+
+def corrected_rows(ds):
+    path = os.path.join(SHP[ds], 'towns_true_wgs84.csv')
+    if not os.path.exists(path):
+        return {}
+    return {(r['name'] or '').strip().lower(): r for r in csv.DictReader(open(path))}
+
+
+def towns_after_correction(ref):
+    """Median error of the model-corrected town coordinates against an external set."""
+    out = {}
+    for ds in ('geology', 'minerals'):
+        rows = corrected_rows(ds)
+        printed, corrected = [], []
+        for name, (lat, lon) in ref.items():
+            r = rows.get(name.strip().lower())
+            if not r:
+                continue
+            kmx = 111.32 * np.cos(np.radians(lat))
+            for key, dst in (('lon_map', printed), ('lon', corrected)):
+                pass
+            printed.append(float(np.hypot((float(r['lon_map']) - lon) * kmx, (float(r['lat_map']) - lat) * KMY)))
+            corrected.append(float(np.hypot((float(r['lon']) - lon) * kmx, (float(r['lat']) - lat) * KMY)))
+        if printed:
+            out[ds] = {'n': len(printed),
+                       'printed_median_km': round(float(np.median(printed)), 2),
+                       'printed_p90_km': round(float(np.percentile(printed, 90)), 2),
+                       'corrected_median_km': round(float(np.median(corrected)), 2),
+                       'corrected_p90_km': round(float(np.percentile(corrected, 90)), 2),
+                       'corrected_within5_km': int(sum(1 for v in corrected if v < 5)),
+                       'corrected_within10_km': int(sum(1 for v in corrected if v < 10))}
+    return out
 
 
 def ne_rivers_ng(step=0.01):
@@ -223,6 +302,11 @@ def main():
         'displacement of the sheets\' topographic overlay (towns, roads, railway, capital symbols) '
         'relative to true WGS84, in km, positive east/north')
 
+    # ---- 1b. the corrected town layers against a second, independent reference set
+    places = ne_places_ng()
+    if places:
+        report['towns_corrected_vs_ne10m'] = towns_after_correction(places)
+
     # ---- 2. hydrography vs NE 10m
     ne_riv = ne_rivers_ng()
     report['rivers'] = {}
@@ -280,6 +364,9 @@ def main():
     print(json.dumps({k: v for k, v in report.items() if k != 'towns'}, indent=1))
     for ds in ('geology', 'minerals'):
         print(ds, 'towns:', report['towns'][ds]['stats'])
+    if report.get('towns_corrected_vs_ne10m'):
+        for ds, v in report['towns_corrected_vs_ne10m'].items():
+            print(ds, 'corrected towns vs NE 10m:', v)
 
 
 if __name__ == '__main__':

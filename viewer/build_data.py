@@ -41,10 +41,12 @@ MINERALS_PDF = os.path.join(ROOT, 'Mineral_Resources_Map_of_Nigeria_2023.pdf')
 
 GEOLOGY_LAYERS = ['geology_units', 'major_rivers_poly', 'geological_boundaries', 'younger_granite_outlines',
                   'faults', 'fold_axes', 'ridges', 'rivers', 'major_rivers_outline', 'state_boundaries',
-                  'roads', 'railway', 'graticule', 'towns', 'volcanic_plugs', 'state_capitals', 'labels']
+                  'roads', 'railway', 'graticule', 'towns', 'volcanic_plugs', 'state_capitals', 'labels',
+                  'towns_wgs84', 'state_capitals_wgs84']
 MINERAL_LAYERS = ['map_zones', 'division_lines', 'map_frame', 'international_boundary', 'rivers', 'roads', 'railway',
                   'graticule', 'mineral_symbols_raster', 'mineral_localities', 'towns', 'state_capitals',
-                  'state_name_labels', 'river_labels', 'pegmatite_marks', 'map_labels']
+                  'state_name_labels', 'river_labels', 'pegmatite_marks', 'map_labels',
+                  'towns_wgs84', 'state_capitals_wgs84']
 
 DATASETS = {
     'geology': {'pdf': GEOLOGY_PDF, 'shp_dir': os.path.join(ROOT, 'shapefiles'),

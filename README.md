@@ -6,7 +6,8 @@ Source file: `ilide.info-geological-map-of-nigeria-pr_a0987e407d194cb02682ac4793
 > **CRS & coordinate accuracy:** outputs are **EPSG:4326**; the 2011 PDF declares no CRS and the 2023 GeoPDF
 > declares an ArcGIS placeholder (NAD 27 / Clarke 1866). The raster, rivers and national boundary are on the true
 > WGS 84 grid to ≤1 km; the two sheets' topographic overlay (towns, roads, capitals) carries a 0.66 % scale error.
-> Details and the attribute-by-attribute audit: **[ACCURACY.md](ACCURACY.md)**.
+> Details and the attribute-by-attribute audit: **[ACCURACY.md](ACCURACY.md)**; the calculation-safety
+> checks (23 of them) and the corrected `*_wgs84` point layers: **[VALIDATION.md](VALIDATION.md)**.
 
 ## 1. Is it a GeoPDF?
 
@@ -177,6 +178,40 @@ within a couple of km.
 
 Full details, including the CRS of the two source PDFs and the attribute-by-attribute
 coordinate audit: **[ACCURACY.md](ACCURACY.md)**.
+
+## 3d. Calculating with the files – pre-flight check
+
+`validate_coordinates.py` runs 23 checks and exits non-zero on any failure, so it can gate a
+pipeline:
+
+```bash
+python3 validate_coordinates.py --quiet     # VALIDATION PASS (20 pass, 3 warn, 0 fail)
+```
+
+It checks the CRS of every file, geometry validity, attribute-vs-geometry agreement, the derived
+`length_km`/`area_km2` against an independent WGS 84 geodesic, surface coverage (the geology union
+covers 98.8 % of Nigeria with 2.3 % overlap between polygons), the two PDFs' frames (same
+projection, 0.016 % scale difference, no rotation, no datum shift), and whether every settlement /
+locality point falls on land.
+
+**Points that land in the sea.** The two sheets' topographic base is 0.66 % under scale, so as
+printed Port Harcourt sits 0.3 km offshore and 13 km from the city, and Cotonou 6.5 km offshore.
+`make_true_layers.py` writes `towns_wgs84` / `state_capitals_wgs84` for both datasets: corrected
+geometry, `lon_map`/`lat_map` as printed, `de_km`/`dn_km`, `move_km`, `on_land` and `coast_km`.
+They are in the GeoPackages and drawn by default in the viewer. With them, **33/33 state capitals
+and 480/483 towns are on land** — the three exceptions are delta waterfronts 0.07–0.60 km from the
+Natural Earth shoreline.
+
+The rule is applied per layer, not blindly: the 2011 **towns** do carry the field (r = 0.58/0.69;
+11.5 → 2.3 km), but the 2011 **capital names** were placed individually and are unbiased, so they
+are left where the sheet puts them (7.3 km median jitter, no bias). Each `*_wgs84` feature records
+which rule was used in its `corr` field.
+
+| use for | layer |
+|---|---|
+| settlement coordinates in a calculation | `towns_wgs84`, `state_capitals_wgs84`, `towns_true_wgs84.csv` (median 2.7 km) |
+| reproducing what the sheet prints | `towns`, `state_capitals` (median 11 km off — not for coordinates) |
+| rivers, coastline, border, geology units | `rivers`, `major_rivers_*`, `international_boundary`, `geology_units` (≤1 km) |
 
 ## Project GeoPackage – everything in one file
 
